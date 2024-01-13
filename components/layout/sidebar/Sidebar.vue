@@ -1,7 +1,7 @@
 <template>
   <NuxtScrollbar
     tag="aside"
-    class="md:bg-primary bg-white relative flex flex-col justify-items-end text-sm py-4 md:text-secondary md:w-full h-full font-medium shrink-0 space-y-6"
+    class="md:bg-primary bg-white flex flex-col text-sm py-4 md:text-secondary md:w-full max-h-screen font-medium space-y-6"
   >
     <div class="flex w-full h-24 md:items-center justify-between px-3">
       <!-- <h1
@@ -32,7 +32,7 @@
 
     <hr class="md:border-gray-500" />
 
-    <ul class="flex flex-col gap-4 pl-5 h-full">
+    <ul class="flex flex-col gap-4 pl-5">
       <template v-for="(link, index) in mainLinks" :key="index">
         <UiCollapsible
           v-if="link.dropdown && link.dropdown.length > 0"
@@ -89,28 +89,30 @@
         </NuxtLink>
       </template>
     </ul>
-    <NuxtLink to="/login" class="self-center">
-      <UiButton class="bg-white shadow-lg text-primary flex gap-2 md:left-[4%]">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="32"
-          height="32"
-          viewBox="0 0 20 20"
-          class="w-6"
-        >
-          <g fill="#888888" fill-rule="evenodd" clip-rule="evenodd">
-            <path
-              d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75z"
-            />
-            <path
-              d="M6 10a.75.75 0 0 1 .75-.75h9.546l-1.048-.943a.75.75 0 1 1 1.004-1.114l2.5 2.25a.75.75 0 0 1 0 1.114l-2.5 2.25a.75.75 0 1 1-1.004-1.114l1.048-.943H6.75A.75.75 0 0 1 6 10"
-            />
-          </g>
-        </svg>
+    <div class="w-full flex py-2 justify-center">
+      <NuxtLink to="/login" class="self-end">
+        <UiButton class="bg-white shadow-lg text-primary flex gap-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            viewBox="0 0 20 20"
+            class="w-6"
+          >
+            <g fill="#888888" fill-rule="evenodd" clip-rule="evenodd">
+              <path
+                d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75z"
+              />
+              <path
+                d="M6 10a.75.75 0 0 1 .75-.75h9.546l-1.048-.943a.75.75 0 1 1 1.004-1.114l2.5 2.25a.75.75 0 0 1 0 1.114l-2.5 2.25a.75.75 0 1 1-1.004-1.114l1.048-.943H6.75A.75.75 0 0 1 6 10"
+              />
+            </g>
+          </svg>
 
-        Logout</UiButton
-      >
-    </NuxtLink>
+          Logout</UiButton
+        >
+      </NuxtLink>
+    </div>
   </NuxtScrollbar>
 </template>
 
