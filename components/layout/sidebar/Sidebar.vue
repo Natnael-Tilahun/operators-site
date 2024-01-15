@@ -1,7 +1,7 @@
 <template>
   <NuxtScrollbar
     tag="aside"
-    class="md:bg-primary bg-white flex flex-col text-sm py-4 md:text-secondary md:w-full overflow-hidden font-medium space-y-6"
+    class="md:bg-primary bg-white flex z-40 flex-col text-sm py-4 md:text-secondary md:w-full overflow-hidden font-medium space-y-6"
   >
     <div class="flex w-full h-24 md:items-center justify-between px-3">
       <!-- <h1
@@ -91,10 +91,7 @@
     </ul>
     <div class="w-full flex absolute bottom-5 py-2 justify-center">
       <NuxtLink to="/login" class="self-end">
-        <UiButton
-          variant="outline"
-          class="shadow-sm shadow-gray-50 text-primary flex gap-2"
-        >
+        <UiButton variant="outline" class="shadow-xl text-primary flex gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="32"

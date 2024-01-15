@@ -146,7 +146,7 @@ const closeMenuNav = () => {
         </div>
 
         <UiCard
-          class="h-16 shadow-sm bg-white flex items-center px-10 relative w-full"
+          class="h-16 shadow-sm bg-white flex relative items-center px-10 w-full"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -155,7 +155,7 @@ const closeMenuNav = () => {
             viewBox="0 0 24 24"
             @click="toggleSidebar"
             v-if="!isSidebarCollapsed"
-            class="absolute w-10 h-10 hidden md:block -left-5 z-10 text-secondary bg-primary rounded-full"
+            class="md:absolute w-14 h-14 hidden md:block -left-7 z-50 text-accent bg-primary rounded-full"
           >
             <path
               fill="currentColor"
