@@ -38,10 +38,10 @@ const clearAllFilters = () => {
 </script>
 
 <template>
-  <div
-    class="flex flex-col gap-6 w-full lg:w-1/2 rounded-xl shadow-lg p-4 md:p-6 border-[1px] mb-10 h-full justify-between"
+  <UiCard
+    class="flex flex-col gap-2 w-full lg:w-1/2 rounded-lg p-4 md:p-6 border-[1px] mb-6 h-full justify-between"
   >
-    <h1 class="text-xl text-left pb-2">Search Customer By</h1>
+    <h1 class="text-left pb-2">Search Customer By</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-6">
       <UiInput
         placeholder="Phone Number"
@@ -61,6 +61,6 @@ const clearAllFilters = () => {
         "
       />
     </div>
-  </div>
+  </UiCard>
   <DataTableViewOptionsVue :table="table" />
 </template>

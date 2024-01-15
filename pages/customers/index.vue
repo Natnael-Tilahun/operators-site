@@ -116,11 +116,11 @@ onMounted(async () => {
 
 <!-- Render DataTable only if data is available -->
 <template>
-  <div v-if="data.length > 0" class="py-5 flex flex-col space-y-10 mx-auto">
-    <UiButton class="w-fit self-end px-5"
+  <div v-if="data.length > 0" class="flex flex-col space-y-0 mx-auto">
+    <!-- <UiButton class="w-fit self-end px-5"
       ><Icon name="material-symbols:add" size="24" class="mr-2"></Icon>Create
       Customer</UiButton
-    >
+    > -->
 
     <UiDataTable :columns="columns" :data="data">
       <template v-slot:toolbar="{ table }">

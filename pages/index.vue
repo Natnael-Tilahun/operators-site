@@ -6,7 +6,7 @@ const route = useRoute();
 
 <template>
   <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-    <UiCard class="shadow-xl rounded-3xl">
+    <UiCard class="shadow-md rounded-3xl">
       <UiCardHeader
         class="flex flex-row items-center justify-between space-y-0 pb-2"
       >
@@ -22,7 +22,7 @@ const route = useRoute();
         <p class="text-xs text-muted-foreground">+10.1% from last month</p>
       </UiCardContent>
     </UiCard>
-    <UiCard class="shadow-xl rounded-3xl">
+    <UiCard class="shadow-md rounded-3xl">
       <UiCardHeader
         class="flex flex-row items-center justify-between space-y-0 pb-2"
       >
@@ -47,7 +47,7 @@ const route = useRoute();
         <p class="text-xs text-muted-foreground">+40.1% from last month</p>
       </UiCardContent>
     </UiCard>
-    <UiCard class="shadow-xl rounded-3xl">
+    <UiCard class="shadow-md rounded-3xl">
       <UiCardHeader
         class="flex flex-row items-center justify-between space-y-0 pb-2"
       >
@@ -71,7 +71,7 @@ const route = useRoute();
         <p class="text-xs text-muted-foreground">+19% from last month</p>
       </UiCardContent>
     </UiCard>
-    <UiCard class="shadow-xl rounded-3xl">
+    <UiCard class="shadow-md rounded-3xl">
       <UiCardHeader
         class="flex flex-row items-center justify-between space-y-0 pb-2"
       >
@@ -107,9 +107,7 @@ const route = useRoute();
     <UiCard class="col-span-3 shadow-md rounded-xl">
       <UiCardHeader>
         <UiCardTitle>Recent Sales</UiCardTitle>
-        <UiCardDescription>
-          You got 265 customers this month.
-        </UiCardDescription>
+        <UiCardDescription> You got 100 sales this month. </UiCardDescription>
       </UiCardHeader>
       <UiCardContent>
         <DashboardRecentSales />

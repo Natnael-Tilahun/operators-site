@@ -281,8 +281,8 @@ onMounted(async () => {
 
 <!-- Render DataTable only if data is available -->
 <template>
-  <div v-if="data.length > 0" class="py-5 flex flex-col space-y-5 mx-auto">
-    <UiButton class="w-fit self-end px-5"
+  <div v-if="data.length > 0" class="flex flex-col space-y-3 mx-auto">
+    <UiButton class="w-fit self-end px-5 bg-primary hover:bg-fuchsia-800"
       ><Icon name="material-symbols:download" size="24" class="mr-2"></Icon
       >Download List</UiButton
     >

@@ -78,7 +78,7 @@ const onSubmit = form.handleSubmit(async (values: any) => {
             Forgot Password?
           </NuxtLink>
         </div>
-        <UiButton :disabled="isLoading">
+        <UiButton class="hover:bg-fuchsia-700" :disabled="isLoading">
           <Icon
             name="svg-spinners:8-dots-rotate"
             v-if="isLoading"
@@ -99,15 +99,6 @@ const onSubmit = form.handleSubmit(async (values: any) => {
         </span>
       </div>
     </div>
-    <UiButton variant="outline" type="button" :disabled="isLoading">
-      <Icon
-        name="svg-spinners:8-dots-rotate"
-        v-if="isLoading"
-        class="mr-2 h-4 w-4 animate-spin"
-      ></Icon>
-      <Icon name="mdi:github" v-else class="mr-2 h-4 w-4"></Icon>
-      GitHub
-    </UiButton>
     <UiButton variant="outline" type="button" :disabled="isLoading">
       <Icon
         name="svg-spinners:8-dots-rotate"

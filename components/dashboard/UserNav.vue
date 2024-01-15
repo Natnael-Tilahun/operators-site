@@ -32,7 +32,7 @@ const { userName, email } = useAuthStore();
         <!-- <UiBadge class="bg-primary mr-5 w-fit self-end block">Merchant</UiBadge> -->
       </div>
     </UiDropdownMenuTrigger>
-    <UiDropdownMenuContent class="w-56 p-3" align="end">
+    <UiDropdownMenuContent class="w-56 p-4" align="end">
       <UiDropdownMenuLabel class="font-normal flex md:hidden">
         <div class="flex flex-col space-y-1">
           <p class="text-sm font-medium leading-none">{{ userName }}</p>

@@ -1,7 +1,7 @@
 <template>
   <NuxtScrollbar
     tag="aside"
-    class="md:bg-primary bg-white flex flex-col text-sm py-4 md:text-secondary md:w-full max-h-screen font-medium space-y-6"
+    class="md:bg-primary bg-white flex flex-col text-sm py-4 md:text-secondary md:w-full overflow-hidden font-medium space-y-6"
   >
     <div class="flex w-full h-24 md:items-center justify-between px-3">
       <!-- <h1
@@ -11,7 +11,7 @@
       </h1> -->
       <img
         src="/cbe-logo2.jpeg"
-        class="lg:w-24 lg:h-24 w-14 h-14 shadow-xl mx-auto rounded-full"
+        class="lg:w-24 lg:h-24 w-14 h-14 shadow-sm shadow-purple-500 mx-auto rounded-full"
         alt="CBE Logo"
       />
 
@@ -30,7 +30,7 @@
       </svg>
     </div>
 
-    <hr class="md:border-gray-500" />
+    <hr class="md:border-secondary/30" />
 
     <ul class="flex flex-col gap-4 pl-5">
       <template v-for="(link, index) in mainLinks" :key="index">
@@ -82,16 +82,19 @@
           v-else
           :to="link.link"
           @click="closeMenuNav"
-          class="flex gap-3 py-3 rounded-l-full px-2 hover:bg-popover hover:text-primary rounded-lg transition"
+          class="flex gap-3 py-3 rounded-l-full px-3 hover:bg-popover hover:text-primary transition"
         >
           <span><Icon :name="link.icon" :size="link.size"></Icon></span>
           <p>{{ link.title }}</p>
         </NuxtLink>
       </template>
     </ul>
-    <div class="w-full flex py-2 justify-center">
+    <div class="w-full flex absolute bottom-5 py-2 justify-center">
       <NuxtLink to="/login" class="self-end">
-        <UiButton class="bg-white shadow-lg text-primary flex gap-2">
+        <UiButton
+          variant="outline"
+          class="shadow-sm shadow-gray-50 text-primary flex gap-2"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="32"
@@ -241,6 +244,6 @@ const closeMenuNav = () => {
 
 <style scoped>
 .router-link-active {
-  @apply font-bold text-white md:text-primary bg-primary md:bg-popover rounded-l-full border-l-2;
+  @apply font-bold text-white md:text-primary bg-primary md:bg-popover rounded-l-full  border-l-2;
 }
 </style>

@@ -21,7 +21,7 @@ const showOtherFilteration = ref(false);
         <UiInput
           placeholder="Search by sender name, From/To account"
           :model-value="(table.getColumn('senderName')?.getFilterValue() as string) ?? ''"
-          class="h-10 w-[150px] lg:w-[350px]"
+          class="h-10 w-[150px] lg:w-[350px] bg-white"
           @input="
             table.getColumn('senderName')?.setFilterValue($event.target.value)
           "
@@ -33,11 +33,11 @@ const showOtherFilteration = ref(false);
         ></Icon>
       </div>
 
-      <div
+      <UiCard
         v-if="showOtherFilteration"
-        class="space-y-6 shadow-sm rounded-xl w-full p-4 lg:p-6 border-[1px]"
+        class="space-y-4 rounded-lg w-full p-4 lg:p-6 border-[1px]"
       >
-        <h1 class="text-xl text-left text-primary">Filter Data By</h1>
+        <h1 class="text-xl text-left font-medium">Filter Data By</h1>
         <div
           class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full items-center gap-6"
         >
@@ -84,7 +84,7 @@ const showOtherFilteration = ref(false);
             />
           </div>
         </div>
-      </div>
+      </UiCard>
     </div>
 
     <DataTableViewOptions :table="table" />

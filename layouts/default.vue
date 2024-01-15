@@ -69,7 +69,7 @@ const closeMenuNav = () => {
 
 <template>
   <div
-    class="w-full min-h-screen bg-background grid grid-cols-12 lg:grid-cols-9 xl:grid-cols-7"
+    class="w-full h-screen overflow-hidden bg-background grid grid-cols-12 lg:grid-cols-9 xl:grid-cols-7"
     :class="[
       {
         ' relative h-screen  w-full': !isSidebarCollapsed,
@@ -79,11 +79,9 @@ const closeMenuNav = () => {
       },
     ]"
   >
-    <!-- ' hidden  border-4 border-white   md:backdrop md:w-[250px]' -->
-    <!-- 'text-green-300 w-2/3  border-4 border-white z-50 absolute top-0 md:block  md:backdrop md:w-[250px] ' -->
     <!-- Page Sidebar -->
     <Sidebar
-      class="md:col-span-3 col-span-12 md:static lg:col-span-2 xl:col-span-1"
+      class="md:col-span-3 col-span-12 md:static fixed h-screen lg:col-span-2 xl:col-span-1"
       :class="[
         {
           'hidden col-span-12  md:block xl:col-span-1  md:col-span-3':
@@ -98,7 +96,7 @@ const closeMenuNav = () => {
     />
 
     <div
-      class="col-span-full md:col-span-9 lg:col-span-7 xl:col-span-6 md:flex"
+      class="col-span-full overflow-scroll md:col-span-9 lg:col-span-7 xl:col-span-6 md:flex"
       :class="[
         {
           'w-full   h-full top-0 left-0   flex-col md:flex':

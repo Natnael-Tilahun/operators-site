@@ -34,20 +34,6 @@ const onSubmit = form.handleSubmit((values: any) => {
     <UiCard class="p-6">
       <form @submit="onSubmit">
         <div class="grid grid-cols-2 gap-6">
-          <FormField v-slot="{ componentField }" name="employeeId">
-            <FormItem>
-              <FormLabel> Employee ID </FormLabel>
-              <FormControl>
-                <UiInput
-                  type="text"
-                  disabled
-                  placeholder="CBE050202"
-                  v-bind="componentField"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          </FormField>
           <FormField v-slot="{ componentField }" name="firstName">
             <FormItem>
               <FormLabel> First Name </FormLabel>
@@ -80,7 +66,6 @@ const onSubmit = form.handleSubmit((values: any) => {
               <FormControl>
                 <UiInput
                   type="text"
-                  disabled
                   placeholder="Enter Email Address"
                   v-bind="componentField"
                 />
@@ -88,41 +73,13 @@ const onSubmit = form.handleSubmit((values: any) => {
               <FormMessage />
             </FormItem>
           </FormField>
-          <FormField v-slot="{ componentField }" name="role">
+          <FormField v-slot="{ componentField }" name="phone">
             <FormItem>
-              <FormLabel> Role </FormLabel>
+              <FormLabel> Phone </FormLabel>
               <FormControl>
                 <UiInput
                   type="text"
-                  placeholder="Enter Role "
-                  v-bind="componentField"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          </FormField>
-          <FormField v-slot="{ componentField }" name="isActive">
-            <FormItem>
-              <FormLabel> Is Active </FormLabel>
-              <FormControl>
-                <UiInput
-                  type="text"
-                  disabled
-                  placeholder="Enter status"
-                  v-bind="componentField"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          </FormField>
-          <FormField v-slot="{ componentField }" name="permissons">
-            <FormItem>
-              <FormLabel>Permissions</FormLabel>
-              <FormControl>
-                <UiTextarea
-                  disabled
-                  placeholder="Enter Permissions"
-                  class="resize-y"
+                  placeholder="Enter Phone "
                   v-bind="componentField"
                 />
               </FormControl>
