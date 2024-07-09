@@ -13,7 +13,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 224 71.4% 4.1%;
 
-    --primary: 293, 77%, 30%;
+    --primary: 306, 56%, 33%;
     --primary-foreground: 210 20% 98%;
 
     --secondary: 220 14.3% 95.9%;
@@ -33,7 +33,8 @@
     --ring: 262.1 83.3% 57.8%;
     --radius: 0.5rem;
   }
-    .dark {
+
+  .dark {
     --background: 224 71.4% 4.1%;
     --foreground: 210 20% 98%;
 
@@ -68,6 +69,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }

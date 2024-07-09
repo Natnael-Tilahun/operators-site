@@ -3,28 +3,39 @@ export default defineNuxtConfig({
   // nitro: {
   //   preset: "vercel",
   // },
+  runtimeConfig: {
+    public: {
+      API_BASE_URL: process.env.API_BASE_URL,
+    },
+  },
   devtools: {
     enabled: true,
     timeline: {
       enabled: true,
     },
   },
+
   app: {
     head: {
-      title: "Project X Backend",
+      title: "Merchant User Management",
       link: [],
     },
   },
+
   modules: [
     "@nuxtjs/tailwindcss",
     // "@nuxtjs/color-mode",
     "@davestewart/nuxt-scrollbar",
     "nuxt-icon",
     "@pinia/nuxt",
+    // "@nuxt/image",
+    "@pinia-plugin-persistedstate/nuxt"
   ],
+
   pinia: {
     storesDirs: ["./stores/**", "./custom-folder/stores/**"],
   },
+
   // colorMode: {
   //   classSuffix: "",
   // },
@@ -41,6 +52,7 @@ export default defineNuxtConfig({
       });
     },
   },
+
   imports: {
     dirs: [
       // Scan top-level modules
@@ -51,4 +63,6 @@ export default defineNuxtConfig({
       "composables/**",
     ],
   },
+
+  compatibilityDate: "2024-07-09",
 });
