@@ -118,7 +118,7 @@ const closeMenuNav = () => {
               class="md:hidden"
             />
             <CloseSidebarIcon
-              class="text-blue-600"
+              class="text-blue-600 md:hidden"
               v-if="isSidebarCollapsed"
               @click="toggleSidebar"
             />
@@ -145,26 +145,41 @@ const closeMenuNav = () => {
           </div>
         </div>
 
-        <UiCard
-          class="h-16 shadow-sm bg-white flex relative items-center px-10 w-full"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="32"
-            height="32"
-            viewBox="0 0 24 24"
-            @click="toggleSidebar"
-            v-if="!isSidebarCollapsed"
-            class="md:absolute w-14 h-14 hidden md:block -left-7 z-50 text-accent bg-primary rounded-full"
-          >
-            <path
-              fill="currentColor"
-              d="M12.675 12L9.6 15.075L11 16.5l4.5-4.5L11 7.5L9.6 8.925zM12 22q-2.075 0-3.9-.788t-3.175-2.137q-1.35-1.35-2.137-3.175T2 12q0-2.075.788-3.9t2.137-3.175q1.35-1.35 3.175-2.137T12 2q2.075 0 3.9.788t3.175 2.137q1.35 1.35 2.138 3.175T22 12q0 2.075-.788 3.9t-2.137 3.175q-1.35 1.35-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12q0-3.35-2.325-5.675T12 4Q8.65 4 6.325 6.325T4 12q0 3.35 2.325 5.675T12 20m0-8"
-            />
-          </svg>
+        <UiCard class="h-16 shadow-sm bg-white flex gap-14 items-center w-full">
+          <div class="w-0 h-14 rounded-xl -left-2 relative">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 32 32"
+              @click="toggleSidebar"
+              v-if="!isSidebarCollapsed"
+              class="md:absolute w-16 h-16 hidden md:block left-[35%] top-[8%] z-50 text-primary"
+            >
+              <path
+                fill="currentColor"
+                d="M16.5 14.8V9.2q0-.35-.3-.475t-.55.125L13.2 11.3q-.3.3-.3.7t.3.7l2.45 2.45q.25.25.55.125t.3-.475M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm5-2h9V5h-9z"
+              />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 32 32"
+              @click="toggleSidebar"
+              v-if="isSidebarCollapsed"
+              class="md:absolute w-16 h-16 hidden md:block left-[35%] top-[5%] z-50 text-primary"
+            >
+              <path
+                fill="currentColor"
+                d="M12.5 9.2v5.6q0 .35.3.475t.55-.125l2.45-2.45q.3-.3.3-.7t-.3-.7l-2.45-2.45q-.25-.25-.55-.125t-.3.475M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm5-2h9V5h-9z"
+              />
+            </svg>
+          </div>
+
           <h1 class="text-lg md:block space-x-2">
             <template v-if="pathSegments.length == 0">
-              <router-link to="/" class="font-semibold">Dashboard</router-link>
+              <router-link to="/" class="font-bold">Dashboard</router-link>
             </template>
 
             <template v-if="pathSegments.length > 0">
@@ -174,7 +189,7 @@ const closeMenuNav = () => {
                 </template>
 
                 <template v-if="segment">
-                  <NuxtLink class="font-semibold" :to="generateLink(index)">
+                  <NuxtLink class="font-light" :to="generateLink(index)">
                     {{ capitalizeRouteName(segment) }}
                   </NuxtLink>
                 </template>
@@ -185,7 +200,7 @@ const closeMenuNav = () => {
       </div>
 
       <!-- Page Main Content -->
-      <div class="space-y-10 p-5 md:p-8 pt-6">
+      <div class="md:px-8 p-5">
         <slot />
       </div>
     </div>
@@ -193,6 +208,6 @@ const closeMenuNav = () => {
 </template>
 <style scoped>
 .router-link-active {
-  @apply font-light text-primary bg-popover ml-1;
+  @apply font-semibold text-primary bg-popover ml-1;
 }
 </style>

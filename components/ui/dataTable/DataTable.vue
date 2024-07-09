@@ -64,7 +64,7 @@ const table = useVueTable({
   <div class="space-y-4">
     <slot name="toolbar" :table="table" />
     <!-- <DataTableToolbar :table="table" /> -->
-    <div class="rounded-xl shadow-lg">
+    <div class="rounded-sm shadow-sm border shadow-secondary-foreground/30">
       <UiTable>
         <UiTableHeader class="bg-secondary">
           <UiTableRow

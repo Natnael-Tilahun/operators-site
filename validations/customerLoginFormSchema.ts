@@ -1,9 +1,11 @@
+
 import { toTypedSchema } from "@vee-validate/zod";
 import { z } from "zod";
 
 export const customerLoginFormSchema = toTypedSchema(
   z.object({
-    email: z.string(),
-    password: z.string().min(6),
+    username: z.string({ required_error: "Username is required." }),
+    password: z.string().min(4),
+    rememberMe: z.boolean().optional().default(false),
   })
 );

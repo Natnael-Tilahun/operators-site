@@ -3,9 +3,20 @@ import { z } from "zod";
 
 export const profileFormSchema = toTypedSchema(
   z.object({
-    firstName: z.string().min(5).max(50),
-    lastName: z.string().min(5).max(50),
-    email: z.string().min(5).max(50),
-    phone: z.string().min(9).max(15),
+    merchantId: z.string().optional(), businessType: z.string().optional(),
+    businessNumber: z.string(),
+    businessName: z.string(),
+    tradeLicenseNumber: z.string().optional(),
+    tradeLicenseIssueDate: z.string().optional(),
+    tradeLicenseExpiryDate: z.string().optional(),
+    taxPayerIdNumber: z.string().optional(),
+    taxPayerIssueDate: z.string().optional(),
+    taxPayerExpiryDate: z.string().optional(),
+    city: z.string().optional(),
+    businessEmail: z.string().optional(),
+    businessPhoneNumber: z.string(),
+    postalNumber: z.string().optional(),
+    faxNumber: z.string().optional(),
+    shortCode: z.string().optional().nullable(),
   })
 );

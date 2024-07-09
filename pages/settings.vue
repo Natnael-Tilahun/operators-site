@@ -26,7 +26,7 @@ const onSubmit = form.handleSubmit((values: any) => {
 
 <template>
   <div class="w-full flex flex-col gap-8">
-    <div class="pb-4">
+    <div>
       <h1 class="md:text-2xl text-lg font-medium">Settings</h1>
       <p class="text-sm text-muted-foreground">Update your settings here</p>
     </div>
