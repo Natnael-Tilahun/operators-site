@@ -115,13 +115,14 @@ const closeMenuNav = () => {
             <OpenSidebarIcon
               v-if="!isSidebarCollapsed"
               @click="toggleSidebar"
-              class="md:hidden"
+              class="md"
             />
             <CloseSidebarIcon
-              class="text-blue-600 md:hidden"
+              class=""
               v-if="isSidebarCollapsed"
               @click="toggleSidebar"
             />
+
             <DashboardSearch class="hidden md:block" />
           </div>
 
@@ -145,8 +146,10 @@ const closeMenuNav = () => {
           </div>
         </div>
 
-        <UiCard class="h-16 shadow-sm bg-white flex gap-14 items-center w-full">
-          <div class="w-0 h-14 rounded-xl -left-2 relative">
+        <UiCard
+          class="h-16 shadow-sm bg-white flex gap-14 md:px-8 px-5 items-center w-full"
+        >
+          <!-- <div class="w-0 h-14 rounded-xl -left-2 relative">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -175,9 +178,9 @@ const closeMenuNav = () => {
                 d="M12.5 9.2v5.6q0 .35.3.475t.55-.125l2.45-2.45q.3-.3.3-.7t-.3-.7l-2.45-2.45q-.25-.25-.55-.125t-.3.475M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm5-2h9V5h-9z"
               />
             </svg>
-          </div>
+          </div> -->
 
-          <h1 class="text-lg md:block space-x-2">
+          <h1 class="text-sm md:text-lg md:block space-x-2">
             <template v-if="pathSegments.length == 0">
               <router-link to="/" class="font-bold">Dashboard</router-link>
             </template>

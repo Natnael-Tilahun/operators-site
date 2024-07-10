@@ -1,7 +1,35 @@
 <script setup lang="ts">
-import DashboardDateRangePicker from "~/components/dashboard/DateRangePicker.vue";
-
 const route = useRoute();
+
+const { getBranches } = useBranches();
+const { getEmployees } = useEmployees();
+
+const isError = ref(false);
+const isLoading = ref(false);
+const branchData = ref<Branch[]>([]);
+const branchNumber = ref<number>();
+const employeeNumber = ref<number>();
+const employeeData = ref<Employee[]>([]);
+
+try {
+  isLoading.value = true;
+  employeeData.value = await getEmployees();
+  employeeNumber.value = employeeData.value.length;
+} catch (error) {
+  console.error("Getting employees error: ", error);
+} finally {
+  isLoading.value = false;
+}
+
+try {
+  isLoading.value = true;
+  branchData.value = await getBranches();
+  branchNumber.value = branchData.value.length;
+} catch (error) {
+  console.error("Getting branches error: ", error);
+} finally {
+  isLoading.value = false;
+}
 </script>
 
 <template>
@@ -19,7 +47,7 @@ const route = useRoute();
           ></Icon>
         </UiCardHeader>
         <UiCardContent>
-          <div class="text-2xl font-bold">+5</div>
+          <div class="text-2xl font-bold">+{{ branchNumber }}</div>
           <p class="text-xs text-muted-foreground">+10.1% from last month</p>
         </UiCardContent>
       </UiCard>
@@ -44,7 +72,7 @@ const route = useRoute();
           </svg>
         </UiCardHeader>
         <UiCardContent>
-          <div class="text-2xl font-bold">+10</div>
+          <div class="text-2xl font-bold">+{{ employeeNumber }}</div>
           <p class="text-xs text-muted-foreground">+19% from last month</p>
         </UiCardContent>
       </UiCard>

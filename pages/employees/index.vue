@@ -1,123 +1,37 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { columns, type Customer } from "~/components/employees/columns";
+import { columns } from "~/components/employees/columns";
 
-const data = ref<Customer[]>([]);
+const { getEmployees } = useEmployees();
+const isError = ref(false);
+const isLoading = ref(false);
+const data = ref<Employee[]>([]);
 
-async function getData(): Promise<Customer[]> {
-  // Fetch data from your API here.
-  return [
-    {
-      customerId: "728ed52f",
-      customerPhone: "933665566",
-      email: "abebekebede@example.com",
-      customerName: "Abebe Kebede",
-      accountNumber: "1000179835597",
-    },
-    {
-      customerId: "hh448ed52f",
-      customerPhone: "923334455",
-      email: "dsdfs@example.com",
-      customerName: "Abebe Kebede",
-      accountNumber: "1000433433234334",
-    },
-    {
-      customerId: "55ddd52f",
-      customerPhone: "911223344",
-      email: "dsdsd@example.com",
-      customerName: "Abebe Kebede",
-      accountNumber: "1000433433234334",
-    },
-    {
-      customerId: "gg33d52f",
-      customerPhone: "944554433",
-      email: "ggdfd@example.com",
-      customerName: "Abebe Kebede",
-      accountNumber: "1000433433234334",
-    },
-    {
-      customerId: "728ed52f",
-      customerPhone: "974635322",
-      email: "m@example.com",
-      customerName: "Abebe Kebede",
-      accountNumber: "1000433433234334",
-    },
-    {
-      customerId: "728ed52f",
-      customerPhone: "923453322",
-      email: "m@example.com",
-      customerName: "Abebe Kebede",
-      accountNumber: "1000433433234334",
-    },
-    {
-      customerId: "728ed52f",
-      customerPhone: "964534222",
-      email: "m@example.com",
-      customerName: "Abebe Kebede",
-      accountNumber: "1000433433234334",
-    },
-    {
-      customerId: "728ed52f",
-      customerPhone: "933665566",
-      email: "m@example.com",
-      customerName: "Abebe Kebede",
-      accountNumber: "1000433433234334",
-    },
-    {
-      customerId: "728ed52f",
-      customerPhone: "933665566",
-      email: "m@example.com",
-      customerName: "Abebe Kebede",
-      accountNumber: "1000433433234334",
-    },
-    {
-      customerId: "728ed52f",
-      customerPhone: "933665566",
-      email: "m@example.com",
-      customerName: "Abebe Kebede",
-      accountNumber: "1000433433234334",
-    },
-    {
-      customerId: "728ed52f",
-      customerPhone: "933665566",
-      email: "m@example.com",
-      customerName: "Abebe Kebede",
-      accountNumber: "1000433433234334",
-    },
-    {
-      customerId: "728ed52f",
-      customerPhone: "933665566",
-      email: "m@example.com",
-      customerName: "Abebe Kebede",
-      accountNumber: "1000433433234334",
-    },
-    {
-      customerId: "728ed52f",
-      customerPhone: "933665566",
-      email: "m@example.com",
-      customerName: "Abebe Kebede",
-      accountNumber: "1000433433234334",
-    },
-    {
-      customerId: "728ed52f",
-      customerPhone: "933665566",
-      email: "m@example.com",
-      customerName: "Abebe Kebede",
-      accountNumber: "1000433433234334",
-    },
-    // ...
-  ];
+try {
+  isLoading.value = true;
+  data.value = await getEmployees();
+} catch (error) {
+  console.error("Getting employees error: ", error);
+} finally {
+  isLoading.value = false;
 }
 
-onMounted(async () => {
-  data.value = await getData();
-});
+const refetch = async () => {
+  try {
+    isLoading.value = true;
+    data.value = await getEmployees();
+  } catch (error) {
+    console.error("Getting employees error: ", error);
+  } finally {
+    isLoading.value = false;
+  }
+};
 </script>
 
 <!-- Render DataTable only if data is available -->
 <template>
   <div v-if="data.length > 0" class="flex flex-col space-y-8 mx-auto">
-    <NuxtLink to="/merchants/new" class="w-fit self-end">
+    <NuxtLink to="/employees/new" class="w-fit self-end">
       <UiButton class="w-fit self-end px-5"
         ><Icon name="material-symbols:add" size="24" class="mr-2"></Icon>Add
         Employee</UiButton

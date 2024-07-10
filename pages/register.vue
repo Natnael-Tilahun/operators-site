@@ -42,19 +42,21 @@ const onSubmit = form.handleSubmit(async (values: any) => {
 </script>
 
 <template>
-  <div class="w-full h-full flex flex-col gap-8 px-20 py-10">
+  <div class="w-full h-full flex flex-col gap-8 px-5 md:px-10 lg:px-20 py-10">
     <div class="">
-      <h1 class="md:text-2xl text-lg font-medium">Create New Merchant</h1>
+      <h1 class="md:text-2xl text-lg font-medium">
+        Create New Merchant Account
+      </h1>
       <p class="text-sm text-muted-foreground">
-        Create new merchant by including Business Name, Business Number, Trade
-        License Number, core customer id, bussiness email and phone
+        Create new merchant account by including Business Name, Business Number,
+        Trade License Number, core customer id, bussiness email and phone
       </p>
     </div>
 
     <UiCard class="w-full flex border-[1px] rounded-lg h-full">
       <div value="roleDetails" class="text-sm md:text-base p-6 basis-full">
         <form @submit="onSubmit">
-          <div class="grid grid-cols-2 gap-6">
+          <div class="grid md:grid-cols-2 gap-6">
             <FormField v-slot="{ componentField }" name="businessName">
               <FormItem>
                 <FormLabel>Business Name </FormLabel>

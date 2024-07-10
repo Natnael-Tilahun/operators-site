@@ -149,13 +149,13 @@ const mainLinks: Link[] = [
     size: "22",
     showDropdown: false,
   },
-  {
-    title: "transactions",
-    icon: "uil:transaction",
-    link: "/transactions",
-    size: "22",
-    showDropdown: false,
-  },
+  // {
+  //   title: "transactions",
+  //   icon: "uil:transaction",
+  //   link: "/transactions",
+  //   size: "22",
+  //   showDropdown: false,
+  // },
   // {
   //   title: "Employee Management",
   //   icon: "solar:user-bold",

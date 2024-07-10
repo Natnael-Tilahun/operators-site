@@ -50,3 +50,13 @@ interface Branch {
     faxNumber: string
     address: Address
 }
+
+interface Employee {
+    merchantEmployeeId: string
+    firstName: string
+    middleName: string
+    fullName: string
+    user: User
+    merchant: Merchant
+    merchantBranch: Branch
+}
