@@ -86,7 +86,7 @@ const onSubmit = form.handleSubmit(async (values: any) => {
     <UiCard class="w-full flex border-[1px] rounded-lg h-full">
       <div value="roleDetails" class="text-sm md:text-base p-6 basis-full">
         <form @submit="onSubmit">
-          <div class="grid grid-cols-2 gap-6">
+          <div class="grid md:grid-cols-2 gap-6">
             <FormField v-slot="{ componentField }" name="merchantBranchId">
               <FormItem>
                 <FormLabel>Merchant Branch Id </FormLabel>

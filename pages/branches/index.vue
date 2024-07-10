@@ -10,7 +10,6 @@ const data = ref<Branch[]>([]);
 try {
   isLoading.value = true;
   data.value = await getBranches();
-  console.log("data: ", data.value);
 } catch (error) {
   console.error("Getting branches error: ", error);
 } finally {
@@ -21,7 +20,6 @@ const refetch = async () => {
   try {
     isLoading.value = true;
     data.value = await getBranches();
-    console.log("data: ", data.value);
   } catch (error) {
     console.error("Getting branches error: ", error);
   } finally {

@@ -9,36 +9,46 @@ import {
 } from "@/components/ui/form";
 import { ref } from "vue";
 import { toast } from "~/components/ui/toast";
-import { newBranchFormSchema } from "~/validations/newBranchFormSchema";
-const { createBranch } = useBranches();
+import { newEmployeeFormSchema } from "~/validations/newEmployeeFormSchema";
+const { createEmployee } = useEmployees();
+const { getBranches } = useBranches();
+
 const isError = ref(false);
-const data = ref<Branch>();
+const data = ref<Employee>();
 const isSubmitting = ref(false);
+const isLoading = ref(false);
+const branchData = ref<Branch[]>([]);
 
 const form = useForm({
-  validationSchema: newBranchFormSchema,
+  validationSchema: newEmployeeFormSchema,
 });
+
+try {
+  isLoading.value = true;
+  branchData.value = await getBranches();
+} catch (error) {
+  console.error("Getting branches error: ", error);
+} finally {
+  isLoading.value = false;
+}
 
 const onSubmit = form.handleSubmit(async (values: any) => {
   try {
     isSubmitting.value = true;
-    const branchData = {
+    const employeeData = {
       ...values,
-      address: {
-        city: values.city,
-        businessEmail: values.businessEmail,
-        postalNumber: values.postalNumber,
-      },
+      fullName: values.firstName + " " + values.middleName,
     };
-    data.value = await createBranch(branchData); // Call your API function to fetch profile
-    navigateTo(`/branches/branchDetails/${data.value.merchantBranchId}`);
-    console.log("New branch data; ", data.value);
+    console.log("employeeData:", employeeData);
+    data.value = await createEmployee(employeeData); // Call your API function to fetch profile
+    navigateTo(`/employees/employeeDetails/${data.value.merchantEmployeeId}`);
+    console.log("New employee data; ", data.value);
     toast({
-      title: "Branch Created",
-      description: "Branch created successfully",
+      title: "Employee Created",
+      description: "Employee created successfully",
     });
   } catch (err: any) {
-    console.error("Error creating new branch:", err.message);
+    console.error("Error creating new employee:", err.message);
     isError.value = true;
   } finally {
     isSubmitting.value = false;
@@ -49,10 +59,10 @@ const onSubmit = form.handleSubmit(async (values: any) => {
 <template>
   <div class="w-full h-full flex flex-col gap-8">
     <div class="">
-      <h1 class="md:text-2xl text-lg font-medium">Create New Branch</h1>
+      <h1 class="md:text-2xl text-lg font-medium">Create New Employee</h1>
       <p class="text-sm text-muted-foreground">
-        Create new branch by including Branch Name, Branch Code, Business Phone
-        Number, address
+        Create new employee by including First Name, Last Name, Username,
+        Password, Branch Id
       </p>
     </div>
 
@@ -60,97 +70,84 @@ const onSubmit = form.handleSubmit(async (values: any) => {
       <div value="roleDetails" class="text-sm md:text-base p-6 basis-full">
         <form @submit="onSubmit">
           <div class="grid md:grid-cols-2 gap-6">
-            <FormField v-slot="{ componentField }" name="branchName">
+            <FormField v-slot="{ componentField }" name="firstName">
               <FormItem>
-                <FormLabel>Branch Name </FormLabel>
+                <FormLabel>First Name </FormLabel>
                 <FormControl>
                   <UiInput
                     type="text"
-                    placeholder="Enter branch name"
+                    placeholder="Enter first name"
                     v-bind="componentField"
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             </FormField>
-            <FormField v-slot="{ componentField }" name="branchCode">
+            <FormField v-slot="{ componentField }" name="middleName">
               <FormItem>
-                <FormLabel>Branch Code </FormLabel>
+                <FormLabel>Middle Name </FormLabel>
                 <FormControl>
                   <UiInput
                     type="text"
-                    placeholder="Enter branch code"
+                    placeholder="Enter middle name"
                     v-bind="componentField"
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             </FormField>
-            <FormField v-slot="{ componentField }" name="businessPhoneNumber">
+            <FormField v-slot="{ componentField }" name="username">
               <FormItem>
-                <FormLabel> Business Phone Number </FormLabel>
+                <FormLabel> Username </FormLabel>
                 <FormControl>
                   <UiInput
                     type="text"
-                    placeholder="Enter business phone number"
+                    placeholder="Enter username"
                     v-bind="componentField"
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             </FormField>
-            <FormField v-slot="{ componentField }" name="city">
+            <FormField v-slot="{ componentField }" name="password">
               <FormItem>
-                <FormLabel> City </FormLabel>
+                <FormLabel> Password </FormLabel>
                 <FormControl>
                   <UiInput
                     type="text"
-                    placeholder="Enter city"
+                    placeholder="Enter password"
                     v-bind="componentField"
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             </FormField>
-            <FormField v-slot="{ componentField }" name="businessEmail">
+            <FormField v-slot="{ componentField }" name="branchId">
               <FormItem>
-                <FormLabel>Business Email </FormLabel>
-                <FormControl>
-                  <UiInput
-                    type="text"
-                    placeholder="Enter business email"
-                    v-bind="componentField"
-                  />
-                </FormControl>
+                <FormLabel>Branch Id</FormLabel>
+
+                <UiSelect v-bind="componentField">
+                  <FormControl>
+                    <UiSelectTrigger>
+                      <UiSelectValue placeholder="Select branch" />
+                    </UiSelectTrigger>
+                  </FormControl>
+                  <UiSelectContent>
+                    <UiSelectGroup>
+                      <UiSelectItem
+                        v-for="branch in branchData"
+                        :key="branch.merchantBranchId"
+                        :value="branch.merchantBranchId"
+                      >
+                        {{ branch.branchName }}
+                      </UiSelectItem>
+                    </UiSelectGroup>
+                  </UiSelectContent>
+                </UiSelect>
                 <FormMessage />
               </FormItem>
             </FormField>
-            <FormField v-slot="{ componentField }" name="postalNumber">
-              <FormItem>
-                <FormLabel> Postal Number </FormLabel>
-                <FormControl>
-                  <UiInput
-                    type="text"
-                    placeholder="Enter postal number"
-                    v-bind="componentField"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            </FormField>
-            <FormField v-slot="{ componentField }" name="faxNumber">
-              <FormItem>
-                <FormLabel> Fax Number </FormLabel>
-                <FormControl>
-                  <UiInput
-                    type="text"
-                    placeholder="Enter fax number"
-                    v-bind="componentField"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            </FormField>
+
             <div class="col-span-full w-full py-4 flex justify-between">
               <UiButton
                 :disabled="isSubmitting"

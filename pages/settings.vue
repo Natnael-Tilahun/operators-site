@@ -33,7 +33,7 @@ const onSubmit = form.handleSubmit((values: any) => {
 
     <UiCard class="p-6">
       <form @submit="onSubmit">
-        <div class="grid grid-cols-2 gap-6">
+        <div class="grid md:grid-cols-2 gap-6">
           <FormField v-slot="{ componentField }" name="currentPassword">
             <FormItem>
               <FormLabel> Current Password </FormLabel>

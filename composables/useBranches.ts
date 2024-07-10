@@ -17,7 +17,6 @@ export const useBranches = () => {
             );
 
             if (status.value == "error") {
-                console.log("Branch error : ", error);
                 toast({
                     title: (error as any)?.value?.data?.title,
                     description: (error as any)?.value?.data?.detail || (error as any)?.value?.data?.message,
@@ -33,7 +32,6 @@ export const useBranches = () => {
             return data.value;
 
         } catch (error) {
-            console.error("Getting branches error: ", error);
             throw error;
         } finally {
             isLoading.value = false;
@@ -41,7 +39,7 @@ export const useBranches = () => {
     };
 
 
-    const deleteBranch: (id: string) => Promise<Branch[]> = async (id) => {
+    const deleteBranch: (id: string) => Promise<Branch[] | null> = async (id) => {
 
         try {
             const { data, error, status } = await useAsyncData<Branch[]>(`branch`, () =>
@@ -66,20 +64,11 @@ export const useBranches = () => {
                 throw new Error("Getting branches error: " + error.value);
             }
 
-            if (status.value === "success") {
-                console.log("branch data: ", data.value)
-                if (!data.value) {
-                    throw new Error("No roles data received");
-                }
-                return data.value;
-            }
+            return data.value;
 
-            // If none of the conditions are met, return an empty array as a fallback
-            return [];
 
         } catch (error) {
-            console.error("Getting branches error: ", error);
-            return [];
+            throw new Error("Getting branches error: " + error);
         } finally {
             // Ensure to stop loading state whether login is successful or not
             isLoading.value = false;
@@ -88,7 +77,7 @@ export const useBranches = () => {
 
     const getBranchById: (id: string) => Promise<Branch> = async (id) => {
         try {
-            const { data, pending, error, status } = await useFetch<Branch>(
+            const { data, error, status } = await useFetch<Branch>(
                 `${runtimeConfig.public.API_BASE_URL}/api/v1/merchants/branches/${id}`,
                 {
                     method: "GET",
@@ -101,10 +90,10 @@ export const useBranches = () => {
             if (status.value === "error") {
                 toast({
                     title: error.value?.data?.type || "Something went wrong!",
-                    description: error.value?.data?.type == "/constraint-violation" ? error.value?.data?.fieldErrors[0]?.message : error.value?.data?.message,
+                    description: error.value?.data?.detail || error.value?.data?.message,
                     variant: "destructive"
                 })
-                throw new Error(error.value?.data?.detail);
+                throw new Error(error.value?.data?.detail || error.value?.data?.message);
             }
 
             if (!data.value) {
@@ -112,7 +101,6 @@ export const useBranches = () => {
             }
             return data.value;
         } catch (err) {
-            // Throw the error to be caught and handled by the caller
             throw err;
         }
     };
@@ -136,19 +124,11 @@ export const useBranches = () => {
 
                 toast({
                     title: error.value?.data?.type || "Something went wrong!",
-                    description: error.value?.data?.type == "/constraint-violation" ? error.value?.data?.fieldErrors[0]?.message : error.value?.data?.message || error.value?.data?.detail,
+                    description: error.value?.data?.detail || error.value?.data?.message,
                     variant: "destructive"
                 })
 
-                console.log("Creating new branch error: ", error.value?.data.detail)
-
-                if (error.value?.data?.type == "/constraint-violation") {
-                    console.log("Creating new branch error: ", error.value?.data?.fieldErrors[0].message)
-                }
-                else {
-                    console.log("Creating new branch errorrr: ", error.value?.data?.message)
-                }
-                throw new Error(error.value?.data.detail);
+                throw new Error(error.value?.data.detail || error.value?.data?.message);
             }
 
             if (!data.value) {
@@ -181,16 +161,10 @@ export const useBranches = () => {
                 console.log("Error: ", error)
                 toast({
                     title: error.value?.data?.type || "Something went wrong!",
-                    description: error.value?.data?.type == "/constraint-violation" ? error.value?.data?.fieldErrors[0]?.message : error.value?.data?.message,
+                    description: error.value?.data?.detail || error.value?.data?.message,
                     variant: "destructive"
                 })
 
-                if (error.value?.data?.type == "/constraint-violation") {
-                    console.log("Updating branch error: ", error.value?.data?.fieldErrors[0].message)
-                }
-                else {
-                    console.log("Updating branch errorrr: ", error.value?.data?.message)
-                }
                 throw new Error((error as any).value);
             }
 
@@ -200,7 +174,6 @@ export const useBranches = () => {
 
             return data.value;
         } catch (err) {
-            // Throw the error to be caught and handled by the caller
             throw err;
         }
     };

@@ -2,7 +2,7 @@ import type { ColumnDef } from "@tanstack/vue-table";
 
 import { Checkbox } from "../ui/checkbox";
 import DataTableColumnHeaderVue from "../ui/dataTable/ColumnHeader.vue";
-import CustomerDataTableRowActionsVue from "./DataTableRowActions.vue";
+import EmployeeDataTableRowActionsVue from "./DataTableRowActions.vue";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -34,29 +34,33 @@ export const columns: ColumnDef<Customer>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "customerId",
-    header: "Customer Id",
-  },
-  {
-    accessorKey: "customerPhone",
-    header: "Phone",
-  },
-  { accessorKey: "customerName", header: "Customer Name" },
-  {
-    accessorKey: "email",
-    header: ({ column }) =>
-      h(DataTableColumnHeaderVue, { column, title: "Email" }),
-
-    cell: ({ row }) =>
-      h(
+    accessorKey: "merchantEmployeeId",
+    header: "Merchant Employee Id",
+    cell: ({ row }) => {
+      const merchantEmployeeId = row.getValue("merchantEmployeeId");
+      return merchantEmployeeId ? h(
         "div",
-        {
-          class: "lowercase max-w-[210px] truncate '",
-        },
-        row.getValue("email")
-      ),
+        { class: "w-[100px] whitespace-nowrap truncate hover:w-full font-medium" },
+        row.getValue("merchantEmployeeId")
+      ) : h("p", "-");
+    },
   },
-  { accessorKey: "accountNumber", header: "Account Number" },
+  {
+    accessorKey: "fullName",
+    header: "Full Name",
+    cell: ({ row }) => {
+      const fullName = row.getValue("fullName");
+      return fullName ? h("p", fullName) : h("p", "-");
+    },
+  },
+  {
+    accessorKey: "merchantBranch",
+    header: "Merchant Branch",
+    cell: ({ row }) => {
+      const merchantBranch = row.getValue("merchantBranch");
+      return merchantBranch ? h("p", (merchantBranch as Branch).merchantBranchId) : h("p", "-");
+    },
+  },
   {
     header: "Actions",
     id: "actions",
@@ -65,7 +69,7 @@ export const columns: ColumnDef<Customer>[] = [
       return h(
         "div",
         { class: "relative" },
-        h(CustomerDataTableRowActionsVue, {
+        h(EmployeeDataTableRowActionsVue, {
           row,
         })
       );

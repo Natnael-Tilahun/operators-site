@@ -1,22 +1,42 @@
 <script setup lang="ts">
 import type { Row } from "@tanstack/vue-table";
-import { computed } from "vue";
-// import { taskSchema } from "../data/schema";
-// import { type Task } from "../data/schema";
-
+import { toast } from "../ui/toast";
+const { deleteEmployee } = useEmployees();
+const isLoading = ref(false);
+const isError = ref(false);
 const route = useRoute();
+
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
 }
 const props = defineProps<DataTableRowActionsProps<any>>();
 
-function viewCustomerDetail(id: string) {
-  // alert(id);
-  navigateTo(`/customers/customerDetails/${id}`);
+function viewEmployeeDetail(id: string) {
+  navigateTo(`/employees/employeeDetails/${id}`);
   navigator.clipboard.writeText(id);
 }
 
-// const task = computed(() => taskSchema.parse(props.row.original));
+function resetEmployeePassword(id: string) {
+  navigateTo(`/employees/resetPassword/${id}`);
+}
+
+async function deleteEmployees(id: string) {
+  try {
+    isLoading.value = true;
+    await deleteEmployee(id); // Call your API function to fetch roles
+    console.log("Employee deleted successfully");
+    toast({
+      title: "Employee deleted successfully",
+    });
+    // Reload the window after deleting the role
+    window.location.reload();
+  } catch (err) {
+    console.error("Error deleting employee:", err);
+    isError.value = true;
+  } finally {
+    isLoading.value = false;
+  }
+}
 </script>
 
 <template>
@@ -31,15 +51,18 @@ function viewCustomerDetail(id: string) {
       </UiButton>
     </UiDropdownMenuTrigger>
     <UiDropdownMenuContent align="end" class="w-[160px]">
-      <UiDropdownMenuItem @click="viewCustomerDetail(row.original.customerId)"
+      <UiDropdownMenuItem
+        @click="viewEmployeeDetail(row.original.merchantEmployeeId)"
         >View</UiDropdownMenuItem
       >
-      <UiDropdownMenuItem>Edit</UiDropdownMenuItem>
-      <UiDropdownMenuItem>Make a copy</UiDropdownMenuItem>
-      <UiDropdownMenuItem>Favorite</UiDropdownMenuItem>
-      <UiDropdownMenuSeparator />
-      <UiDropdownMenuSeparator />
-      <UiDropdownMenuItem>
+      <UiDropdownMenuItem
+        @click="resetEmployeePassword(row.original.merchantEmployeeId)"
+        >Reset Password</UiDropdownMenuItem
+      >
+      <UiDropdownMenuItem
+        @click="deleteEmployees(row.original.merchantEmployeeId)"
+        class="text-red-600"
+      >
         Delete
         <UiDropdownMenuShortcut>⌘⌫</UiDropdownMenuShortcut>
       </UiDropdownMenuItem>
