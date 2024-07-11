@@ -12,6 +12,7 @@ try {
   data.value = await getEmployees();
 } catch (error) {
   console.error("Getting employees error: ", error);
+  isError.value = true;
 } finally {
   isLoading.value = false;
 }
@@ -22,6 +23,7 @@ const refetch = async () => {
     data.value = await getEmployees();
   } catch (error) {
     console.error("Getting employees error: ", error);
+    isError.value = true;
   } finally {
     isLoading.value = false;
   }
@@ -30,7 +32,10 @@ const refetch = async () => {
 
 <!-- Render DataTable only if data is available -->
 <template>
-  <div v-if="data.length > 0" class="flex flex-col space-y-8 mx-auto">
+  <div v-if="isLoading" class="py-10 flex justify-center w-full">
+    <UiLoading />
+  </div>
+  <div v-else-if="data && !isError" class="flex flex-col space-y-8 mx-auto">
     <NuxtLink to="/employees/new" class="w-fit self-end">
       <UiButton class="w-fit self-end px-5"
         ><Icon name="material-symbols:add" size="24" class="mr-2"></Icon>Add
@@ -44,7 +49,7 @@ const refetch = async () => {
       </template>
     </UiDataTable>
   </div>
-  <div v-else class="py-10 flex justify-center w-full">
-    <UiLoading />
+  <div v-else-if="isError">
+    <UiErrorMessage :retry="refetch" title="Something went wrong." />
   </div>
 </template>

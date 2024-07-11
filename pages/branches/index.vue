@@ -12,6 +12,7 @@ try {
   data.value = await getBranches();
 } catch (error) {
   console.error("Getting branches error: ", error);
+  isError.value = true;
 } finally {
   isLoading.value = false;
 }
@@ -22,6 +23,7 @@ const refetch = async () => {
     data.value = await getBranches();
   } catch (error) {
     console.error("Getting branches error: ", error);
+    isError.value = true;
   } finally {
     isLoading.value = false;
   }
@@ -33,7 +35,7 @@ const refetch = async () => {
   <div v-if="isLoading" class="py-10 flex justify-center w-full">
     <UiLoading />
   </div>
-  <div v-else class="flex flex-col space-y-8 mx-auto">
+  <div v-else-if="data && !isError" class="flex flex-col space-y-8 mx-auto">
     <NuxtLink to="/branches/new" class="w-fit self-end">
       <UiButton class="w-fit self-end px-5"
         ><Icon name="material-symbols:add" size="24" class="mr-2"></Icon>Add
@@ -46,7 +48,7 @@ const refetch = async () => {
       </template>
     </UiDataTable>
   </div>
-  <div v-if="isError">
+  <div v-else-if="isError">
     <UiErrorMessage :retry="refetch" title="Something went wrong." />
   </div>
 </template>
