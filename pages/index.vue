@@ -32,7 +32,7 @@ try {
 </script>
 
 <template>
-  <div class="lg:space-y-16 md:space-y-10 space-y-6">
+  <div class="lg:space-y-16 md:space-y-10 space-y-6 dark:bg-gray-900">
     <div
       class="grid gap-4 lg:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
       v-if="isLoading"
@@ -58,7 +58,7 @@ try {
       v-else
       class="grid gap-4 lg:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
     >
-      <UiCard class="shadow-md rounded-3xl">
+      <UiCard class="shadow-md rounded-3xl dark:bg-gray-800">
         <UiCardHeader
           class="flex flex-row items-center justify-between space-y-0 pb-2"
         >
@@ -75,7 +75,7 @@ try {
         </UiCardContent>
       </UiCard>
 
-      <UiCard class="shadow-md rounded-3xl">
+      <UiCard class="shadow-md rounded-3xl dark:bg-gray-800">
         <UiCardHeader
           class="flex flex-row items-center justify-between space-y-0 pb-2"
         >
@@ -101,7 +101,7 @@ try {
         </UiCardContent>
       </UiCard>
 
-      <UiCard class="shadow-md rounded-3xl">
+      <UiCard class="shadow-md rounded-3xl dark:bg-gray-800">
         <UiCardHeader
           class="flex flex-row items-center justify-between space-y-0 pb-2"
         >
@@ -133,7 +133,7 @@ try {
       </UiCard>
     </div>
     <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
-      <UiCard class="col-span-4 shadow-md rounded-xl">
+      <UiCard class="col-span-4 shadow-md rounded-xl dark:bg-gray-800">
         <UiCardHeader>
           <UiCardTitle>Overview</UiCardTitle>
         </UiCardHeader>
@@ -141,7 +141,7 @@ try {
           <DashboardOverview />
         </UiCardContent>
       </UiCard>
-      <UiCard class="col-span-3 shadow-md rounded-xl">
+      <UiCard class="col-span-3 shadow-md rounded-xl dark:bg-gray-800">
         <UiCardHeader>
           <UiCardTitle>Recent Sales</UiCardTitle>
           <UiCardDescription> Your recent 5 transactions. </UiCardDescription>

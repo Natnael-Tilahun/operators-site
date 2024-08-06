@@ -1,7 +1,7 @@
 <template>
   <NuxtScrollbar
     tag="aside"
-    class="md:bg-primary bg-white flex z-40 flex-col text-sm py-4 md:text-secondary md:w-full overflow-hidden font-medium space-y-6"
+    class="md:bg-primary bg-white dark:bg-gray-800 flex z-40 flex-col text-sm py-4 md:text-secondary dark:text-gray-300 md:w-full overflow-hidden font-medium space-y-6"
   >
     <div class="flex w-full h-24 md:items-center justify-between px-3">
       <!-- <h1

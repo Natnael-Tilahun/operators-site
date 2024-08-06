@@ -77,7 +77,7 @@ const onSubmit = form.handleSubmit(async (values: any) => {
                   <UiInput
                     type="text"
                     disabled
-                    class="border-2 bg-muted"
+                    class="border-2 bg-muted dark:border-gray-700 dark:bg-gray-600"
                     placeholder="Enter merchant operator Id"
                     v-bind="componentField"
                   />

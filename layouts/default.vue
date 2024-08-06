@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
+import { useColorMode } from "@vueuse/core";
 import Sidebar from "~/components/layout/sidebar/Sidebar.vue";
 import OpenSidebarIcon from "~/components/layout/sidebar/OpenSidebarIcon.vue";
 import CloseSidebarIcon from "~/components/layout/sidebar/CloseSidebarIcon.vue";
@@ -33,27 +34,29 @@ function generateLink(index: any) {
   return path === "/" ? path : `/${path}`;
 }
 
-// const colorMode = useColorMode(); // Set the initial color mode
+const colorMode = useColorMode();
 
-// const setTheme = (newTheme: any) => {
-//   localStorage.setItem(LOCAL_STORAGE_THEME_KEY, newTheme);
-//   colorMode.value = newTheme;
-// };
+// Use system preference if no theme is set
+onMounted(() => {
+  const storedTheme = process.client
+    ? localStorage.getItem(LOCAL_STORAGE_THEME_KEY)
+    : null;
+  if (!storedTheme) {
+    colorMode.value = "auto";
+  }
+});
 
-// const toggleTheme = () => {
-//   // colorMode.value = colorMode.value === "light" ? "dark" : "light";
-//   if (colorMode.value === "dark") {
-//     colorMode.value = "light";
-//     setTheme("light");
-//     // document.body.classList.add("dark");
-//   } else {
-//     colorMode.value = "dark";
-//     setTheme("dark");
-//     // document.body.classList.remove("dark");
-//   }
-// };
+const setTheme = (newTheme: "light" | "dark" | "auto") => {
+  colorMode.value = newTheme;
+  if (process.client) {
+    localStorage.setItem(LOCAL_STORAGE_THEME_KEY, newTheme);
+  }
+};
 
-// console.log("colorMode", colorMode.value);
+const toggleTheme = () => {
+  const newTheme = colorMode.value === "dark" ? "light" : "dark";
+  setTheme(newTheme);
+};
 
 const isSidebarCollapsed = useSidebarCollapsed();
 
@@ -69,7 +72,7 @@ const closeMenuNav = () => {
 
 <template>
   <div
-    class="w-full h-screen overflow-hidden bg-background grid grid-cols-12 lg:grid-cols-9 xl:grid-cols-7"
+    class="w-full h-screen overflow-hidden bg-background dark:bg-gray-900 text-foreground dark:text-gray-100 grid grid-cols-12 lg:grid-cols-9 xl:grid-cols-7"
     :class="[
       {
         ' relative h-screen  w-full': !isSidebarCollapsed,
@@ -122,25 +125,30 @@ const closeMenuNav = () => {
               @click="toggleSidebar"
             />
 
-            <DashboardSearch class="hidden md:block" />
+            <!-- <DashboardSearch class="hidden md:block" /> -->
           </div>
 
-          <div class="ml-auto flex items-center space-x-2 md:space-x-10">
-            <!-- <div class="flex">
+          <div class="ml-auto flex items-center space-x-2 md:space-x-5">
+            <UiButton
+              variant="ghost"
+              size="icon"
+              @click="toggleTheme"
+              class="bg-primary text-primary-foreground hover:bg-gray-300 dark:bg-gray-500 dark:text-white hover:dark:bg-gray-700 rounded-full"
+            >
               <Icon
-                name="tdesign:mode-dark"
-                size="22"
-                @click="toggleTheme"
-                v-if="colorMode.value === 'dark'"
-              ></Icon>
+                v-if="colorMode === 'dark'"
+                fill="currentColor"
+                name="lucide:sun"
+                class="h-[1.2rem] w-[1.2rem] transition-all"
+              />
               <Icon
-                size="22"
-                name="material-symbols:light-mode-outline"
-                @click="toggleTheme"
-                v-else="colorMode.value === 'light'"
-              >
-              </Icon>
-            </div> -->
+                v-else
+                name="lucide:moon"
+                fill="currentColor"
+                class="h-[1.2rem] w-[1.2rem] transition-all"
+              />
+              <span class="sr-only">Toggle theme</span>
+            </UiButton>
             <DashboardUserNav />
           </div>
         </div>
@@ -210,6 +218,6 @@ const closeMenuNav = () => {
 </template>
 <style scoped>
 .router-link-active {
-  @apply font-semibold text-primary bg-popover ml-1;
+  @apply font-semibold text-primary ml-1;
 }
 </style>

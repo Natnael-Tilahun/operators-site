@@ -105,7 +105,7 @@ const getInitials = (name: string) =>
       v-else
       v-for="item in data.slice(0, 5)"
       :key="item.merchantTransactionId"
-      class="flex items-center cursor-pointer hover:bg-accent hover:border p-3 rounded-xl transition-colors bg-accent/70"
+      class="flex items-center cursor-pointer p-3 rounded-xl bg-accent dark:bg-gray-700 hover:bg-accent/20 hover:dark:bg-gray-600 hover:shadow-md hover:scale-[1.02] border border-transparent hover:border-accent/20 transition-all duration-300 ease-in-out"
       @click="navigateToTransactionDetail(item.merchantTransactionId)"
     >
       <UiAvatar class="h-9 w-9">
