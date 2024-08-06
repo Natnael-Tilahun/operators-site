@@ -27,7 +27,7 @@ const showOtherFilteration = ref(false);
           "
         />
         <Icon
-          @click="($event) => (showOtherFilteration = !showOtherFilteration)"
+          @click="() => (showOtherFilteration = !showOtherFilteration)"
           name="material-symbols:filter-list"
           class="h-8 w-8 text-primary"
         ></Icon>

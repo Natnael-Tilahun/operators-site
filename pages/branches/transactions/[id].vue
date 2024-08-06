@@ -1,26 +1,13 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { columns } from "~/components/transactions/columns";
 import { useTransactions } from "~/composables/useTransactions";
 
-const { getTransactions } = useTransactions();
+const { getTransactionsByBranchId } = useTransactions();
 const data = ref<Transaction[]>([]);
 const isLoading = ref(true);
 const isError = ref(false);
-
-const initiatorOptions = computed(() => [
-  { value: "", label: "All Initiators" },
-  ...[
-    "MERCHANT_INITIATED",
-    "MERCHANT_OPERATOR_INITIATED",
-    "PAYER_INITIATED",
-    "NONE",
-  ].map((initiator) => ({
-    value: initiator,
-    label: initiator.replace(/_/g, " ").toLowerCase(),
-  })),
-]);
-
+const route = useRoute();
 const filterValue = ref("");
 
 const handleFilter = (table: any) => {
@@ -29,9 +16,10 @@ const handleFilter = (table: any) => {
 };
 
 try {
-  data.value = await getTransactions();
+  const id = route.params.id as string;
+  data.value = await getTransactionsByBranchId(id);
 } catch (error) {
-  console.error("Error fetching transactions:", error);
+  console.error("Error fetching branch transactions:", error);
   isError.value = true;
 } finally {
   isLoading.value = false;
@@ -39,10 +27,11 @@ try {
 
 const refetch = async () => {
   try {
+    const id = route.params.id as string;
     isLoading.value = true;
-    data.value = await getTransactions();
+    data.value = await getTransactionsByBranchId(id);
   } catch (error) {
-    console.error("Error fetching transactions:", error);
+    console.error("Error fetching branch transactions:", error);
     isError.value = true;
   } finally {
     isLoading.value = false;
@@ -52,20 +41,16 @@ const refetch = async () => {
 
 <template>
   <div class="w-full flex flex-col gap-8">
-    <div class="flex justify-between">
-      <div>
-        <h1 class="md:text-2xl text-lg font-medium">Transactions</h1>
-        <p class="text-sm text-muted-foreground">
-          View and manage transactions
-        </p>
-      </div>
-      <NuxtLink to="/transactions/initiate" class="w-fit self-end">
-        <UiButton class="w-fit self-end px-5"
-          ><Icon name="material-symbols:add" size="24" class="mr-2"></Icon
-          >Initiate Transaction</UiButton
-        >
-      </NuxtLink>
+    <div>
+      <h1 class="md:text-2xl text-lg font-medium">
+        {{
+          data[0]?.merchantBranchName && "Branch" + data[0]?.merchantBranchName
+        }}
+        Transactions
+      </h1>
+      <p class="text-sm text-muted-foreground">View and manage transactions</p>
     </div>
+
     <div v-if="isLoading" class="py-10 flex justify-center w-full">
       <UiLoading />
     </div>

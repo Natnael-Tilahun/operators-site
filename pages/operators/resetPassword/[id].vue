@@ -40,12 +40,12 @@ const onSubmit = form.handleSubmit(async (values: any) => {
       values.newPassword
     );
     toast({
-      title: "Employee password resetted.",
-      description: "Employee password resetted successfully",
+      title: "Operator password resetted.",
+      description: "Operator password resetted successfully",
     });
-    navigateTo("/employees");
+    navigateTo("/operators");
   } catch (err: any) {
-    console.error("Error resetting employee password:", err.message);
+    console.error("Error resetting operator password:", err.message);
     isError.value = true;
   } finally {
     isSubmitting.value = false;
@@ -56,7 +56,7 @@ const onSubmit = form.handleSubmit(async (values: any) => {
 <template>
   <div class="w-full h-full flex flex-col gap-8">
     <div class="">
-      <h1 class="md:text-2xl text-lg font-medium">Reset Employee Password</h1>
+      <h1 class="md:text-2xl text-lg font-medium">Reset Operator Password</h1>
       <p class="text-sm text-muted-foreground">
         Update the password by entering new password
       </p>
@@ -69,15 +69,16 @@ const onSubmit = form.handleSubmit(async (values: any) => {
             <FormField
               v-slot="{ componentField }"
               :value="employeeId"
-              name="merchantEmployeeId"
+              name="merchantOperatorId"
             >
               <FormItem>
-                <FormLabel>Merchant Employee Id </FormLabel>
+                <FormLabel>Merchant Operator Id </FormLabel>
                 <FormControl>
                   <UiInput
                     type="text"
                     disabled
-                    placeholder="Enter merchant employee Id"
+                    class="border-2 bg-muted"
+                    placeholder="Enter merchant operator Id"
                     v-bind="componentField"
                   />
                 </FormControl>

@@ -11,9 +11,17 @@ interface DataTableRowActionsProps<TData> {
 }
 const props = defineProps<DataTableRowActionsProps<any>>();
 
-function viewCustomerDetail(id: string) {
+function viewBranchDetail(id: string) {
   navigateTo(`/branches/branchDetails/${id}`);
   navigator.clipboard.writeText(id);
+}
+
+function viewTransactionHistory(id: string) {
+  navigateTo(`/branches/transactions/${id}`);
+}
+
+function viewOperators(id: string) {
+  navigateTo(`/branches/operators/${id}`);
 }
 
 async function deleteMerchants(id: string) {
@@ -48,8 +56,15 @@ async function deleteMerchants(id: string) {
     </UiDropdownMenuTrigger>
     <UiDropdownMenuContent align="end" class="w-[160px]">
       <UiDropdownMenuItem
-        @click="viewCustomerDetail(row.original.merchantBranchId)"
-        >View</UiDropdownMenuItem
+        @click="viewBranchDetail(row.original.merchantBranchId)"
+        >View Branch</UiDropdownMenuItem
+      >
+      <UiDropdownMenuItem
+        @click="viewTransactionHistory(row.original.merchantBranchId)"
+        >Transaction History</UiDropdownMenuItem
+      >
+      <UiDropdownMenuItem @click="viewOperators(row.original.merchantBranchId)"
+        >Operators</UiDropdownMenuItem
       >
       <UiDropdownMenuItem
         @click="deleteMerchants(row.original.merchantBranchId)"

@@ -4,17 +4,7 @@ import { Checkbox } from "../ui/checkbox";
 import DataTableColumnHeaderVue from "../ui/dataTable/ColumnHeader.vue";
 import EmployeeDataTableRowActionsVue from "./DataTableRowActions.vue";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export interface Customer {
-  customerId: string;
-  customerPhone: string;
-  email: string;
-  customerName: string;
-  accountNumber: string;
-}
-
-export const columns: ColumnDef<Customer>[] = [
+export const columns: ColumnDef<Employee>[] = [
   {
     id: "select",
     header: ({ table }) =>
@@ -34,31 +24,44 @@ export const columns: ColumnDef<Customer>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "merchantEmployeeId",
-    header: "Merchant Employee Id",
+    accessorKey: "merchantOperatorId",
+    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "Operator Id" }),
     cell: ({ row }) => {
-      const merchantEmployeeId = row.getValue("merchantEmployeeId");
-      return merchantEmployeeId ? h(
+      const merchantOperatorId = row.getValue("merchantOperatorId");
+      return merchantOperatorId ? h(
         "div",
         { class: "w-[100px] whitespace-nowrap truncate hover:w-full font-medium" },
-        row.getValue("merchantEmployeeId")
+        row.getValue("merchantOperatorId")
       ) : h("p", "-");
     },
   },
   {
     accessorKey: "fullName",
-    header: "Full Name",
+    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "Full Name" }),
     cell: ({ row }) => {
       const fullName = row.getValue("fullName");
       return fullName ? h("p", fullName) : h("p", "-");
     },
   },
   {
+    accessorKey: "operatorRole",
+    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "Operator Role" }),
+    cell: ({ row }) => {
+      const operatorRole = row.getValue("operatorRole");
+      return operatorRole ? h("p", operatorRole) : h("p", "-");
+    },
+  },
+  {
     accessorKey: "merchantBranch",
-    header: "Merchant Branch",
+    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "Merchant Branch" }),
     cell: ({ row }) => {
       const merchantBranch = row.getValue("merchantBranch");
-      return merchantBranch ? h("p", (merchantBranch as Branch).merchantBranchId) : h("p", "-");
+      return merchantBranch ? h(
+        "div",
+        { class: "w-[100px] whitespace-nowrap truncate hover:w-full font-medium" },
+        (merchantBranch as Branch).merchantBranchId
+      ) : h("p", "-");
+      // return merchantBranch ? h("p", (merchantBranch as Branch).merchantBranchId) : h("p", "-");
     },
   },
   {

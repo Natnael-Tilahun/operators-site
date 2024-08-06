@@ -143,19 +143,19 @@ const mainLinks: Link[] = [
     showDropdown: false,
   },
   {
-    title: "Employees",
+    title: "Operators",
     icon: "carbon:customer-service",
-    link: "/employees",
+    link: "/operators",
     size: "22",
     showDropdown: false,
   },
-  // {
-  //   title: "transactions",
-  //   icon: "uil:transaction",
-  //   link: "/transactions",
-  //   size: "22",
-  //   showDropdown: false,
-  // },
+  {
+    title: "transactions",
+    icon: "uil:transaction",
+    link: "/transactions",
+    size: "22",
+    showDropdown: false,
+  },
   // {
   //   title: "Employee Management",
   //   icon: "solar:user-bold",

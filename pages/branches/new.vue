@@ -31,7 +31,7 @@ const onSubmit = form.handleSubmit(async (values: any) => {
       },
     };
     data.value = await createBranch(branchData); // Call your API function to fetch profile
-    navigateTo(`/branches/branchDetails/${data.value.merchantBranchId}`);
+    navigateTo(`/branches`);
     console.log("New branch data; ", data.value);
     toast({
       title: "Branch Created",

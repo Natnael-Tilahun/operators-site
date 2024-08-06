@@ -31,7 +31,7 @@ export default {
           size="sm"
           class="-ml-3 h-8 data-[state=open]:bg-accent"
         >
-          <span>{{ title }}</span>
+          <span class="whitespace-nowrap">{{ title }}</span>
           <ArrowDownIcon
             v-if="column.getIsSorted() === 'desc'"
             class="ml-2 h-4 w-4"
@@ -69,7 +69,7 @@ export default {
     </UiDropdownMenu>
   </div>
 
-  <div v-else :class="$attrs.class">
+  <div class="whitespace-nowrap" v-else :class="$attrs.class">
     {{ title }}
   </div>
 </template>

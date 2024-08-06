@@ -110,7 +110,6 @@ const closeMenuNav = () => {
       <!-- Page Header -->
       <div class="flex flex-col py-6 gap-4">
         <div class="flex h-10 items-center px-3 md:px-8">
-          <!-- <DashboardMainNav class="mx-6" /> -->
           <div class="flex items-center gap-3 md:gap-8">
             <OpenSidebarIcon
               v-if="!isSidebarCollapsed"

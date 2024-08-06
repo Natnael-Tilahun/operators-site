@@ -18,6 +18,14 @@ const data = ref<Employee>();
 const isSubmitting = ref(false);
 const isLoading = ref(false);
 const branchData = ref<Branch[]>([]);
+type OperatorRole = "ADMIN" | "MANAGER" | "ATTENDANT" | "SUPERVISOR" | "NONE";
+const operatorRoleData = ref<OperatorRole[]>([
+  "ADMIN",
+  "MANAGER",
+  "ATTENDANT",
+  "SUPERVISOR",
+  "NONE",
+]);
 
 const form = useForm({
   validationSchema: newEmployeeFormSchema,
@@ -41,14 +49,14 @@ const onSubmit = form.handleSubmit(async (values: any) => {
     };
     console.log("employeeData:", employeeData);
     data.value = await createEmployee(employeeData); // Call your API function to fetch profile
-    navigateTo(`/employees/employeeDetails/${data.value.merchantEmployeeId}`);
-    console.log("New employee data; ", data.value);
+    navigateTo(`/operators`);
+    console.log("New operator data; ", data.value);
     toast({
-      title: "Employee Created",
-      description: "Employee created successfully",
+      title: "Operator Created",
+      description: "Operator created successfully",
     });
   } catch (err: any) {
-    console.error("Error creating new employee:", err.message);
+    console.error("Error creating new operator:", err.message);
     isError.value = true;
   } finally {
     isSubmitting.value = false;
@@ -59,9 +67,9 @@ const onSubmit = form.handleSubmit(async (values: any) => {
 <template>
   <div class="w-full h-full flex flex-col gap-8">
     <div class="">
-      <h1 class="md:text-2xl text-lg font-medium">Create New Employee</h1>
+      <h1 class="md:text-2xl text-lg font-medium">Create New Operator</h1>
       <p class="text-sm text-muted-foreground">
-        Create new employee by including First Name, Last Name, Username,
+        Create new operator by including First Name, Last Name, Username,
         Password, Branch Id
       </p>
     </div>
@@ -122,6 +130,32 @@ const onSubmit = form.handleSubmit(async (values: any) => {
                 <FormMessage />
               </FormItem>
             </FormField>
+            <FormField v-slot="{ componentField }" name="operatorRole">
+              <FormItem>
+                <FormLabel>Operator Role</FormLabel>
+
+                <UiSelect v-bind="componentField">
+                  <FormControl>
+                    <UiSelectTrigger>
+                      <UiSelectValue placeholder="Select operator role" />
+                    </UiSelectTrigger>
+                  </FormControl>
+                  <UiSelectContent>
+                    <UiSelectGroup>
+                      <UiSelectItem
+                        v-for="role in operatorRoleData"
+                        :key="role"
+                        :value="role"
+                      >
+                        {{ role }}
+                      </UiSelectItem>
+                    </UiSelectGroup>
+                  </UiSelectContent>
+                </UiSelect>
+                <FormMessage />
+              </FormItem>
+            </FormField>
+
             <FormField v-slot="{ componentField }" name="branchId">
               <FormItem>
                 <FormLabel>Branch Id</FormLabel>
