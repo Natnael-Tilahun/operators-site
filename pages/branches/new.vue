@@ -31,7 +31,7 @@ const onSubmit = form.handleSubmit(async (values: any) => {
       },
     };
     data.value = await createBranch(branchData); // Call your API function to fetch profile
-    navigateTo(`/branches/branchDetails/${data.value.merchantBranchId}`);
+    navigateTo(`/branches`);
     console.log("New branch data; ", data.value);
     toast({
       title: "Branch Created",
@@ -48,7 +48,7 @@ const onSubmit = form.handleSubmit(async (values: any) => {
 
 <template>
   <div class="w-full h-full flex flex-col gap-8">
-    <div class="">
+    <div class="pt-4">
       <h1 class="md:text-2xl text-lg font-medium">Create New Branch</h1>
       <p class="text-sm text-muted-foreground">
         Create new branch by including Branch Name, Branch Code, Business Phone

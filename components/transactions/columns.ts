@@ -1,37 +1,9 @@
 import type { ColumnDef } from "@tanstack/vue-table";
-
 import { Checkbox } from "../ui/checkbox";
+import DataTableColumnHeaderVue from "~/components/ui/dataTable/ColumnHeader.vue";
+import TransactionsDataTableRowActionsVue from "./DataTableRowActions.vue";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import DataTableColumnHeaderVue from "../ui/dataTable/ColumnHeader.vue";
-import DataTableRowActionsVue from "../components/ui/dataTable/RowActions.vue";
-import LogsAndReportsTransactionsOtherInfoDetails from "~/components/transactions/OtherInfoDetails.vue";
-
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export interface TransactionLogs {
-  activityType: string;
-  senderName: string;
-  dataAndTime: string;
-  fromAccount: string;
-  toAccount: number;
-  amount: string;
-  currency: string;
-  otherInfo: {};
-}
-
-// function viewCustomerDetail(id: string) {
-//   alert(id);
-//   navigateTo(`customerDetails/${id}`);
-//   // navigator.clipboard.writeText(id);
-// }
-
-export const columns: ColumnDef<TransactionLogs>[] = [
+export const columns: ColumnDef<Transaction>[] = [
   {
     id: "select",
     header: ({ table }) =>
@@ -51,60 +23,62 @@ export const columns: ColumnDef<TransactionLogs>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "activityType",
-    header: "Activity Type",
+    accessorKey: "merchantTransactionId",
+    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "Transaction ID" }),
+    cell: ({ row }) => {
+      const merchantTransactionId = row.getValue("merchantTransactionId");
+      return merchantTransactionId ? h(
+        "div",
+        { class: "w-[100px] whitespace-nowrap truncate hover:w-full font-medium" },
+        row.getValue("merchantTransactionId")
+      ) : h("p", "-");
+    },
   },
-  { accessorKey: "senderName", header: "Sender Name" },
   {
-    accessorKey: "dataAndTime",
-    header: ({ column }) =>
-      h(DataTableColumnHeaderVue, { column, title: "dataAndTime" }),
+    accessorKey: "payerName",
+    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "Payer Name" }),
+    cell: ({ row }) => {
+      const payerName = row.getValue("payerName");
+      return payerName ? h("p", payerName) : h("p", "-");
+    },
   },
-  { accessorKey: "fromAccount", header: "From Account" },
-  { accessorKey: "toAccount", header: "To Account" },
+  {
+    accessorKey: "payerAccountNumber",
+    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "Payer Account Number" }),
+    cell: ({ row }) => {
+      const payerAccountNumber = row.getValue("payerAccountNumber");
+      return payerAccountNumber ? h("p", payerAccountNumber) : h("p", "-");
+    },
+  },
   {
     accessorKey: "amount",
-    header: "amount",
+    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "Amount" }),
   },
   {
-    accessorKey: "currency",
-    header: "Currency",
+    accessorKey: "tipAmount",
+    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "tipAmount" }),
   },
   {
-    accessorKey: "otherInfo",
-    header: "Other Info",
-    cell: ({ row }) => {
-      const additionalInfo = row.original.otherInfo;
-      const showDetails = () => {
-        return h(DropdownMenu, {}, [
-          h(
-            DropdownMenuTrigger,
-            {
-              class: "cursor-pointer underline",
-            },
-            "Views"
-          ),
-          h(
-            DropdownMenuContent,
-            {
-              slot: "DropdownMenuContent",
-            },
-            [
-              h(
-                DropdownMenuItem,
-                {},
-                h(LogsAndReportsTransactionsOtherInfoDetails, {
-                  class: "w-[900px]  right-0 ",
-                  otherInfoData: additionalInfo,
-                })
-              ),
-            ]
-          ),
-        ]);
-      };
-      return showDetails();
-      // showDetails,
-    },
+    accessorKey: "currencyCode",
+    header: ({ column }) =>
+      h(DataTableColumnHeaderVue, { column, title: "currencyCode" }),
+  },
+  {
+    accessorKey: "paymentStatus",
+    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "paymentStatus" }),
+  },
+  {
+    accessorKey: "paymentReference",
+    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "paymentReference" }),
+  },
+  {
+    accessorKey: "transactionInitiator",
+    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "transactionInitiator" }),
+  },
+  {
+    accessorKey: "expirationDate",
+    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "Expiration Date" }),
+    cell: ({ row }) => new Date(row.getValue("expirationDate")).toLocaleDateString(),
   },
   {
     header: "Actions",
@@ -114,7 +88,7 @@ export const columns: ColumnDef<TransactionLogs>[] = [
       return h(
         "div",
         { class: "relative" },
-        h(DataTableRowActionsVue, {
+        h(TransactionsDataTableRowActionsVue, {
           row,
         })
       );

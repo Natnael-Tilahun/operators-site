@@ -49,12 +49,12 @@ const { username, email } = useAuthStore();
             <UiDropdownMenuShortcut>⇧⌘P</UiDropdownMenuShortcut>
           </UiDropdownMenuItem>
         </NuxtLink>
-        <NuxtLink to="/settings">
+        <!-- <NuxtLink to="/settings">
           <UiDropdownMenuItem>
             Settings
             <UiDropdownMenuShortcut>⌘S</UiDropdownMenuShortcut>
           </UiDropdownMenuItem>
-        </NuxtLink>
+        </NuxtLink> -->
       </UiDropdownMenuGroup>
     </UiDropdownMenuContent>
   </UiDropdownMenu>

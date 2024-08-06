@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const resetEmployeePasswordFormSchema = toTypedSchema(
     z.object({
-        merchantEmployeeId: z.string(),
+        merchantOperatorId: z.string(),
         newPassword: z.string(),
     })
 );

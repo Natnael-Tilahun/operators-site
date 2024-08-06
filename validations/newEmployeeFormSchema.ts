@@ -8,5 +8,6 @@ export const newEmployeeFormSchema = toTypedSchema(
         username: z.string(),
         password: z.string(),
         branchId: z.string(),
+        operatorRole: z.string()
     })
 );

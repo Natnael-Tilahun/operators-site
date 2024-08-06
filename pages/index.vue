@@ -1,41 +1,64 @@
 <script setup lang="ts">
+import { Skeleton } from "~/components/ui/skeleton";
+
 const route = useRoute();
 
 const { getBranches } = useBranches();
 const { getEmployees } = useEmployees();
+const { getTransactions } = useTransactions();
 
-const isError = ref(false);
-const isLoading = ref(false);
+const isLoading = ref(true);
 const branchData = ref<Branch[]>([]);
-const branchNumber = ref<number>();
-const employeeNumber = ref<number>();
 const employeeData = ref<Employee[]>([]);
+const transactionData = ref<Transaction[]>([]);
+
+const branchNumber = computed(() => branchData.value.length);
+const employeeNumber = computed(() => employeeData.value.length);
+const totalTransactionAmount = computed(() =>
+  transactionData.value.reduce(
+    (sum, transaction) => sum + transaction.amount,
+    0
+  )
+);
 
 try {
-  isLoading.value = true;
-  employeeData.value = await getEmployees();
-  employeeNumber.value = employeeData.value.length;
+  [branchData.value, employeeData.value, transactionData.value] =
+    await Promise.all([getBranches(), getEmployees(), getTransactions()]);
 } catch (error) {
-  console.error("Getting employees error: ", error);
-} finally {
-  isLoading.value = false;
-}
-
-try {
-  isLoading.value = true;
-  branchData.value = await getBranches();
-  branchNumber.value = branchData.value.length;
-} catch (error) {
-  console.error("Getting branches error: ", error);
+  console.error("Error fetching data:", error);
 } finally {
   isLoading.value = false;
 }
 </script>
 
 <template>
-  <div class="lg:space-y-16 md:space-y-10 space-y-6">
-    <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-      <UiCard class="shadow-md rounded-3xl">
+  <div class="lg:space-y-16 md:space-y-10 space-y-6 dark:bg-gray-900">
+    <div
+      class="grid gap-4 lg:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+      v-if="isLoading"
+    >
+      <div class="h-32 flex flex-col gap-4 shadow-md rounded-3xl p-8">
+        <UiSkeleton class="h-32 w-20 bg-slate-300" />
+        <UiSkeleton class="h-32 w-10 bg-slate-300" />
+        <UiSkeleton class="h-32 w-20 bg-slate-300" />
+      </div>
+      <div class="h-32 flex flex-col gap-4 shadow-md rounded-3xl p-8">
+        <UiSkeleton class="h-32 w-20 bg-slate-300" />
+        <UiSkeleton class="h-32 w-10 bg-slate-300" />
+        <UiSkeleton class="h-32 w-20 bg-slate-300" />
+      </div>
+      <div class="h-32 flex flex-col gap-4 shadow-md rounded-3xl p-8">
+        <UiSkeleton class="h-32 w-20 bg-slate-300" />
+        <UiSkeleton class="h-32 w-10 bg-slate-300" />
+        <UiSkeleton class="h-32 w-20 bg-slate-300" />
+      </div>
+    </div>
+
+    <div
+      v-else
+      class="grid gap-4 lg:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+    >
+      <UiCard class="shadow-md rounded-3xl dark:bg-gray-800">
         <UiCardHeader
           class="flex flex-row items-center justify-between space-y-0 pb-2"
         >
@@ -51,11 +74,12 @@ try {
           <p class="text-xs text-muted-foreground">+10.1% from last month</p>
         </UiCardContent>
       </UiCard>
-      <UiCard class="shadow-md rounded-3xl">
+
+      <UiCard class="shadow-md rounded-3xl dark:bg-gray-800">
         <UiCardHeader
           class="flex flex-row items-center justify-between space-y-0 pb-2"
         >
-          <UiCardTitle class="text-sm font-medium"> Employees </UiCardTitle>
+          <UiCardTitle class="text-sm font-medium"> Operators </UiCardTitle>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -76,11 +100,12 @@ try {
           <p class="text-xs text-muted-foreground">+19% from last month</p>
         </UiCardContent>
       </UiCard>
-      <UiCard class="shadow-md rounded-3xl">
+
+      <UiCard class="shadow-md rounded-3xl dark:bg-gray-800">
         <UiCardHeader
           class="flex flex-row items-center justify-between space-y-0 pb-2"
         >
-          <UiCardTitle class="text-sm font-medium"> Transactions </UiCardTitle>
+          <UiCardTitle class="text-sm font-medium">Transactions</UiCardTitle>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -96,36 +121,19 @@ try {
           </svg>
         </UiCardHeader>
         <UiCardContent>
-          <div class="text-2xl font-bold">+100,000 Br</div>
-          <p class="text-xs text-muted-foreground">+40.1% from last month</p>
-        </UiCardContent>
-      </UiCard>
-      <UiCard class="shadow-md rounded-3xl">
-        <UiCardHeader
-          class="flex flex-row items-center justify-between space-y-0 pb-2"
-        >
-          <UiCardTitle class="text-sm font-medium"> Deposits </UiCardTitle>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            class="h-4 w-4 text-muted-foreground"
-          >
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-          </svg>
-        </UiCardHeader>
-        <UiCardContent>
-          <div class="text-2xl font-bold">+1000,000 Br</div>
-          <p class="text-xs text-muted-foreground">+21 since last hour</p>
+          <div class="text-2xl font-bold">
+            {{
+              isLoading
+                ? "Loading..."
+                : `${totalTransactionAmount.toFixed(2)} Br`
+            }}
+          </div>
+          <p class="text-xs text-muted-foreground">Total transaction amount</p>
         </UiCardContent>
       </UiCard>
     </div>
     <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
-      <UiCard class="col-span-4 shadow-md rounded-xl">
+      <UiCard class="col-span-4 shadow-md rounded-xl dark:bg-gray-800">
         <UiCardHeader>
           <UiCardTitle>Overview</UiCardTitle>
         </UiCardHeader>
@@ -133,10 +141,10 @@ try {
           <DashboardOverview />
         </UiCardContent>
       </UiCard>
-      <UiCard class="col-span-3 shadow-md rounded-xl">
+      <UiCard class="col-span-3 shadow-md rounded-xl dark:bg-gray-800">
         <UiCardHeader>
           <UiCardTitle>Recent Sales</UiCardTitle>
-          <UiCardDescription> You got 100 sales this month. </UiCardDescription>
+          <UiCardDescription> Your recent 5 transactions. </UiCardDescription>
         </UiCardHeader>
         <UiCardContent>
           <DashboardRecentSales />

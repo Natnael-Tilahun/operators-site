@@ -8,8 +8,8 @@ export const useEmployees = () => {
 
     const getEmployees: () => Promise<Employee[]> = async () => {
         try {
-            const { data, error, status } = await useAsyncData<Employee[]>(`employee`, () =>
-                $fetch(`${runtimeConfig.public.API_BASE_URL}/api/v1/merchants/employees`, {
+            const { data, error, status } = await useAsyncData<Employee[]>(`operators`, () =>
+                $fetch(`${runtimeConfig.public.API_BASE_URL}/api/v1/merchants/operators`, {
                     headers: {
                         Authorization: `Bearer ${store.accessToken}`,
                     },
@@ -17,17 +17,17 @@ export const useEmployees = () => {
             );
 
             if (status.value == "error") {
-                console.log("Employee error : ", error);
+                console.log("Operator error : ", error);
                 toast({
                     title: (error as any)?.value?.data?.title,
                     description: (error as any)?.value?.data?.detail || (error as any)?.value?.data?.message,
                     variant: "destructive",
                 });
-                throw new Error("Getting employees error: " + error.value);
+                throw new Error("Getting operators error: " + error.value);
             }
 
             if (!data.value) {
-                throw new Error("No employees data received");
+                throw new Error("No operators data received");
             }
 
             return data.value;
@@ -43,8 +43,8 @@ export const useEmployees = () => {
     const deleteEmployee: (id: string) => Promise<Employee[] | undefined> = async (id) => {
 
         try {
-            const { data, error, status } = await useAsyncData<Employee[]>(`employee`, () =>
-                $fetch(`${runtimeConfig.public.API_BASE_URL}/api/v1/merchants/employees/${id}`,
+            const { data, error, status } = await useAsyncData<Employee[]>(`operators`, () =>
+                $fetch(`${runtimeConfig.public.API_BASE_URL}/api/v1/merchants/operators/${id}`,
                     {
                         method: 'DELETE',
                         headers: {
@@ -61,12 +61,12 @@ export const useEmployees = () => {
                     description: (error as any)?.value?.data?.detail || (error as any)?.value?.data?.message,
                     variant: "destructive",
                 });
-                throw new Error("Getting employees error: " + error.value);
+                throw new Error("Getting operators error: " + error.value);
             }
 
             if (status.value === "success") {
                 if (!data.value) {
-                    throw new Error("No employees data received");
+                    throw new Error("No operators data received");
                 }
                 return data.value;
             }
@@ -74,7 +74,7 @@ export const useEmployees = () => {
             return [];
 
         } catch (error) {
-            throw new Error("Getting employees error: " + error);
+            throw new Error("Getting operators error: " + error);
         } finally {
             isLoading.value = false;
         }
@@ -83,7 +83,7 @@ export const useEmployees = () => {
     const getEmployeeById: (id: string) => Promise<Employee> = async (id) => {
         try {
             const { data, pending, error, status } = await useFetch<Employee>(
-                `${runtimeConfig.public.API_BASE_URL}/api/v1/merchants/employees/${id}`,
+                `${runtimeConfig.public.API_BASE_URL}/api/v1/merchants/operators/${id}`,
                 {
                     method: "GET",
                     headers: {
@@ -102,7 +102,37 @@ export const useEmployees = () => {
             }
 
             if (!data.value) {
-                throw new Error("No employee data received");
+                throw new Error("No operator data received");
+            }
+            return data.value;
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    const getBranchOperators: (id: string) => Promise<Employee[]> = async (id) => {
+        try {
+            const { data, pending, error, status } = await useFetch<Employee[]>(
+                `${runtimeConfig.public.API_BASE_URL}/api/v1/merchants/branches/${id}/employees`,
+                {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${store.accessToken}`,
+                    },
+                }
+            );
+
+            if (status.value === "error") {
+                toast({
+                    title: error.value?.data?.type || "Something went wrong!",
+                    description: error.value?.data?.type == "/constraint-violation" ? error.value?.data?.fieldErrors[0]?.message : error.value?.data?.message,
+                    variant: "destructive"
+                })
+                throw new Error(error.value?.data?.detail);
+            }
+
+            if (!data.value) {
+                throw new Error("No branch operator data received");
             }
             return data.value;
         } catch (err) {
@@ -113,7 +143,7 @@ export const useEmployees = () => {
     const createEmployee: (employeeData: Employee) => Promise<Employee> = async (employeeData) => {
         try {
             const { data, error, status } = await useFetch<Employee>(
-                `${runtimeConfig.public.API_BASE_URL}/api/v1/merchants/employees`,
+                `${runtimeConfig.public.API_BASE_URL}/api/v1/merchants/operators`,
                 {
                     method: "POST",
                     headers: {
@@ -129,12 +159,12 @@ export const useEmployees = () => {
                     description: error.value?.data?.detail || error.value?.data?.message,
                     variant: "destructive"
                 })
-                console.log("Creating new employee error: ", error.value?.data.detail || error.value?.data?.message)
+                console.log("Creating new operator error: ", error.value?.data.detail || error.value?.data?.message)
                 throw new Error(error.value?.data.detail || error.value?.data?.message);
             }
 
             if (!data.value) {
-                throw new Error("No employee with this customer id received");
+                throw new Error("No operator with this customer id received");
             }
 
             return data.value;
@@ -146,7 +176,7 @@ export const useEmployees = () => {
     const updateEmployee: (id: string, employeeData: Employee) => Promise<Employee> = async (id, employeeData) => {
         try {
             const { data, error, status } = await useFetch<Employee>(
-                `${runtimeConfig.public.API_BASE_URL}/api/v1/merchants/employees/${id}`,
+                `${runtimeConfig.public.API_BASE_URL}/api/v1/merchants/operators/${id}`,
                 {
                     method: "PATCH",
                     headers: {
@@ -167,16 +197,16 @@ export const useEmployees = () => {
                 })
 
                 if (error.value?.data?.type == "/constraint-violation") {
-                    console.log("Updating employeebranch error: ", error.value?.data?.fieldErrors[0].message)
+                    console.log("Updating operator error: ", error.value?.data?.fieldErrors[0].message)
                 }
                 else {
-                    console.log("Updating employee errorrr: ", error.value?.data?.message)
+                    console.log("Updating operator errorrr: ", error.value?.data?.message)
                 }
                 throw new Error((error as any).value);
             }
 
             if (!data.value) {
-                throw new Error("No employee with this merchant id received");
+                throw new Error("No operator with this merchant id received");
             }
 
             return data.value;
@@ -193,7 +223,7 @@ export const useEmployees = () => {
 
         try {
             const { data, error, status } = await useFetch<Employee>(
-                `${runtimeConfig.public.API_BASE_URL}/api/v1/merchants/employees/${id}/reset-password`,
+                `${runtimeConfig.public.API_BASE_URL}/api/v1/merchants/operators/${id}/reset-password`,
                 {
                     method: "POST",
                     headers: {
@@ -228,6 +258,7 @@ export const useEmployees = () => {
         getEmployeeById,
         createEmployee,
         updateEmployee,
-        resetEmployeePassword
+        resetEmployeePassword,
+        getBranchOperators
     };
 };

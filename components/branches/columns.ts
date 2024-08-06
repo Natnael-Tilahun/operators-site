@@ -2,6 +2,7 @@ import type { ColumnDef } from "@tanstack/vue-table";
 
 import { Checkbox } from "../ui/checkbox";
 import BranchesDataTableRowActionsVue from "./DataTableRowActions.vue";
+import DataTableColumnHeaderVue from "~/components/ui/dataTable/ColumnHeader.vue";
 
 
 export const columns: ColumnDef<Branch>[] = [
@@ -25,7 +26,7 @@ export const columns: ColumnDef<Branch>[] = [
   },
   {
     accessorKey: "merchantBranchId",
-    header: "Branch Id",
+    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "Branch Id" }),
     cell: ({ row }) => {
       const merchantBranchId = row.getValue("merchantBranchId");
       return merchantBranchId ? h(
@@ -37,7 +38,7 @@ export const columns: ColumnDef<Branch>[] = [
   },
   {
     accessorKey: "branchName",
-    header: "Branch Name",
+    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "Branch Name" }),
     cell: ({ row }) => {
       const branchName = row.getValue("branchName");
       return branchName ? h("p", branchName) : h("p", "-");
@@ -45,7 +46,7 @@ export const columns: ColumnDef<Branch>[] = [
   },
   {
     accessorKey: "branchCode",
-    header: "Branch Code",
+    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "Branch Code" }),
     cell: ({ row }) => {
       const branchCode = row.getValue("branchCode");
       return branchCode ? h("p", branchCode) : h("p", "-");
@@ -53,7 +54,7 @@ export const columns: ColumnDef<Branch>[] = [
   },
   {
     accessorKey: "businessPhoneNumber",
-    header: "Business Phone Number",
+    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "Phone" }),
     cell: ({ row }) => {
       const businessPhoneNumber = row.getValue("businessPhoneNumber");
       return businessPhoneNumber ? h("p", businessPhoneNumber) : h("p", "-");
@@ -61,7 +62,7 @@ export const columns: ColumnDef<Branch>[] = [
   },
   {
     accessorKey: "faxNumber",
-    header: "Fax Number",
+    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "Fax No" }),
     cell: ({ row }) => {
       const faxNumber = row.getValue("faxNumber");
       return faxNumber ? h("p", faxNumber) : h("p", "-");
@@ -69,7 +70,7 @@ export const columns: ColumnDef<Branch>[] = [
   },
   {
     accessorKey: "address",
-    header: "City",
+    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "City" }),
     cell: ({ row }) => {
       const city = (row.getValue("address") as Address).city;
       return city ? h("p", city) : h("p", "-");
@@ -77,7 +78,7 @@ export const columns: ColumnDef<Branch>[] = [
   },
   {
     accessorKey: "address",
-    header: "Business Email",
+    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "Email" }),
     cell: ({ row }) => {
       const businessEmail = (row.getValue("address") as Address).businessEmail;
       return businessEmail ? h("p", businessEmail) : h("p", "-");
@@ -85,7 +86,7 @@ export const columns: ColumnDef<Branch>[] = [
   },
   {
     accessorKey: "address",
-    header: "Postal Number",
+    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "Postal No" }),
     cell: ({ row }) => {
       const postalNumber = (row.getValue("address") as Address).postalNumber;
       return postalNumber ? h("p", postalNumber) : h("p", "-");

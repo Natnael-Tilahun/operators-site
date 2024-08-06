@@ -22,6 +22,15 @@ const fullPath = ref(route.fullPath);
 const pathSegments = ref([]);
 const employeeId = ref<string>("");
 const branchData = ref<Branch[]>([]);
+type OperatorRole = "ADMIN" | "MANAGER" | "ATTENDANT" | "SUPERVISOR" | "NONE";
+
+const operatorRoleData = ref<OperatorRole[]>([
+  "ADMIN",
+  "MANAGER",
+  "ATTENDANT",
+  "SUPERVISOR",
+  "NONE",
+]);
 
 pathSegments.value = splitPath(fullPath.value);
 const pathLength = pathSegments.value.length;
@@ -50,9 +59,10 @@ try {
   form.setValues({
     ...data.value,
     merchantBranchId: data.value.merchantBranch?.merchantBranchId,
+    operatorRole: data.value?.operatorRole.toString(),
   });
 } catch (error) {
-  console.error("Getting employees error: ", error);
+  console.error("Getting operators error: ", error);
 } finally {
   isLoading.value = false;
 }
@@ -66,11 +76,11 @@ const onSubmit = form.handleSubmit(async (values: any) => {
     };
     data.value = await updateEmployee(employeeId.value, employeeData); // Call your API function to fetch profile
     toast({
-      title: "Employee Updated",
-      description: "Employee updated successfully",
+      title: "Operator Updated",
+      description: "Operator updated successfully",
     });
   } catch (err: any) {
-    console.error("Error updating employee:", err.message);
+    console.error("Error updating operator:", err.message);
     isError.value = true;
   } finally {
     isSubmitting.value = false;
@@ -80,10 +90,10 @@ const onSubmit = form.handleSubmit(async (values: any) => {
 
 <template>
   <div class="w-full h-full flex flex-col gap-8">
-    <div class="">
-      <h1 class="md:text-2xl text-lg font-medium">Update Employee</h1>
+    <div class="pt-4">
+      <h1 class="md:text-2xl text-lg font-medium">Update Operator</h1>
       <p class="text-sm text-muted-foreground">
-        Update employee by editing First Name, Last Name, Username, Password,
+        Update operator by editing First Name, Last Name, Username, Password,
         Branch Id
       </p>
     </div>
@@ -92,7 +102,7 @@ const onSubmit = form.handleSubmit(async (values: any) => {
       <div value="roleDetails" class="text-sm md:text-base p-6 basis-full">
         <form @submit="onSubmit">
           <div class="grid md:grid-cols-2 gap-6">
-            <FormField v-slot="{ componentField }" name="merchantEmployeeId">
+            <FormField v-slot="{ componentField }" name="merchantOperatorId">
               <FormItem>
                 <FormLabel>Merchant Employee Id </FormLabel>
                 <FormControl>
@@ -132,6 +142,30 @@ const onSubmit = form.handleSubmit(async (values: any) => {
                 <FormMessage />
               </FormItem>
             </FormField>
+            <FormField v-slot="{ componentField }" name="operatorRole">
+              <FormItem>
+                <FormLabel>Operator Role</FormLabel>
+                <UiSelect v-bind="componentField">
+                  <FormControl>
+                    <UiSelectTrigger>
+                      <UiSelectValue placeholder="Select operator role" />
+                    </UiSelectTrigger>
+                  </FormControl>
+                  <UiSelectContent>
+                    <UiSelectGroup>
+                      <UiSelectItem
+                        v-for="role in operatorRoleData"
+                        :key="role"
+                        :value="role"
+                      >
+                        {{ role }}
+                      </UiSelectItem>
+                    </UiSelectGroup>
+                  </UiSelectContent>
+                </UiSelect>
+                <FormMessage />
+              </FormItem>
+            </FormField>
             <FormField v-slot="{ componentField }" name="merchantBranchId">
               <FormItem>
                 <FormLabel>Branch</FormLabel>
@@ -156,6 +190,7 @@ const onSubmit = form.handleSubmit(async (values: any) => {
                 <FormMessage />
               </FormItem>
             </FormField>
+
             <div class="col-span-full w-full py-4 flex justify-between">
               <UiButton
                 :disabled="isSubmitting"

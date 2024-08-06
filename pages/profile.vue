@@ -87,7 +87,7 @@ const onSubmit = form.handleSubmit(async (values: any) => {
 
 <template>
   <div class="w-full flex flex-col gap-8">
-    <div>
+    <div class="pt-4">
       <h1 class="md:text-2xl text-lg font-medium">Profile</h1>
       <p class="text-sm text-muted-foreground">Update your profile</p>
     </div>
