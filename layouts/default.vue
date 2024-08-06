@@ -111,8 +111,8 @@ const closeMenuNav = () => {
       ]"
     >
       <!-- Page Header -->
-      <div class="flex flex-col py-6 gap-4">
-        <div class="flex h-10 items-center px-3 md:px-8">
+      <div class="flex flex-col py-6 gap-4 md:px-8 p-5">
+        <div class="flex h-10 items-center justify-between">
           <div class="flex items-center gap-3 md:gap-8">
             <OpenSidebarIcon
               v-if="!isSidebarCollapsed"
@@ -154,7 +154,7 @@ const closeMenuNav = () => {
         </div>
 
         <UiCard
-          class="h-16 shadow-sm bg-white flex gap-14 md:px-8 px-5 items-center w-full"
+          class="h-16 shadow-sm bg-white flex gap-14 px-5 items-center w-full"
         >
           <!-- <div class="w-0 h-14 rounded-xl -left-2 relative">
             <svg
@@ -210,7 +210,7 @@ const closeMenuNav = () => {
       </div>
 
       <!-- Page Main Content -->
-      <div class="md:px-8 p-5">
+      <div class="md:px-8 px-5 pb-5">
         <slot />
       </div>
     </div>

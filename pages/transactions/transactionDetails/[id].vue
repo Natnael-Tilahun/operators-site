@@ -24,7 +24,7 @@ const formatDate = (date: string) => {
 
 <template>
   <div class="w-full flex flex-col gap-8">
-    <div>
+    <div class="pt-4">
       <h1 class="md:text-2xl text-lg font-medium">Transaction Details</h1>
       <p class="text-sm text-muted-foreground">View transaction information</p>
     </div>

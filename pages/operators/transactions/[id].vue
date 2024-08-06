@@ -41,7 +41,7 @@ const refetch = async () => {
 
 <template>
   <div class="w-full flex flex-col gap-8">
-    <div>
+    <div class="pt-4">
       <h1 class="md:text-2xl text-lg font-medium">
         {{ data[0]?.operatorName && "Operator" + data[0]?.operatorName }}
         Transactions

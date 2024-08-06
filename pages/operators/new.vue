@@ -66,7 +66,7 @@ const onSubmit = form.handleSubmit(async (values: any) => {
 
 <template>
   <div class="w-full h-full flex flex-col gap-8">
-    <div class="">
+    <div class="pt-4">
       <h1 class="md:text-2xl text-lg font-medium">Create New Operator</h1>
       <p class="text-sm text-muted-foreground">
         Create new operator by including First Name, Last Name, Username,

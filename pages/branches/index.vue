@@ -33,7 +33,7 @@ const refetch = async () => {
 <!-- Render DataTable only if data is available -->
 <template>
   <div class="flex flex-col space-y-8 mx-auto">
-    <div class="flex justify-between">
+    <div class="flex justify-between pt-4">
       <div>
         <h1 class="md:text-2xl text-lg font-medium">Branches</h1>
         <p class="text-sm text-muted-foreground">View and manage branches</p>

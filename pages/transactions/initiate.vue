@@ -54,7 +54,7 @@ const onSubmit = form.handleSubmit(async (values) => {
 
 <template>
   <div class="w-full flex flex-col gap-8">
-    <div>
+    <div class="pt-4">
       <h1 class="md:text-2xl text-lg font-medium">Initiate Transaction</h1>
       <p class="text-sm text-muted-foreground">Create a new transaction</p>
     </div>

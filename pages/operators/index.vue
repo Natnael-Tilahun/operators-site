@@ -33,7 +33,7 @@ const refetch = async () => {
 <!-- Render DataTable only if data is available -->
 <template>
   <div class="w-full flex flex-col gap-8 mx-auto">
-    <div class="flex justify-between">
+    <div class="flex justify-between pt-4">
       <div>
         <h1 class="md:text-2xl text-lg font-medium">Operators</h1>
         <p class="text-sm text-muted-foreground">View and manage operators</p>

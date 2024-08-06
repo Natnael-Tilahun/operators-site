@@ -52,7 +52,7 @@ const refetch = async () => {
 
 <template>
   <div class="w-full flex flex-col gap-8">
-    <div class="flex justify-between">
+    <div class="flex justify-between pt-4">
       <div>
         <h1 class="md:text-2xl text-lg font-medium">Transactions</h1>
         <p class="text-sm text-muted-foreground">

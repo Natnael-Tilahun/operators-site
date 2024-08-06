@@ -90,7 +90,7 @@ const onSubmit = form.handleSubmit(async (values: any) => {
 
 <template>
   <div class="w-full h-full flex flex-col gap-8">
-    <div class="">
+    <div class="pt-4">
       <h1 class="md:text-2xl text-lg font-medium">Update Operator</h1>
       <p class="text-sm text-muted-foreground">
         Update operator by editing First Name, Last Name, Username, Password,
