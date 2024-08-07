@@ -2,26 +2,24 @@
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-const { getTransactions } = useTransactions();
-const data = ref<Transaction[]>([]);
-const isLoading = ref(true);
-const isError = ref(false);
 
-onMounted(async () => {
-  await fetchTransactions();
+const props = defineProps<{
+  transactionData: Transaction[];
+}>();
+
+const data = computed(() => {
+  return props.transactionData
+    .slice() // Create a shallow copy to avoid mutating the original array
+    .sort(
+      (a, b) =>
+        new Date(b.expirationDate).getTime() -
+        new Date(a.expirationDate).getTime()
+    )
+    .slice(0, 5);
 });
 
-const fetchTransactions = async () => {
-  try {
-    isLoading.value = true;
-    data.value = await getTransactions();
-  } catch (error) {
-    console.error("Error fetching transactions:", error);
-    isError.value = true;
-  } finally {
-    isLoading.value = false;
-  }
-};
+const isLoading = ref(false);
+const isError = ref(false);
 
 const navigateToTransactionDetail = (id: string) => {
   router.push(`/transactions/transactionDetails/${id}`);
@@ -103,7 +101,7 @@ const getInitials = (name: string) =>
     <UiError v-if="isError" />
     <div
       v-else
-      v-for="item in data.slice(0, 5)"
+      v-for="item in data"
       :key="item.merchantTransactionId"
       class="flex items-center cursor-pointer p-3 rounded-xl bg-accent dark:bg-gray-700 hover:bg-accent/20 hover:dark:bg-gray-600 hover:shadow-md hover:scale-[1.02] border border-transparent hover:border-accent/20 transition-all duration-300 ease-in-out"
       @click="navigateToTransactionDetail(item.merchantTransactionId)"
