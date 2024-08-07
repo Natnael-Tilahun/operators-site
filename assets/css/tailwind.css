@@ -32,6 +32,24 @@
     --input: 220 13% 91%;
     --ring: 262.1 83.3% 57.8%;
     --radius: 0.5rem;
+
+    /* ... */
+    --vis-tooltip-background-color: none !important;
+    --vis-tooltip-border-color: none !important;
+    --vis-tooltip-text-color: none !important;
+    --vis-tooltip-shadow-color: none !important;
+    --vis-tooltip-backdrop-filter: none !important;
+    --vis-tooltip-padding: none !important;
+
+    /* --vis-primary-color: 126 56% 73%;
+    --vis-secondary-color: 56 100% 85%;
+    --vis-muted-color: 126 56% 73%; */
+    --vis-primary-color: 142 76% 46%;
+    /* Green for completed */
+    --vis-secondary-color: 45 93% 67%;
+    /* Yellow for pending */
+    --vis-muted-color: 0 84% 70%;
+    --vis-text-color: var(--muted-foreground)
   }
 
   .dark {
