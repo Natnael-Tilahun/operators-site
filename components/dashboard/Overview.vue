@@ -1,48 +1,96 @@
 <script setup lang="ts">
-import { VisAxis, VisStackedBar, VisXYContainer } from "@unovis/vue";
+import { computed } from "vue";
+import { BarChart } from "~/components/ui/chart-bar";
 
-type Data = (typeof data)[number];
-const data = [
-  { name: "Jan", total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: "Feb", total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: "Mar", total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: "Apr", total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: "May", total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: "Jun", total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: "Jul", total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: "Aug", total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: "Sep", total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: "Oct", total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: "Nov", total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: "Dec", total: Math.floor(Math.random() * 5000) + 1000 },
-];
+interface Transaction {
+  expirationDate: string;
+  amount: number;
+  paymentStatus: string;
+}
+
+interface MonthlyData {
+  name: string;
+  completed: number;
+  Pending: number;
+  Failed: number;
+}
+
+const props = withDefaults(
+  defineProps<{
+    transactionData?: Transaction[];
+  }>(),
+  {
+    transactionData: () => [],
+  }
+);
+
+const data = computed<MonthlyData[]>(() => {
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const monthlyData = monthNames.map((name) => ({
+    name,
+    completed: 0,
+    Pending: 0,
+    Failed: 0,
+  }));
+
+  if (props.transactionData && props.transactionData.length > 0) {
+    props.transactionData.forEach((transaction) => {
+      if (
+        transaction &&
+        transaction.expirationDate &&
+        transaction.paymentStatus &&
+        transaction.amount
+      ) {
+        const date = new Date(transaction.expirationDate);
+        const monthIndex = date.getMonth();
+        if (monthIndex >= 0 && monthIndex < 12) {
+          const status = transaction.paymentStatus.toLowerCase();
+          if (status === "completed") {
+            monthlyData[monthIndex].completed += transaction.amount;
+          } else if (status === "pending") {
+            monthlyData[monthIndex].Pending += transaction.amount;
+          } else if (status === "failed") {
+            monthlyData[monthIndex].Failed += transaction.amount;
+          }
+        }
+      }
+    });
+  }
+
+  return monthlyData;
+});
+
+const maxValue = computed(() =>
+  Math.max(...data.value.flatMap((d) => [d.completed, d.Pending, d.Failed]))
+);
 </script>
 
 <template>
-  <VisXYContainer height="350px" :margin="{ left: 20, right: 20 }" :data="data">
-    <VisStackedBar
-      :x="(d: Data, i: number) => i"
-      :y="(d: Data) => d.total"
-      color="hsl(var(--primary))"
-      :rounded-corners="4"
-      :bar-padding="0.15"
-    />
-    <VisAxis
-      type="x"
-      :num-ticks="data.length"
-      :tick-format="(index: number) => data[index]?.name"
-      :grid-line="false"
-      :tick-line="false"
-      color="#888888"
-    />
-    <VisAxis
-      type="y"
-      :num-ticks="data.length"
-      :tick-format="(index: number) => data[index]?.name"
-      :grid-line="false"
-      :tick-line="false"
-      :domain-line="false"
-      color="#888888"
-    />
-  </VisXYContainer>
+  <BarChart
+    index="name"
+    :data="data"
+    :categories="['completed', 'Pending', 'Failed']"
+    :y-formatter="
+      (tick: number | Date, i: number, ticks: number[] | Date[]) => {
+        return typeof tick === 'number'
+          ? `$ ${new Intl.NumberFormat('us').format(tick).toString()}`
+          : '';
+      }
+    "
+    :rounded-corners="4"
+  />
 </template>

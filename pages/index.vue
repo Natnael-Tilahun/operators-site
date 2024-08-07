@@ -29,6 +29,14 @@ try {
 } finally {
   isLoading.value = false;
 }
+
+watch(
+  transactionData,
+  (newData) => {
+    console.log("Transaction Data in index.vue:", newData);
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
@@ -138,7 +146,7 @@ try {
           <UiCardTitle>Overview</UiCardTitle>
         </UiCardHeader>
         <UiCardContent class="pl-2">
-          <DashboardOverview />
+          <DashboardOverview :transactionData="transactionData" />
         </UiCardContent>
       </UiCard>
       <UiCard class="col-span-3 shadow-md rounded-xl dark:bg-gray-800">
@@ -147,7 +155,7 @@ try {
           <UiCardDescription> Your recent 5 transactions. </UiCardDescription>
         </UiCardHeader>
         <UiCardContent>
-          <DashboardRecentSales />
+          <DashboardRecentSales :transactionData="transactionData" />
         </UiCardContent>
       </UiCard>
     </div>
