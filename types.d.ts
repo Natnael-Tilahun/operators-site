@@ -78,12 +78,12 @@ enum TransactionInitiator {
 interface Transaction {
     merchantTransactionId: string
     merchantId: string
-    merchantName: string
+    merchantName?: string
     merchantCity: string
-    merchantBranchId: string
+    merchantBranchId?: string
     merchantBranchName: string
-    operatorId: string
-    operatorName: string
+    operatorId?: string
+    operatorName?: string
     amount: number
     currencyCode: string
     merchantCategoryCode: string
@@ -96,11 +96,11 @@ interface Transaction {
     expirationDate: string
     transactionInitiator: string
     Enum: TransactionInitiator
-    mbTransactionId: string
-    coreTransactionId: string
+    mbTransactionId?: string
+    coreTransactionId?: string
     merchantAccountNumber: string
-    payerAccountNumber: string
-    payerId: string
-    payerName: string
-    payerPhone: string
+    payerAccountNumber?: string
+    payerId?: string
+    payerName?: string
+    payerPhone?: string
 }
