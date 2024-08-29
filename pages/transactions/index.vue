@@ -2,11 +2,13 @@
 import { ref, computed } from "vue";
 import { columns } from "~/components/transactions/columns";
 import { useTransactions } from "~/composables/useTransactions";
+import { useRouter } from "vue-router"; // {{ edit_1 }}
 
 const { getTransactions } = useTransactions();
 const data = ref<Transaction[]>([]);
 const isLoading = ref(true);
 const isError = ref(false);
+const router = useRouter(); // {{ edit_2 }}
 
 const initiatorOptions = computed(() => [
   { value: "", label: "All Initiators" },
@@ -48,6 +50,13 @@ const refetch = async () => {
     isLoading.value = false;
   }
 };
+
+const navigateToPrintTransactions = () => {
+  console.log("account", data.value[0].merchantAccountNumber);
+  router.push({
+    path: "/transactions/print-transactions",
+  });
+};
 </script>
 
 <template>
@@ -59,12 +68,21 @@ const refetch = async () => {
           View and manage transactions
         </p>
       </div>
-      <NuxtLink to="/transactions/initiate" class="w-fit self-end">
-        <UiButton class="w-fit self-end px-5"
-          ><Icon name="material-symbols:add" size="24" class="mr-2"></Icon
-          >Initiate Transaction</UiButton
+      <div class="flex flex-col md:flex-row gap-4">
+        <UiButton
+          class="w-fit self-end px-5"
+          @click="navigateToPrintTransactions"
+          ><Icon name="material-symbols:download" size="24" class="mr-2"></Icon
+          >Download Transactions</UiButton
         >
-      </NuxtLink>
+
+        <NuxtLink to="/transactions/initiate" class="w-fit self-end">
+          <UiButton class="w-fit self-end px-5"
+            ><Icon name="material-symbols:add" size="24" class="mr-2"></Icon
+            >Initiate Transaction</UiButton
+          >
+        </NuxtLink>
+      </div>
     </div>
     <div v-if="isLoading" class="py-10 flex justify-center w-full">
       <UiLoading />
