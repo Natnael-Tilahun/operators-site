@@ -1,19 +1,11 @@
 <script setup lang="ts">
 import { Skeleton } from "~/components/ui/skeleton";
-
 const route = useRoute();
-
-const { getBranches } = useBranches();
-const { getEmployees } = useEmployees();
 const { getTransactions } = useTransactions();
 
 const isLoading = ref(true);
-const branchData = ref<Branch[]>([]);
-const employeeData = ref<Employee[]>([]);
 const transactionData = ref<Transaction[]>([]);
 
-const branchNumber = computed(() => branchData.value.length);
-const employeeNumber = computed(() => employeeData.value.length);
 const totalTransactionAmount = computed(() =>
   transactionData.value.reduce(
     (sum, transaction) => sum + transaction.amount,
@@ -22,8 +14,7 @@ const totalTransactionAmount = computed(() =>
 );
 
 try {
-  [branchData.value, employeeData.value, transactionData.value] =
-    await Promise.all([getBranches(), getEmployees(), getTransactions()]);
+  transactionData.value = await getTransactions();
 } catch (error) {
   console.error("Error fetching data:", error);
 } finally {
@@ -41,6 +32,7 @@ watch(
 
 <template>
   <div class="lg:space-y-16 md:space-y-10 space-y-6 dark:bg-gray-900">
+    <!-- Loading Indicator Skeleton -->
     <div
       class="grid gap-4 lg:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
       v-if="isLoading"
@@ -62,11 +54,8 @@ watch(
       </div>
     </div>
 
-    <div
-      v-else
-      class="grid gap-4 lg:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-    >
-      <UiCard class="shadow-md rounded-3xl dark:bg-gray-800">
+    <div v-else class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
+      <!-- <UiCard class="shadow-md rounded-3xl dark:bg-gray-800">
         <UiCardHeader
           class="flex flex-row items-center justify-between space-y-0 pb-2"
         >
@@ -81,9 +70,9 @@ watch(
           <div class="text-2xl font-bold">+{{ branchNumber }}</div>
           <p class="text-xs text-muted-foreground">+10.1% from last month</p>
         </UiCardContent>
-      </UiCard>
+      </UiCard> -->
 
-      <UiCard class="shadow-md rounded-3xl dark:bg-gray-800">
+      <!-- <UiCard class="shadow-md rounded-3xl dark:bg-gray-800">
         <UiCardHeader
           class="flex flex-row items-center justify-between space-y-0 pb-2"
         >
@@ -107,9 +96,10 @@ watch(
           <div class="text-2xl font-bold">+{{ employeeNumber }}</div>
           <p class="text-xs text-muted-foreground">+19% from last month</p>
         </UiCardContent>
-      </UiCard>
+      </UiCard> -->
 
-      <UiCard class="shadow-md rounded-3xl dark:bg-gray-800">
+      <!-- Account list and total balance -->
+      <UiCard class="col-span-4 shadow-md rounded-3xl dark:bg-gray-800">
         <UiCardHeader
           class="flex flex-row items-center justify-between space-y-0 pb-2"
         >
@@ -139,8 +129,12 @@ watch(
           <p class="text-xs text-muted-foreground">Total transaction amount</p>
         </UiCardContent>
       </UiCard>
+
+      <!-- Applications -->
+      <DashboardAPPlications />
     </div>
     <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
+      <!-- Account Overview -->
       <UiCard class="col-span-4 shadow-md rounded-xl dark:bg-gray-800">
         <UiCardHeader>
           <UiCardTitle>Overview</UiCardTitle>
@@ -149,10 +143,21 @@ watch(
           <DashboardOverview :transactionData="transactionData" />
         </UiCardContent>
       </UiCard>
+
+      <!-- Recent Transactions -->
       <UiCard class="col-span-3 shadow-md rounded-xl dark:bg-gray-800">
         <UiCardHeader>
-          <UiCardTitle>Recent Sales</UiCardTitle>
-          <UiCardDescription> Your recent 5 transactions. </UiCardDescription>
+          <div class="flex justify-between w-full items-center">
+            <div class="space-y-1">
+              <UiCardTitle>Recent Sales</UiCardTitle>
+              <UiCardDescription class="text-xs">
+                Your recent 5 transactions.
+              </UiCardDescription>
+            </div>
+            <NuxtLink class="text-primary text-sm" to="/transactions">
+              View All
+            </NuxtLink>
+          </div>
         </UiCardHeader>
         <UiCardContent>
           <DashboardRecentSales :transactionData="transactionData" />

@@ -17,7 +17,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: "Merchant User Management",
+      title: "Operators Site",
       link: [],
     },
   },

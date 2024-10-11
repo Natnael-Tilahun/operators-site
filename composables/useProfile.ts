@@ -1,17 +1,16 @@
 import { Toast, ToastAction, toast, useToast } from "~/components/ui/toast";
 import { useAuthUser } from "./useAuthUser";
 
-export const useMerchants = () => {
+export const useProfile = () => {
     const runtimeConfig = useRuntimeConfig();
     const isLoading = ref<boolean>(false);
     const isSubmitting = ref<boolean>(false);
-
     const store = useAuthStore();
 
-    const getProfile: () => Promise<Merchant> = async () => {
+    const getProfile: () => Promise<Profile> = async () => {
         try {
-            const { data, pending, error, status } = await useFetch<Merchant>(
-                `${runtimeConfig.public.API_BASE_URL}/api/v1/merchants`,
+            const { data, pending, error, status } = await useFetch<Profile>(
+                `${runtimeConfig.public.API_BASE_URL}/api/v1/operators/me`,
                 {
                     method: "GET",
                     headers: {
@@ -32,7 +31,7 @@ export const useMerchants = () => {
             }
 
             if (!data.value) {
-                throw new Error("No merchants data received");
+                throw new Error("No profile data received");
             }
 
             return data.value;
@@ -42,44 +41,7 @@ export const useMerchants = () => {
         }
     };
 
-    const createNeweMerchant: (merchantData: any) => Promise<Merchant> = async (merchantData) => {
-        try {
-            const { data, pending, error, status } = await useFetch<Merchant>(
-                `${runtimeConfig.public.API_BASE_URL}/api/v1/merchants/register`,
-                {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${store.accessToken}`,
-                    },
-                    body: JSON.stringify(merchantData),
-                },
-            );
 
-            isLoading.value = pending.value;
-
-            if (status.value === "error") {
-
-                toast({
-                    title: error.value?.data?.title || "Something went wrong!",
-                    description: error.value?.data?.detail || error.value?.data?.message,
-                    variant: "destructive"
-                })
-
-                console.log("Creating new merchant error: ", error.value?.data.detail, error)
-                throw new Error(error.value?.data.detail);
-            }
-
-
-            if (!data.value) {
-                throw new Error("No merchant with this customer id received");
-            }
-
-            return data.value;
-        } catch (err) {
-            // Throw the error to be caught and handled by the caller
-            throw err;
-        }
-    };
 
     const updateProfile: (merchantData: any) => Promise<Merchant> = async (merchantData) => {
         try {
@@ -128,7 +90,6 @@ export const useMerchants = () => {
     return {
         isLoading,
         getProfile,
-        createNeweMerchant,
         updateProfile,
         isSubmitting
     };

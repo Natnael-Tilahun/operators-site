@@ -136,114 +136,12 @@ const mainLinks: Link[] = [
     showDropdown: false,
   },
   {
-    title: "Branches",
-    icon: "material-symbols:partner-exchange-outline-rounded",
-    link: "/branches",
-    size: "22",
-    showDropdown: false,
-  },
-  {
-    title: "Operators",
-    icon: "carbon:customer-service",
-    link: "/operators",
-    size: "22",
-    showDropdown: false,
-  },
-  {
-    title: "transactions",
+    title: "Transactions",
     icon: "uil:transaction",
     link: "/transactions",
     size: "22",
     showDropdown: false,
   },
-  // {
-  //   title: "Employee Management",
-  //   icon: "solar:user-bold",
-  //   size: "22",
-  //   showDropdown: false,
-  //   dropdown: [
-  //     { title: "Users", link: "/users" },
-  //     { title: "Roles", link: "/userRoles" },
-  //     { title: "Permissions", link: "/permissions" },
-  //   ],
-  // },
-  // {
-  //   title: "Merchants",
-  //   icon: "material-symbols:partner-exchange-outline-rounded",
-  //   link: "/merchants",
-  //   size: "22",
-  //   showDropdown: false,
-  // },
-  // {
-  //   title: "Application Content Management",
-  //   icon: "material-symbols:create-new-folder",
-  //   size: "22",
-  //   showDropdown: false,
-  //   dropdown: [
-  //     { title: "FAQs", link: "/faqs" },
-  //     { title: "Privacy Policies", link: "/privacy-policies" },
-  //     { title: "Term & Conditions", link: "/term-conditions" },
-  //     { title: "Service Outage Messages", link: "/service-outage-messages" },
-  //     { title: "Locations", link: "/locations" },
-  //     { title: "Customer Care Informations", link: "/customer-care-info" },
-  //     { title: "Ad Campaigns", link: "/ad-campaigns" },
-  //   ],
-  // },
-  // {
-  //   title: "Logs & Reports",
-  //   icon: "iconoir:reports-solid",
-  //   size: "22",
-  //   showDropdown: false,
-  //   dropdown: [
-  //     { title: "Logs", link: "/log" },
-  //     { title: "Reports", link: "/reports" },
-  //   ],
-  // },
-  // {
-  //   title: "Master Data Management",
-  //   icon: "icon-park-solid:category-management",
-  //   size: "22",
-  //   showDropdown: false,
-  //   dropdown: [
-  //     { title: "Products", link: "/products" },
-  //     { title: "Services", link: "/services" },
-  //     { title: "Sequrity Questions", link: "/security-questions" },
-  //   ],
-  // },
-
-  // {
-  //   title: "Transactions",
-  //   icon: "uil:transaction",
-  //   // link: "/transactions",
-  //   size: "22",
-  //   showDropdown: false,
-  //   dropdown: [
-  //     { title: "Transactions", link: "/transactions" },
-  //     { title: "Dropdown Item 2", link: "/dropdown/item2" },
-  //     // Add more dropdown items as needed
-  //   ],
-  // },
-  // {
-  //   title: "T24",
-  //   icon: "streamline:computer-database-server-2-server-network-internet",
-  //   link: "/t24",
-  //   size: "22",
-  //   showDropdown: false,
-  // },
-  // {
-  //   title: "Anonymous",
-  //   icon: "codicon:workspace-unknown",
-  //   link: "/anonymous",
-  //   size: "22",
-  //   showDropdown: false,
-  // },
-  // {
-  //   title: "Location Based Services",
-  //   icon: "material-symbols:location-on",
-  //   link: "/location-based-services",
-  //   size: "22",
-  //   showDropdown: false,
-  // },
 ];
 const { logout } = useAuth();
 
@@ -252,6 +150,7 @@ const logoutHandler = async () => {
     console.log("User logged out successfully!");
   });
 };
+
 // Initialize isOpen array with the same length as mainLinks and set all to false
 const isOpen = ref(new Array(mainLinks.length).fill(false));
 
