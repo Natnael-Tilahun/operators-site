@@ -9,10 +9,6 @@ export const useAuth = () => {
   const store = useAuthStore();
   const { toast } = useToast();
 
-  const setUser = (user: User) => {
-    authUser.value = user;
-  };
-
   // const login = async (user: UserInput) => {
   //   try {
   //     const { data, error, status } = await useFetch<any>(
@@ -52,16 +48,14 @@ export const useAuth = () => {
 
     try {
       const { data, error, status } = await useAsyncData<any>(`user`, () =>
-        $fetch(`${runtimeConfig.public.API_BASE_URL}/api/v1/auth/sign-in/password`,
+        $fetch(`${runtimeConfig.public.API_BASE_URL}/api/v1/operators/sign-in`,
           {
             method: "POST",
             body: JSON.stringify(user)
           })
-      ); // If login is successful, navigate to the home page
+      );
 
       if (status.value === "error") {
-        console.log("error: ", error)
-        // Handle the error, e.g., display a toast message or stay on the login page
         toast({
           title: (error as any)?.value?.data?.title,
           description: (error as any)?.value?.data?.detail || (error as any)?.value?.data?.message,
@@ -76,10 +70,10 @@ export const useAuth = () => {
           ...data?.value,
           isAuthenticated: data?.value.accessToken ? true : false,
         });
-
+        // navigateTo("/", { replace: true });
         try {
-          const { data, pending, error, status } = await useFetch<Merchant>(
-            `${runtimeConfig.public.API_BASE_URL}/api/v1/merchants`,
+          const { data: profileData, pending: profilePending, error: profileError, status: profileStatus } = await useFetch<Profile>(
+            `${runtimeConfig.public.API_BASE_URL}/api/v1/operators/me`,
             {
               method: "GET",
               headers: {
@@ -88,142 +82,136 @@ export const useAuth = () => {
             }
           );
 
-          if (status.value == 'success') {
+          if (profileStatus.value == 'success') {
+            if (profileData?.value) {
+              store.setProfile(profileData?.value);
+            }
+            console.log("profile data: ", profileData.value)
             navigateTo("/", { replace: true });
           }
 
-          if (status.value === "error" && error.value?.data?.detail == "404 NOT_FOUND") {
-            navigateTo("/register", { replace: true });
+          if (profileStatus.value === "error" && profileError.value?.data?.detail == "404 NOT_FOUND") {
+            console.log("error: ", profileError)
+            toast({
+              title: "Getting profile error",
+              description: (profileError as any)?.value?.data?.detail || (profileError as any)?.value?.data?.message,
+              variant: "destructive",
+            });
+            navigateTo("/", { replace: true });
           }
         } catch (error) {
           console.error("Getting profile error: ", error);
-          if ((error as any).value?.data?.detail == "404 NOT_FOUND") {
-            navigateTo("/register", { replace: true });
-          }
+
+          // if ((error as any).value?.data?.detail == "404 NOT_FOUND") {
+          navigateTo("/", { replace: true });
+          // }
         }
-        return data.value;
+
+
+        // try {
+        //   const { data, pending, error, status } = await useFetch<Merchant>(
+        //     `${runtimeConfig.public.API_BASE_URL}/api/v1/merchants`,
+        //     {
+        //       method: "GET",
+        //       headers: {
+        //         Authorization: `Bearer ${store.accessToken}`,
+        //       },
+        //     }
+        //   );
+
+        //   if (status.value == 'success') {
+        //     navigateTo("/", { replace: true });
+        //   }
+
+        //   if (status.value === "error" && error.value?.data?.detail == "404 NOT_FOUND") {
+        //     navigateTo("/register", { replace: true });
+        //   }
+        // } catch (error) {
+        //   console.error("Getting profile error: ", error);
+        //   if ((error as any).value?.data?.detail == "404 NOT_FOUND") {
+        //     navigateTo("/register", { replace: true });
+        //   }
+        // }
+        // return data.value;
       }
 
     } catch (error) {
       console.error("Login error: ", error);
     } finally {
-      // Ensure to stop loading state whether login is successful or not
       isLoading.value = false;
     }
   }
 
-  const register = async (user: UserInput) => {
+  // const getRefreshToken = async () => {
+  //   try {
+  //     const { data, error, status } = await useFetch(
+  //       `${runtimeConfig.public.API_BASE_URL}/v1/api/auth/refresh-token`,
+  //       {
+  //         method: "POST",
+  //         body: {
+  //           refreshToken: store.refreshToken,
+  //         },
+  //         headers: {
+  //           Authorization: `Bearer ${store.accessToken}`,
+  //         },
+  //       }
+  //     );
 
-    try {
-      const { data, error, status } = await useAsyncData<any>(`user`, () =>
-        $fetch(`${runtimeConfig.public.API_BASE_URL}/api/v1/auth/sign-in/password`,
-          {
-            method: "POST",
-            body: JSON.stringify(user)
-          })
-      ); // If login is successful, navigate to the home page
+  //     if (status.value === "error") {
+  //       // Handle the error, e.g., display a toast message or stay on the login page
+  //       toast({
+  //         title: error?.value?.data?.title,
+  //         description: error?.value?.data?.detail,
+  //         variant: "destructive",
+  //       });
+  //       console.log("Refresh-token error: ", error);
 
-      if (status.value === "error") {
-        console.log("error: ", error)
-        // Handle the error, e.g., display a toast message or stay on the login page
-        toast({
-          title: (error as any)?.value?.data?.title,
-          description: (error as any)?.value?.data?.detail || (error as any)?.value?.data?.message,
-          variant: "destructive",
-        });
-        throw new Error("Login error: " + error.value);
-      }
+  //       throw new Error("Refresh-token error: " + error.value);
+  //     }
+  //     console.log("v1/api/auth/refresh-token: ", data);
+  //     return data.value;
+  //   } catch (err) {
+  //     throw err;
+  //   }
+  // };
 
-      if (status.value === "success") {
-        console.log("faffd: ", data.value)
-        store.setAuth({
-          ...user,
-          ...data?.value,
-          isAuthenticated: data?.value.accessToken ? true : false,
-        });
-        await getAuthorities()
-        return data.value;
-      }
+  // const getAuthorities = async () => {
+  //   try {
+  //     const { data, error, status } = await useFetch<any>(
+  //       `${runtimeConfig.public.API_BASE_URL}/api/v1/auth/roles`,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           Authorization: `Bearer ${store.accessToken}`,
+  //         },
+  //       }
+  //     );
 
-    } catch (error) {
-      console.error("Login error: ", error);
-    } finally {
-      // Ensure to stop loading state whether login is successful or not
-      isLoading.value = false;
-    }
-  }
+  //     if (status.value === "error") {
+  //       // Handle the error, e.g., display a toast message or stay on the login page
+  //       toast({
+  //         title: error?.value?.data?.title || error?.value,
+  //         description: error?.value?.data?.detail,
+  //         variant: "destructive",
+  //       });
+  //       console.log("Getting roles error: ", error);
 
-  const getRefreshToken = async () => {
-    try {
-      const { data, error, status } = await useFetch(
-        `${runtimeConfig.public.API_BASE_URL}/v1/api/auth/refresh-token`,
-        {
-          method: "POST",
-          body: {
-            refreshToken: store.refreshToken,
-          },
-          headers: {
-            Authorization: `Bearer ${store.accessToken}`,
-          },
-        }
-      );
+  //       throw new Error("Getting role error: " + error.value);
+  //     }
+  //     if (status.value === "success") {
 
-      if (status.value === "error") {
-        // Handle the error, e.g., display a toast message or stay on the login page
-        toast({
-          title: error?.value?.data?.title,
-          description: error?.value?.data?.detail,
-          variant: "destructive",
-        });
-        console.log("Refresh-token error: ", error);
+  //       store.setPermissions({
+  //         permissions: data?.value && data?.value?.permissions
+  //       });
 
-        throw new Error("Refresh-token error: " + error.value);
-      }
-      console.log("v1/api/auth/refresh-token: ", data);
-      return data.value;
-    } catch (err) {
-      // Throw the error to be caught and handled by the caller
-      throw err;
-    }
-  };
-
-  const getAuthorities = async () => {
-    try {
-      const { data, error, status } = await useFetch<any>(
-        `${runtimeConfig.public.API_BASE_URL}/api/v1/auth/roles`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${store.accessToken}`,
-          },
-        }
-      );
-
-      if (status.value === "error") {
-        // Handle the error, e.g., display a toast message or stay on the login page
-        toast({
-          title: error?.value?.data?.title || error?.value,
-          description: error?.value?.data?.detail,
-          variant: "destructive",
-        });
-        console.log("Getting roles error: ", error);
-
-        throw new Error("Getting role error: " + error.value);
-      }
-      if (status.value === "success") {
-
-        store.setPermissions({
-          permissions: data?.value && data?.value?.permissions
-        });
-
-        navigateTo('/')
-      }
-      return data.value;
-    } catch (err) {
-      // Throw the error to be caught and handled by the caller
-      throw err;
-    }
-  };
+  //       navigateTo('/')
+  //     }
+  //     return data.value;
+  //   } catch (err) {
+  //     // Throw the error to be caught and handled by the caller
+  //     throw err;
+  //   }
+  // };
 
   const userLoggedIn = async () => {
     if (!authUser.value) {
@@ -270,6 +258,6 @@ export const useAuth = () => {
     Error,
     logout,
     authUser,
-    getRefreshToken,
+    // getRefreshToken,
   };
 };

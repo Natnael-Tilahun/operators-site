@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
+import { Icons } from "@/components/icons.jsx";
 
 const router = useRouter();
 
@@ -106,12 +107,8 @@ const getInitials = (name: string) =>
       class="flex items-center cursor-pointer p-3 rounded-xl bg-accent dark:bg-gray-700 hover:bg-accent/20 hover:dark:bg-gray-600 hover:shadow-md hover:scale-[1.02] border border-transparent hover:border-accent/20 transition-all duration-300 ease-in-out"
       @click="navigateToTransactionDetail(item.merchantTransactionId)"
     >
-      <UiAvatar class="h-9 w-9">
-        <UiAvatarImage src="/avatars/01.png" alt="Avatar" />
-        <UiAvatarFallback>{{
-          getInitials(item.payerName || "Unknown")
-        }}</UiAvatarFallback>
-      </UiAvatar>
+      <Icons.deposit />
+
       <div class="ml-4 space-y-1">
         <p class="text-sm font-medium leading-none">
           {{ item.payerName || "Payer Name" }}
@@ -120,8 +117,13 @@ const getInitials = (name: string) =>
           {{ item.payerAccountNumber || "Payer Account Number" }}
         </p>
       </div>
-      <div class="ml-auto font-medium">
-        {{ item.amount.toFixed(2) + " " + item.currencyCode }}
+      <div class="space-y-1 ml-auto">
+        <div class="font-medium text-[#2DD683] whitespace-nowrap text-sm">
+          + {{ item.amount.toFixed(2) + " " + item.currencyCode }}
+        </div>
+        <p class="text-xs text-muted-foreground text-right">
+          {{ new Date(item.expirationDate).toLocaleTimeString() }}
+        </p>
       </div>
     </div>
   </div>

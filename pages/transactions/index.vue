@@ -9,6 +9,26 @@ const data = ref<Transaction[]>([]);
 const isLoading = ref(true);
 const isError = ref(false);
 const router = useRouter(); // {{ edit_2 }}
+const transactionFilterStore = useTransactionFilterStore();
+
+// const paymentStatusOptions = computed(() => [
+//   { value: "", label: "All Payment Status" },
+//   ...["NONE", "PENDING", "COMPLETED", "FAILED", "CANCELLED", "EXPIRED"].map(
+//     (status) => ({
+//       value: status,
+//       label: status.toLowerCase(),
+//     })
+//   ),
+// ]);
+
+const paymentStatusOptions = computed(() => [
+  "NONE",
+  "PENDING",
+  "COMPLETED",
+  "FAILED",
+  "CANCELLED",
+  "EXPIRED",
+]);
 
 const initiatorOptions = computed(() => [
   { value: "", label: "All Initiators" },
@@ -84,20 +104,44 @@ const navigateToPrintTransactions = () => {
         </NuxtLink>
       </div>
     </div>
-    <div v-if="isLoading" class="py-10 flex justify-center w-full">
+    <div
+      v-if="isLoading"
+      class="py-10 border-2 h-96 rounded-md flex items-center justify-center w-full"
+    >
       <UiLoading />
     </div>
 
     <UiCard v-else-if="data && !isError" class="p-6">
       <UiDataTable :columns="columns" :data="data">
         <template v-slot:toolbar="{ table }">
-          <div class="flex flex-1 items-center space-x-2">
+          <div class="flex w-full items-center space-x-4">
             <UiInput
               placeholder="Filter by payer name or account number"
               v-model="filterValue"
               class="h-8 w-[250px] lg:w-[350px]"
               @input="handleFilter(table)"
             />
+
+            <UiSelect
+              name="paymentStatus"
+              v-model="transactionFilterStore.paymentStatus"
+              @update:model-value="() => refetch()"
+            >
+              <UiSelectTrigger class="h-8 w-[150px]">
+                <UiSelectValue
+                  :placeholder="`${transactionFilterStore.paymentStatus}`"
+                />
+              </UiSelectTrigger>
+              <UiSelectContent side="bottom">
+                <UiSelectItem
+                  v-for="status in paymentStatusOptions"
+                  :key="status"
+                  :value="status"
+                >
+                  {{ status }}
+                </UiSelectItem>
+              </UiSelectContent>
+            </UiSelect>
           </div>
         </template>
       </UiDataTable>

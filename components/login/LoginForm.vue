@@ -9,25 +9,25 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { customerLoginFormSchema } from "~/validations/customerLoginFormSchema";
+import { operatorLoginFormSchema } from "~/validations/operatorLoginFormSchema";
 const isLoading = ref<boolean>(false);
 const { login } = useAuth();
 let showPassword = ref(false);
 
 const form = useForm({
-  validationSchema: customerLoginFormSchema,
+  validationSchema: operatorLoginFormSchema,
 });
 
 const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value;
 };
 
-const onSubmit = form.handleSubmit(async (values: any) => {
+const onSubmit = form.handleSubmit(async (values: UserInput) => {
   isLoading.value = true;
   const userCredentials = {
-    username: values.username,
+    merchantShortCode: values.merchantShortCode,
     password: values.password,
-    rememberMe: values.rememberMe,
+    operatorCode: values.operatorCode,
   };
 
   try {
@@ -44,16 +44,32 @@ const onSubmit = form.handleSubmit(async (values: any) => {
   <div :class="cn('grid gap-6', $attrs.class ?? '')">
     <form @submit="onSubmit">
       <div class="grid gap-3">
-        <FormField v-slot="{ componentField }" name="username">
+        <FormField v-slot="{ componentField }" name="merchantShortCode">
           <FormItem>
-            <FormLabel> Username or Email</FormLabel>
+            <FormLabel> Merchant Short Code</FormLabel>
             <FormControl>
               <UiInput
                 type="text"
-                placeholder="username"
+                placeholder="merchant short code"
                 v-bind="componentField"
                 :disabled="isLoading"
-                aria-autocomplete="username"
+                aria-autocomplete="merchantShortCode"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+
+        <FormField v-slot="{ componentField }" name="operatorCode">
+          <FormItem>
+            <FormLabel> Operator Code</FormLabel>
+            <FormControl>
+              <UiInput
+                type="text"
+                placeholder="operator code"
+                v-bind="componentField"
+                :disabled="isLoading"
+                aria-autocomplete="operatorCode"
               />
             </FormControl>
             <FormMessage />
@@ -93,31 +109,12 @@ const onSubmit = form.handleSubmit(async (values: any) => {
           </FormItem>
         </FormField>
 
-        <div class="flex justify-between items-center pb-3">
-          <FormField
-            v-slot="{ value, handleChange }"
-            type="checkbox"
-            name="rememberMe"
-          >
-            <FormItem
-              class="flex flex-row w-fit items-start gap-x-3 space-y-0 py-4"
-            >
-              <FormControl>
-                <UiCheckbox :checked="value" @update:checked="handleChange" />
-              </FormControl>
-              <div class="space-y-1 leading-none">
-                <FormLabel>Remember Me</FormLabel>
-                <FormMessage />
-              </div>
-            </FormItem>
-          </FormField>
-          <NuxtLink
-            to="/forgotPassword"
-            class="text-primary text-right text-sm"
-          >
-            Forgot Password?
-          </NuxtLink>
-        </div>
+        <NuxtLink
+          to="/forgotPassword"
+          class="text-primary text-right text-sm pb-3"
+        >
+          Forgot Password?
+        </NuxtLink>
         <UiButton :disabled="isLoading">
           <Icon
             v-if="isLoading"
@@ -129,21 +126,5 @@ const onSubmit = form.handleSubmit(async (values: any) => {
         </UiButton>
       </div>
     </form>
-    <div class="relative">
-      <div class="absolute inset-0 flex items-center">
-        <span class="w-full border-t" />
-      </div>
-      <div class="relative flex justify-center text-xs uppercase">
-        <span class="bg-background px-2 text-muted-foreground"> Or </span>
-      </div>
-    </div>
-    <UiButton variant="outline" type="button" :disabled="isLoading">
-      <Icon
-        name="svg-spinners:8-dots-rotate"
-        v-if="isLoading"
-        class="mr-2 h-4 w-4 animate-spin"
-      ></Icon>
-      Register as a merchant
-    </UiButton>
   </div>
 </template>

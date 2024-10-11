@@ -1,16 +1,18 @@
 import { useAuthStore } from "~/stores/auth";
+import { useTransactionFilterStore } from "~/stores/transactionStore";
 import { toast } from "~/components/ui/toast";
 
 export const useTransactions = () => {
     const runtimeConfig = useRuntimeConfig();
     const store = useAuthStore();
     const isLoading = ref<boolean>(false);
+    const transactionFilterStore = useTransactionFilterStore();
 
 
     const getTransactions: () => Promise<Transaction[]> = async () => {
         try {
             const { data, error, status } = await useAsyncData<Transaction[]>(`transactions`, () =>
-                $fetch(`${runtimeConfig.public.API_BASE_URL}/api/v1/merchants/transactions`, {
+                $fetch(`${runtimeConfig.public.API_BASE_URL}/api/v1/operators/transactions?PaymentStatus=${transactionFilterStore.paymentStatus}&page=${transactionFilterStore.pageNumber}&size=${transactionFilterStore.pageSize}&sort=${transactionFilterStore.sortBy}`, {
                     headers: {
                         Authorization: `Bearer ${store.accessToken}`,
                     },
@@ -32,7 +34,6 @@ export const useTransactions = () => {
             }
 
             return data.value;
-
         } catch (error) {
             throw error;
         } finally {

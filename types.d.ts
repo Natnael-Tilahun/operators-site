@@ -1,14 +1,53 @@
 interface User {
-    email: string;
     id: string;
-    password: string;
-    role: string[];
+    login: string;
+    email?: string;
+    phone: string;
+    nationalId?: string;
+    activated?: boolean;
+    langKey?: string;
+    imageUrl?: string;
+    verificationKey?: string;
+    resetKey?: string;
+    resetDate?: string;
+    deviceId?: string;
+    unsuccessfulLoginAttempts?: number;
+    lockCount?: number;
+    isUserAccountLocked?: boolean;
+    lockoutDateTime?: string;
+    preferredOtpMethod?: string;
+    isPinSet?: boolean;
+    currentLoginTime?: string;
+    lastLoginTime?: string;
+    forcePinChange?: boolean;
+    emailVerified?: boolean;
+    verified?: boolean;
+    createdBy?: string;
+    createdDate?: string;
+    lastModifiedBy?: string;
+    lastModifiedDate?: string;
+    isEnrolled?: boolean;
+    authorities?: string[];
+}
+
+interface Profile {
+    merchantOperatorId: string;
+    operatorCode: string;
+    operatorRole: string;
+    firstName: string;
+    middleName: string;
+    fullName: string;
+    active: boolean;
+    user: User;
+    merchant: Merchant;
+    merchantBranch: Branch;
+    staticQrData: string;
 }
 
 interface UserInput {
-    username: string;
+    merchantShortCode: string;
+    operatorCode: string;
     password: string;
-    rememberMe: boolean;
 }
 
 interface UserWithoutPassword {
@@ -32,7 +71,7 @@ interface Merchant {
     tradeLicenseNumber: string
     tradeLicenseIssueDate: string
     tradeLicenseExpiryDate: string
-    taxPayerIdNumber: Gender
+    taxPayerIdNumber: string
     taxPayerIssueDate: string
     taxPayerExpiryDate: string
     businessPhoneNumber: string
@@ -49,23 +88,12 @@ interface Branch {
     businessPhoneNumber: string
     faxNumber: string
     address: Address
+    paymentReceivingAccountNumber: string
 }
 
 enum OperatorRole {
     ADMIN, MANAGER, ATTENDANT, SUPERVISOR, NONE
 }
-
-interface Employee {
-    merchantOperatorId: string
-    operatorRole: OperatorRole
-    firstName: string
-    middleName: string
-    fullName: string
-    user: User
-    merchant: Merchant
-    merchantBranch: Branch
-}
-
 
 enum PaymentStatus {
     NONE, PENDING, COMPLETED, FAILED, CANCELLED, EXPIRED
@@ -81,8 +109,10 @@ interface Transaction {
     merchantName?: string
     merchantCity: string
     merchantBranchId?: string
+    businessName: string
     merchantBranchName: string
     operatorId?: string
+    operatorUsername: string
     operatorName?: string
     amount: number
     currencyCode: string
@@ -91,11 +121,11 @@ interface Transaction {
     paymentReference: string
     tipAmount: number
     dynamicId: string
-    paymentStatus: string
-    Enum: PaymentStatus
+    transactionRefId: string
+    paymentStatus: PaymentStatus
     expirationDate: string
-    transactionInitiator: string
-    Enum: TransactionInitiator
+    completedDate: string
+    transactionInitiator: TransactionInitiator
     mbTransactionId?: string
     coreTransactionId?: string
     merchantAccountNumber: string
@@ -103,4 +133,5 @@ interface Transaction {
     payerId?: string
     payerName?: string
     payerPhone?: string
+    qrEncodedData: string
 }

@@ -7,6 +7,7 @@ interface DataTableRowActionsProps<TData> {
 const props = defineProps<DataTableRowActionsProps<any>>();
 
 function viewTransactionDetail(id: string) {
+  console.log("viewTransactionDetail", id);
   navigateTo(`/transactions/transactionDetails/${id}`);
 }
 </script>

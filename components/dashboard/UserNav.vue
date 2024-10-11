@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { username, email } = useAuthStore();
+const { profile } = useAuthStore();
 </script>
 
 <template>
@@ -14,7 +14,7 @@ const { username, email } = useAuthStore();
           <p
             class="text-sm hidden md:block font-medium leading-none text-secondary-foreground"
           >
-            {{ username }}
+            {{ profile?.fullName }}
           </p>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -35,9 +35,11 @@ const { username, email } = useAuthStore();
     <UiDropdownMenuContent class="w-56 p-4" align="end">
       <UiDropdownMenuLabel class="font-normal flex md:hidden">
         <div class="flex flex-col space-y-1">
-          <p class="text-sm font-medium leading-none">{{ username }}</p>
+          <p class="text-sm font-medium leading-none">
+            {{ profile?.fullName }}
+          </p>
           <p class="text-xs leading-none text-muted-foreground">
-            {{ email && email }}
+            {{ profile?.operatorCode }}
           </p>
         </div>
       </UiDropdownMenuLabel>
