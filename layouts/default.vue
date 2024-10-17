@@ -8,12 +8,12 @@ import CloseSidebarIcon from "~/components/layout/sidebar/CloseSidebarIcon.vue";
 const LOCAL_STORAGE_THEME_KEY = "theme";
 
 const route = useRoute();
-const fullPath = ref(route.fullPath);
+const fullPath = ref(route.path);
 const pathSegments = ref([]);
 pathSegments.value = splitPath(fullPath.value);
 
 watch(
-  () => route.fullPath,
+  () => route.path,
   (newVal) => {
     fullPath.value = newVal;
     pathSegments.value = splitPath(fullPath.value);
@@ -62,7 +62,6 @@ const isSidebarCollapsed = useSidebarCollapsed();
 
 const toggleSidebar = () => {
   isSidebarCollapsed.value = !isSidebarCollapsed.value;
-  console.log("isSidebarcollapsed : ", isSidebarCollapsed.value);
 };
 
 const closeMenuNav = () => {

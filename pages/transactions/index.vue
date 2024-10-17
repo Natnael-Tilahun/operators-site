@@ -72,7 +72,6 @@ const refetch = async () => {
 };
 
 const navigateToPrintTransactions = () => {
-  console.log("account", data.value[0].merchantAccountNumber);
   router.push({
     path: "/transactions/print-transactions",
   });
@@ -95,13 +94,6 @@ const navigateToPrintTransactions = () => {
           ><Icon name="material-symbols:download" size="24" class="mr-2"></Icon
           >Download Transactions</UiButton
         >
-
-        <NuxtLink to="/transactions/initiate" class="w-fit self-end">
-          <UiButton class="w-fit self-end px-5"
-            ><Icon name="material-symbols:add" size="24" class="mr-2"></Icon
-            >Initiate Transaction</UiButton
-          >
-        </NuxtLink>
       </div>
     </div>
     <div

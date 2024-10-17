@@ -81,6 +81,11 @@ export const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => new Date(row.getValue("expirationDate")).toLocaleDateString(),
   },
   {
+    accessorKey: "completedDate",
+    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "Completed Date" }),
+    cell: ({ row }) => new Date(row.getValue("completedDate")).toLocaleDateString(),
+  },
+  {
     header: "Actions",
     id: "actions",
     enableHiding: false,

@@ -107,7 +107,7 @@ const getInitials = (name: string) =>
       class="flex items-center cursor-pointer p-3 rounded-xl bg-accent dark:bg-gray-700 hover:bg-accent/20 hover:dark:bg-gray-600 hover:shadow-md hover:scale-[1.02] border border-transparent hover:border-accent/20 transition-all duration-300 ease-in-out"
       @click="navigateToTransactionDetail(item.merchantTransactionId)"
     >
-      <Icons.deposit />
+      <Icons.deposit class="stroke-none" />
 
       <div class="ml-4 space-y-1">
         <p class="text-sm font-medium leading-none">
