@@ -1,20 +1,103 @@
 <script setup lang="ts">
 import { Skeleton } from "~/components/ui/skeleton";
-const route = useRoute();
-const { getTransactions } = useTransactions();
+import { Icons } from "~/components/icons";
 
+const { getTransactions } = useTransactions();
 const isLoading = ref(true);
 const transactionData = ref<Transaction[]>([]);
+const todaysTransactions = ref<Transaction[]>([]);
+const showFullAvailableBalance = ref(false);
+const showFullCurrentBalance = ref(false);
+const currentPaymentSummaryOption = ref("Daily");
+const transactionsNumber = ref();
 
-const totalTransactionAmount = computed(() =>
-  transactionData.value.reduce(
+const paymentSummaryOptions = computed(() => [
+  "Daily",
+  "Weekly",
+  "Monthly",
+  "Yearly",
+]);
+
+function formatAvailableBalance(
+  balance: string,
+  showFullBalance: any,
+  type: string
+) {
+  if (showFullBalance) {
+    return balance;
+  } else {
+    if (type == "balance") {
+      return "*".repeat(balance.length);
+    } else {
+      const firstFourDigits = balance.substring(0, 4);
+      const lastTwoDigits = balance.substring(balance.length - 2);
+      const asterisks = "*".repeat(balance.length - 6);
+      return `${firstFourDigits}${asterisks}${lastTwoDigits}`;
+    }
+  }
+}
+
+function toggleAvailableBalanceVisibility(showFullBalance: string) {
+  if (showFullBalance == "showFullAvailableBalance") {
+    showFullAvailableBalance.value = !showFullAvailableBalance.value;
+  } else {
+    showFullCurrentBalance.value = !showFullCurrentBalance.value;
+  }
+}
+
+const totalTransactionAmount = computed(() => {
+  const today = new Date();
+  const startOfPeriod = new Date();
+  let endOfPeriod = new Date();
+
+  switch (currentPaymentSummaryOption.value) {
+    case "Daily":
+      transactionsNumber.value = todaysTransactions.value.length;
+      return todaysTransactions.value.reduce(
+        (sum, transaction) => sum + transaction.amount,
+        0
+      );
+    case "Weekly":
+      startOfPeriod.setDate(today.getDate() - today.getDay()); // Start of the week
+      break;
+    case "Monthly":
+      startOfPeriod.setDate(1); // Start of the month
+      break;
+    case "Yearly":
+      startOfPeriod.setMonth(0, 1); // Start of the year
+      break;
+    default:
+      return 0; // Fallback
+  }
+  // Filter transactions based on the selected
+  const filteredTransactions = transactionData.value.filter((transaction) => {
+    const transactionDate = new Date(transaction.expirationDate);
+    return transactionDate >= startOfPeriod && transactionDate <= endOfPeriod;
+  });
+  transactionsNumber.value = filteredTransactions.length;
+  return filteredTransactions.reduce(
     (sum, transaction) => sum + transaction.amount,
     0
-  )
-);
+  );
+});
 
 try {
-  transactionData.value = await getTransactions();
+  transactionData.value = await getTransactions(
+    "COMPLETED",
+    "1",
+    "10000",
+    "DESC"
+  );
+  todaysTransactions.value = transactionData.value.filter((transaction) => {
+    const transactionDate = new Date(transaction.expirationDate); // Assuming 'date' is the field for transaction date
+    const today = new Date();
+    return (
+      transactionDate.getDate() === today.getDate() &&
+      transactionDate.getMonth() === today.getMonth() &&
+      transactionDate.getFullYear() === today.getFullYear()
+    );
+  });
+  transactionsNumber.value = todaysTransactions.value.length;
 } catch (error) {
   console.error("Error fetching data:", error);
 } finally {
@@ -24,14 +107,14 @@ try {
 watch(
   transactionData,
   (newData) => {
-    console.log("Transaction Data in index.vue:", newData);
+    // console.log("Transaction Data in index.vue:", newData);
   },
   { immediate: true }
 );
 </script>
 
 <template>
-  <div class="lg:space-y-16 md:space-y-10 space-y-6 dark:bg-gray-900">
+  <div class="lg:space-y-12 md:space-y-8 space-y-6 dark:bg-gray-900">
     <!-- Loading Indicator Skeleton -->
     <div
       class="grid gap-4 lg:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
@@ -54,88 +137,122 @@ watch(
       </div>
     </div>
 
-    <div v-else class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
-      <!-- <UiCard class="shadow-md rounded-3xl dark:bg-gray-800">
-        <UiCardHeader
-          class="flex flex-row items-center justify-between space-y-0 pb-2"
-        >
-          <UiCardTitle class="text-sm font-medium"> Branches </UiCardTitle>
-          <Icon
-            name="material-symbols:home"
-            size="18"
-            class="text-muted-foreground"
-          ></Icon>
-        </UiCardHeader>
-        <UiCardContent>
-          <div class="text-2xl font-bold">+{{ branchNumber }}</div>
-          <p class="text-xs text-muted-foreground">+10.1% from last month</p>
-        </UiCardContent>
-      </UiCard> -->
-
-      <!-- <UiCard class="shadow-md rounded-3xl dark:bg-gray-800">
-        <UiCardHeader
-          class="flex flex-row items-center justify-between space-y-0 pb-2"
-        >
-          <UiCardTitle class="text-sm font-medium"> Operators </UiCardTitle>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            class="h-4 w-4 text-muted-foreground"
-          >
-            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-            <circle cx="9" cy="7" r="4" />
-            <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-          </svg>
-        </UiCardHeader>
-        <UiCardContent>
-          <div class="text-2xl font-bold">+{{ employeeNumber }}</div>
-          <p class="text-xs text-muted-foreground">+19% from last month</p>
-        </UiCardContent>
-      </UiCard> -->
-
+    <div
+      v-else
+      class="grid gap-4 md:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-7 xl:grid-cols-9"
+    >
       <!-- Account list and total balance -->
-      <UiCard class="col-span-4 shadow-md rounded-3xl dark:bg-gray-800">
+      <UiCard
+        class="col-span-1 lg:col-span-4 xl:col-span-5 shadow-md rounded-3xl dark:bg-gray-800 flex flex-col justify-between max-h-72 relative"
+      >
+        <img
+          src="/backgroundMap.png"
+          alt="background"
+          class="opacity-90 dark:opacity-50 absolute top-0 left-0 w-full h-full z-0"
+        />
         <UiCardHeader
-          class="flex flex-row items-center justify-between space-y-0 pb-2"
+          class="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10"
         >
-          <UiCardTitle class="text-sm font-medium">Transactions</UiCardTitle>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            class="h-4 w-4 text-muted-foreground"
+          <UiCardTitle class="font-semibold text-primary text-xl"
+            >My {{ currentPaymentSummaryOption }} Sales</UiCardTitle
           >
-            <rect width="20" height="14" x="2" y="5" rx="2" />
-            <path d="M2 10h20" />
-          </svg>
+
+          <UiSelect name="paymentStatus" v-model="currentPaymentSummaryOption">
+            <UiSelectTrigger
+              class="h-8 w-[100px] z-10 border border-muted-foreground/30"
+            >
+              <UiSelectValue :placeholder="`${currentPaymentSummaryOption}`" />
+            </UiSelectTrigger>
+            <UiSelectContent side="bottom">
+              <UiSelectItem
+                v-for="option in paymentSummaryOptions"
+                :key="option"
+                :value="option"
+              >
+                {{ option }}
+              </UiSelectItem>
+            </UiSelectContent>
+          </UiSelect>
         </UiCardHeader>
-        <UiCardContent>
-          <div class="text-2xl font-bold">
+        <UiCardContent
+          class="h-full flex justify-center flex-col gap-1 relative z-10"
+        >
+          <div class="flex items-center gap-6">
+            <p class="text-2xl font-bold">
+              {{
+                isLoading
+                  ? "Loading..."
+                  : `${
+                      totalTransactionAmount
+                        ? formatAvailableBalance(
+                            totalTransactionAmount.toFixed(2),
+                            showFullAvailableBalance,
+                            "balance"
+                          )
+                        : "----"
+                    } `
+              }}
+              {{ todaysTransactions?.[0]?.currencyCode }}
+            </p>
+            <Icons.hide
+              v-if="showFullAvailableBalance"
+              class="md:w-7 md:h-7 w-5 h-5 fill-muted-foreground"
+              @click="
+                toggleAvailableBalanceVisibility('showFullAvailableBalance')
+              "
+            />
+            <Icons.view
+              v-else
+              class="md:w-7 md:h-7 w-5 h-5 dark:fill-white"
+              @click="
+                toggleAvailableBalanceVisibility('showFullAvailableBalance')
+              "
+            />
+          </div>
+          <p class="text-base text-[#CDA352]">
             {{
               isLoading
                 ? "Loading..."
-                : `${totalTransactionAmount.toFixed(2)} Br`
+                : `Merchant AC - ${
+                    transactionData?.[0]?.merchantAccountNumber
+                      ? formatAvailableBalance(
+                          transactionData?.[0]?.merchantAccountNumber,
+                          showFullAvailableBalance,
+                          "merchantAccountNumber"
+                        )
+                      : "N/A"
+                  }`
             }}
-          </div>
-          <p class="text-xs text-muted-foreground">Total transaction amount</p>
+          </p>
+          <p class="text-sm text-muted-foreground">
+            {{ new Date().toLocaleString() }}
+          </p>
         </UiCardContent>
+        <div class="bg-primary w-full mt-auto rounded-b-3xl p-6">
+          <p class="text-lg text-primary-foreground">
+            Total Sales: {{ transactionsNumber }}
+          </p>
+        </div>
       </UiCard>
 
-      <!-- Applications -->
-      <DashboardAPPlications />
+      <!-- Initiate payment -->
+      <UiCard
+        class="col-span-1 lg:col-span-3 xl:col-span-4 p-6 space-y-4 w-full"
+      >
+        <h1 class="font-semibold text-xl col-span-full flex-1 w-full block">
+          Initiate Payment
+        </h1>
+        <DashboardInitiatePaymentQRCode />
+      </UiCard>
     </div>
-    <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
+
+    <div
+      class="grid gap-4 md:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-7 xl:grid-cols-9"
+    >
       <!-- Account Overview -->
-      <UiCard class="col-span-4 shadow-md rounded-xl dark:bg-gray-800">
+      <UiCard
+        class="col-span-1 lg:col-span-4 xl:col-span-5 shadow-md rounded-xl dark:bg-gray-800"
+      >
         <UiCardHeader>
           <UiCardTitle>Overview</UiCardTitle>
         </UiCardHeader>
@@ -145,7 +262,9 @@ watch(
       </UiCard>
 
       <!-- Recent Transactions -->
-      <UiCard class="col-span-3 shadow-md rounded-xl dark:bg-gray-800">
+      <UiCard
+        class="col-span-1 lg:col-span-3 xl:col-span-4 shadow-md rounded-xl dark:bg-gray-800"
+      >
         <UiCardHeader>
           <div class="flex justify-between w-full items-center">
             <div class="space-y-1">

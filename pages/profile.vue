@@ -46,7 +46,6 @@ try {
     );
   }
 } catch (error) {
-  console.error("Error fetching profile:", error);
   toast({
     title: "Uh oh! Something went wrong.",
     description: `There was a problem with your request: ${error}`,

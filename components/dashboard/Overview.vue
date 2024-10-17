@@ -63,7 +63,11 @@ const data = computed<MonthlyData[]>(() => {
             monthlyData[monthIndex].completed += transaction.amount;
           } else if (status === "pending") {
             monthlyData[monthIndex].Pending += transaction.amount;
-          } else if (status === "failed") {
+          } else if (
+            status === "failed" ||
+            status === "expired" ||
+            status === "cancelled"
+          ) {
             monthlyData[monthIndex].Failed += transaction.amount;
           }
         }

@@ -9,10 +9,10 @@ export const useTransactions = () => {
     const transactionFilterStore = useTransactionFilterStore();
 
 
-    const getTransactions: () => Promise<Transaction[]> = async () => {
+    const getTransactions: (paymentStatus?: string, pageNumber?: string, pageSize?: string, sortBy?: string) => Promise<Transaction[]> = async (paymentStatus = undefined, pageNumber = undefined, pageSize = undefined, sortBy = undefined) => {
         try {
             const { data, error, status } = await useAsyncData<Transaction[]>(`transactions`, () =>
-                $fetch(`${runtimeConfig.public.API_BASE_URL}/api/v1/operators/transactions?PaymentStatus=${transactionFilterStore.paymentStatus}&page=${transactionFilterStore.pageNumber}&size=${transactionFilterStore.pageSize}&sort=${transactionFilterStore.sortBy}`, {
+                $fetch(`${runtimeConfig.public.API_BASE_URL}/api/v1/operators/transactions?PaymentStatus=${paymentStatus ?? transactionFilterStore.paymentStatus}&page=${transactionFilterStore.pageNumber}&size=${pageSize ?? transactionFilterStore.pageSize}&sort=${transactionFilterStore.sortBy}`, {
                     headers: {
                         Authorization: `Bearer ${store.accessToken}`,
                     },
@@ -101,63 +101,9 @@ export const useTransactions = () => {
         }
     };
 
-
-    const getTransactionsByBranchId: (id: string) => Promise<Transaction[]> = async (id) => {
-        try {
-            const { data, error, status } = await useFetch<Transaction[]>(
-                `${runtimeConfig.public.API_BASE_URL}/api/v1/merchants/branches/${id}/transactions`,
-                {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Bearer ${store.accessToken}`,
-                    },
-                }
-            );
-
-            if (status.value === "error") {
-                toast({
-                    title: error.value?.data?.type || "Something went wrong!",
-                    description: error.value?.data?.detail || error.value?.data?.message,
-                    variant: "destructive"
-                })
-                throw new Error(error.value?.data?.detail || error.value?.data?.message);
-            }
-
-            if (!data.value) {
-                throw new Error("No transactions for branch received");
-            }
-            return data.value;
-        } catch (err) {
-            throw err;
-        }
-    };
-
-    const initiateTransaction = async (transactionData: { amount: number; paymentReference: string }) => {
-        try {
-            const { data, error } = await useFetch(`${runtimeConfig.public.API_BASE_URL}/api/v1/merchants/transactions`, {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${store.accessToken}`,
-                },
-                body: JSON.stringify(transactionData),
-            });
-
-            if (error.value) {
-                throw new Error(error.value.message);
-            }
-
-            return data.value;
-        } catch (err) {
-            console.error("Error initiating transaction:", err);
-            throw err;
-        }
-    };
-
     return {
         getTransactions,
         getTransactionById,
-        initiateTransaction,
         getTransactionsByOperatorId,
-        getTransactionsByBranchId
     };
 };

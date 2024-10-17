@@ -18,7 +18,7 @@ export const useTransactionFilterStore = defineStore("transactionStore", {
         paymentStatus: "COMPLETED",
         pageNumber: 0,
         pageSize: 20,
-        sortBy: "asc",
+        sortBy: "desc",
         paymentMethod: "",
         paymentType: "",
         expiryDate: "",
