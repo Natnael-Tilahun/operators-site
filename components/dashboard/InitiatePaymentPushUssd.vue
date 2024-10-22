@@ -37,7 +37,7 @@ const onSubmit = form.handleSubmit(async (values: any) => {
 </script>
 
 <template>
-  <UiCard :class="['w-full h-full p-6', $props.class]">
+  <UiCard :class="['w-full h-full p-6', $props.class].join(' ')">
     <form @submit="onSubmit">
       <div class="flex flex-col justify-betwee h-full gap-4 md:gap-6">
         <div class="md:space-y-6 space-y-4">
