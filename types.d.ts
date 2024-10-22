@@ -133,5 +133,5 @@ interface Transaction {
     payerId?: string
     payerName?: string
     payerPhone?: string
-    qrEncodedData: string
+    qrEncodedData?: string
 }
