@@ -99,6 +99,15 @@ function formatAccountNumber(accountId: string) {
                 alt="QR Code"
               />
             </UiCard>
+            <div class="flex w-full justify-center col-span-full">
+              <div class="flex flex-col items-center gap-2">
+                <Icon
+                  name="svg-spinners:8-dots-rotate"
+                  class="h-6 w-6 animate-spin text-green-500"
+                ></Icon>
+                <p>Pending</p>
+              </div>
+            </div>
           </UiCardDescription>
         </UiCardHeader>
       </UiCardContent>

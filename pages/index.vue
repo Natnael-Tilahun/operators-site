@@ -83,9 +83,9 @@ const totalTransactionAmount = computed(() => {
 
 try {
   transactionData.value = await getTransactions(
-    "COMPLETED",
-    "1",
-    "10000",
+    "",
+    "0",
+    "10000000000000",
     "DESC"
   );
   todaysTransactions.value = transactionData.value.filter((transaction) => {

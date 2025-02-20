@@ -45,7 +45,7 @@ const clearFilter = () => {
   >
     <div class="flex items-center flex-wra self-start gap-4">
       <UiInput
-        placeholder="Filter by payer name"
+        placeholder="Filter by payer name and enter to search"
         v-model="transactionFilterStore.payerName"
         class="h-10 min-w-[150px] md:min-w-[200px] lg:min-w-[350px] w-fit rounded-full px-4"
         @keydown.enter="refetch"
