@@ -6,11 +6,26 @@ interface TransactionFilterState {
     pageNumber: number;
     pageSize: number;
     sortBy: string;
-    paymentMethod: string;
-    paymentType: string;
-    expiryDate: string;
+    expirationDate: string;
+    initiatedDate: string;
     completedDate: string;
-    paymentInitiator: string;
+    transactionInitiator: string;
+    merchantTransactionId: string;
+    dynamicId: string;
+    transactionRefId: string;
+    amountGreaterThanOrEqual: number,
+    amountLessThanOrEqual: number,
+    paymentReference: string;
+    mbTransactionId: string;
+    coreTransactionId: string;
+    merchantAccountNumber: string;
+    payerAccountNumber: string;
+    payerId: string;
+    payerName: string;
+    payerPhone: string;
+    merchantId:string
+    merchantOperatorId:string
+    merchantBranchId:string
 }
 
 export const useTransactionFilterStore = defineStore("transactionStore", {
@@ -19,37 +34,82 @@ export const useTransactionFilterStore = defineStore("transactionStore", {
         pageNumber: 0,
         pageSize: 20,
         sortBy: "desc",
-        paymentMethod: "",
-        paymentType: "",
-        expiryDate: "",
+        transactionInitiator: "",
+        amountGreaterThanOrEqual: 0,
+        amountLessThanOrEqual: 0,
+        payerName: "",
+        payerPhone: "",
+        payerAccountNumber: "",
+        payerId: "",
+        paymentReference: "",
+        dynamicId: "",
+        mbTransactionId: "",
+        coreTransactionId: "",
+        merchantAccountNumber: "",
+        merchantBranchId: "",
+        merchantOperatorId: "",
+        initiatedDate: "",
         completedDate: "",
-        paymentInitiator: "",
+        expirationDate: "",
+        merchantTransactionId: "",
+        transactionRefId: "",
+        merchantId: "",
     }),
 
     actions: {
         setFilter(filter: Partial<TransactionFilterState>) {
             this.paymentStatus = filter?.paymentStatus ?? "";
-            this.pageNumber = filter?.pageNumber ?? 1;
+            this.pageNumber = filter?.pageNumber ?? 0;
             this.pageSize = filter?.pageSize ?? 20;
-            this.sortBy = filter?.sortBy ?? "";
-            this.paymentMethod = filter?.paymentMethod ?? "";
-            this.paymentType = filter?.paymentType ?? "";
-            this.expiryDate = filter?.expiryDate ?? "";
-            this.completedDate = filter?.completedDate ?? "";
-            this.paymentInitiator = filter?.paymentInitiator ?? "";
+            this.sortBy = filter?.sortBy ?? "desc";
+            this.expirationDate = filter?.expirationDate ? new Date(filter.expirationDate).toISOString() : "";
+            this.completedDate = filter?.completedDate ? new Date(filter.completedDate).toISOString() : "";
+            this.initiatedDate = filter?.initiatedDate ? new Date(filter.initiatedDate).toISOString() : "";
+            this.transactionInitiator = filter?.transactionInitiator ?? "";
+            this.merchantTransactionId = filter?.merchantTransactionId ?? "";
+            this.dynamicId = filter?.dynamicId ?? "";
+            this.transactionRefId = filter?.transactionRefId ?? "";
+            this.amountGreaterThanOrEqual = filter?.amountGreaterThanOrEqual ?? "";
+            this.amountLessThanOrEqual = filter?.amountLessThanOrEqual ?? "";
+            this.paymentReference = filter?.paymentReference ?? "";
+            this.mbTransactionId = filter?.mbTransactionId ?? "";
+            this.coreTransactionId = filter?.coreTransactionId ?? "";
+            this.merchantAccountNumber = filter?.merchantAccountNumber ?? "";
+            this.payerAccountNumber = filter?.payerAccountNumber ?? "";
+            this.payerId = filter?.payerId ?? "";
+            this.payerName = filter?.payerName ?? "";
+            this.payerPhone = filter?.payerPhone ?? "";
+            this.merchantId = filter?.merchantId ?? "";
+            this.merchantOperatorId = filter?.merchantOperatorId ?? "";
+            this.merchantBranchId = filter?.merchantBranchId ?? "";
         },
 
 
         $reset() {
             this.paymentStatus = "";
-            this.pageNumber = 1;
+            this.pageNumber = 0;
             this.pageSize = 20;
-            this.sortBy = "";
-            this.paymentMethod = "";
-            this.paymentType = "";
-            this.expiryDate = "";
+            this.sortBy = "desc";
+            this.expirationDate = "";
+            this.initiatedDate = "";
             this.completedDate = "";
-            this.paymentInitiator = "";
+            this.transactionInitiator = "";
+            this.merchantTransactionId = "";
+            this.dynamicId = "";
+            this.transactionRefId = "";
+            this.amountLessThanOrEqual = 0;
+            this.amountGreaterThanOrEqual = 0;
+            this.paymentReference = "";
+            this.mbTransactionId = "";
+            this.coreTransactionId = "";
+            this.merchantAccountNumber = "";
+            this.payerAccountNumber = "";
+            this.payerId = "";
+            this.payerName = "";
+            this.payerPhone = "";
+            this.merchantId = "";
+            this.merchantOperatorId = "";
+            this.merchantBranchId = "";
         },
     },
     persist: {
