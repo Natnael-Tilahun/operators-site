@@ -2,6 +2,7 @@ import type { ColumnDef } from "@tanstack/vue-table";
 import { Checkbox } from "../ui/checkbox";
 import DataTableColumnHeaderVue from "~/components/ui/dataTable/ColumnHeader.vue";
 import TransactionsDataTableRowActionsVue from "./DataTableRowActions.vue";
+import { NuxtLink } from "#components";
 
 export const columns: ColumnDef<Transaction>[] = [
   {
@@ -23,23 +24,21 @@ export const columns: ColumnDef<Transaction>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "merchantTransactionId",
-    header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "Transaction ID" }),
-    cell: ({ row }) => {
-      const merchantTransactionId = row.getValue("merchantTransactionId");
-      return merchantTransactionId ? h(
-        "div",
-        { class: "w-[100px] whitespace-nowrap truncate hover:w-full font-medium" },
-        row.getValue("merchantTransactionId")
-      ) : h("p", "-");
-    },
-  },
-  {
     accessorKey: "payerName",
     header: ({ column }) => h(DataTableColumnHeaderVue, { column, title: "Payer Name" }),
     cell: ({ row }) => {
       const payerName = row.getValue("payerName");
-      return payerName ? h("p", payerName) : h("p", "-");
+      const merchantTransactionId = row.original.merchantTransactionId;
+      const route = useRoute();
+      return payerName ? h(
+        NuxtLink,
+        {
+          class:
+            "font-medium text-primary w-fit whitespace-nowrap truncate hover:w-full",
+          to: merchantTransactionId ? `${route.path}/transactionDetails/${merchantTransactionId}` : route.path,
+        },
+        payerName
+      ) : h("p", "-");
     },
   },
   {
