@@ -14,7 +14,7 @@
           'bg-yellow-100 text-yellow-800 w-fit':
             String(value).toLowerCase() === 'pending',
           'bg-red-100 text-red-800 w-fit':
-            String(value).toLowerCase() === 'failed',
+            String(value).toLowerCase() === 'failed' || String(value).toLowerCase() === 'expired',
         },
       ]"
     >

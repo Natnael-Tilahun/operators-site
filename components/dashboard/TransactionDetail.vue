@@ -3,9 +3,15 @@ import { useRoute } from "vue-router";
 import { Icons } from "@/components/icons.jsx";
 
 const route = useRoute();
-const paymentResponse = route.query;
+// const paymentResponse = route.query;
 const showFullAccountId = ref(false);
-console.log("paymnet response: ", paymentResponse)
+const paymentResponse = ref<Transaction | null>(null);
+
+// Define props
+const props = defineProps(["transactionDetails"]);
+if(props){
+  paymentResponse.value = props.transactionDetails
+}
 
 function toggleAccountIdVisibility() {
   showFullAccountId.value = !showFullAccountId.value;
@@ -25,10 +31,10 @@ function formatAccountNumber(accountId: string) {
 
 <template>
   <div
-    class="flex flex-col md:flex-row w-full gap-4 md:gap-8 justify-center h-full"
+    class="flex flex-col md:flex-row lg:flex-col gap-4 md:gap-8 justify-center h-full"
   >
     <UiCard
-      class="w-full md:w-1/2 lg:w-2/5 xl:w-1/3 h-fit relative bg-gray-700"
+      class="w-full  h-fit relative bg-gray-700"
     >
       <UiCardContent class="">
         <img
@@ -57,12 +63,12 @@ function formatAccountNumber(accountId: string) {
                 </p>
                 <Icons.hide
                   v-if="showFullAccountId"
-                  class="md:w-6 md:h-6 w-5 h-5 fill-white"
+                  class="md:min-w-6 md:min-h-6 min-w-5 min-h-5 fill-white"
                   @click="toggleAccountIdVisibility"
                 />
                 <Icons.view
                   v-else
-                  class="md:w-6 md:h-6 w-5 h-5 fill-white"
+                  class="md:min-w-6 md:min-h-6 min-w-5 min-h-5 fill-white"
                   @click="toggleAccountIdVisibility"
                 />
               </div>
@@ -100,13 +106,26 @@ function formatAccountNumber(accountId: string) {
                 alt="QR Code"
               />
             </UiCard>
-            <div class="flex w-full justify-center col-span-full">
-              <div class="flex flex-col items-center gap-2">
-                <Icon
+            <div class="flex w-full flex-col items-center gap-2 justify-center col-span-full">
+              <Icon
                   v-if="paymentResponse.paymentStatus == 'PENDING'"
                   name="svg-spinners:8-dots-rotate"
-                  class="h-6 w-6 animate-spin text-green-500"
+                  class="h-6 w-6 animate-spin text-yellow-500"
                 ></Icon>
+              <div
+                :class="[
+        'inline-flex items-center px-3 py-1 rounded-full text-xs font-medium flex flex-col items-center gap-2',
+        {
+          'bg-green-600 text-white font-bold w-fit':
+            String(paymentResponse.paymentStatus).toLowerCase() === 'completed',
+          'bg-yellow-500 text-black font-bold w-fit':
+            String(paymentResponse.paymentStatus).toLowerCase() === 'pending',
+          'bg-red-600 text-white font-bold w-fit':
+            String(paymentResponse.paymentStatus).toLowerCase() === 'failed' || String(paymentResponse.paymentStatus).toLowerCase() === 'expired',
+        },
+      ]"
+              >
+              
                 <p>{{paymentResponse.paymentStatus}}</p>
               </div>
             </div>
@@ -115,7 +134,8 @@ function formatAccountNumber(accountId: string) {
       </UiCardContent>
     </UiCard>
     <DashboardInitiatePaymentPushUssd
-      class="w-full md:w-1/2 lg:w-2/5 xl:w-1/3 min-h-max"
+     v-if="String(paymentResponse.paymentStatus).toLowerCase() === 'pending'"
+      class="w-full min-h-max"
       :merchantTransactionId="paymentResponse?.merchantTransactionId"
     />
   </div>

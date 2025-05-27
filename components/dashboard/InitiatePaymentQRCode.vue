@@ -24,7 +24,6 @@ const onSubmit = form.handleSubmit(async (values: any) => {
   try {
     const data = await generateQRCode(values);
     paymentResponse.value = data;
-
     router.push({
       name: "initTransactionDetail", // Replace with your route name
       query: {
@@ -34,6 +33,7 @@ const onSubmit = form.handleSubmit(async (values: any) => {
         amount: data.amount,
         qrEncodedData: data.qrEncodedData,
         dynamicId: data.dynamicId,
+        paymentStatus: data.paymentStatus
       },
     });
   } catch (error) {

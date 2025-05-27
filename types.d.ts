@@ -135,3 +135,51 @@ interface Transaction {
     payerPhone?: string
     qrEncodedData?: string
 }
+
+
+export interface ApiError {
+    type?: string;
+    message?: string;
+    detail?: string;
+    fieldErrors?: Array<{
+      field: string;
+      message: string;
+    }>;
+  }
+  
+  export interface ApiResponse<T> {
+    data: T;
+    pending: boolean;
+    error: {
+      value?: {
+        data?: ApiError;
+      };
+    };
+    status: {
+      value: 'success' | 'error' | '404';
+    };
+  }
+  
+  export interface OtpDTO {
+    verificationId:	string
+    phone?:	string
+    expiryTime?:	string
+    }
+  
+  export interface TFAAccessTokenDTO{
+    token:	string
+    validFrom:	string
+    validTo:	string
+  }
+  
+  export interface VerificationRequest{
+    verificationId: string
+    otp?: 	string
+  }
+
+  
+  interface AuthResponse {
+    accessToken?: string;
+    refreshToken?: string;
+    permissions?: string[];
+  }

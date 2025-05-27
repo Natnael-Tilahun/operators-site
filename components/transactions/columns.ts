@@ -3,6 +3,7 @@ import { Checkbox } from "../ui/checkbox";
 import DataTableColumnHeaderVue from "~/components/ui/dataTable/ColumnHeader.vue";
 import TransactionsDataTableRowActionsVue from "./DataTableRowActions.vue";
 import { NuxtLink } from "#components";
+import type { Transaction } from "~/types";
 
 export const columns: ColumnDef<Transaction>[] = [
   {
@@ -30,15 +31,15 @@ export const columns: ColumnDef<Transaction>[] = [
       const payerName = row.getValue("payerName");
       const merchantTransactionId = row.original.merchantTransactionId;
       const route = useRoute();
-      return payerName ? h(
+      return h(
         NuxtLink,
         {
           class:
             "font-medium text-primary w-fit whitespace-nowrap truncate hover:w-full",
           to: merchantTransactionId ? `${route.path}/transactionDetails/${merchantTransactionId}` : route.path,
         },
-        payerName
-      ) : h("p", "-");
+        payerName || "View"
+      ) 
     },
   },
   {
