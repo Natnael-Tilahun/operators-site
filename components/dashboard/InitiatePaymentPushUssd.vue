@@ -9,9 +9,12 @@ import {
 } from "@/components/ui/form";
 import { initiatePaymentPushUssdFormSchema } from "~/validations/initiatePaymentPushUssdFormSchema.js";
 import { defineProps } from "vue";
+import { Toast, ToastAction, useToast } from "~/components/ui/toast";
 
 const isLoading = ref(false);
 const { sendPushUssd } = usePayment();
+const { toast } = useToast();
+
 const form = useForm({
   validationSchema: initiatePaymentPushUssdFormSchema,
 });
@@ -28,6 +31,14 @@ const onSubmit = form.handleSubmit(async (values: any) => {
 
   try {
     const data = await sendPushUssd(transactionData);
+    if(data){
+      toast({
+        title: "Push USSD sent successfully.",
+        description: data,
+        variant: "default",
+      });
+      navigateTo("/", { replace: true });
+    }
   } catch (error) {
     console.error("Login error: ", error);
   } finally {

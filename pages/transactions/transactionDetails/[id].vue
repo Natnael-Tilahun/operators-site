@@ -29,14 +29,17 @@ const formatDate = (date: string) => {
       <p class="text-sm text-muted-foreground">View transaction information</p>
     </div>
 
-    <UiCard v-if="isLoading" class="p-6">
-      <div class="grid md:grid-cols-2 gap-6">
+    <UiCard v-if="isLoading" class="p-6 ">
+      <div class="grid md:grid-cols-2 gap-6 ">
         <UiSkeleton v-for="n in 8" :key="n" class="h-16 w-full" />
       </div>
     </UiCard>
 
-    <UiCard v-else-if="transactionData" class="p-6">
-      <div class="grid md:grid-cols-2 gap-6">
+    <UiCard v-else-if="transactionData" class="p-6 grid lg:grid-cols-5 gap-8 w-full">
+      <div class="w-full   lg:col-span-2">
+        <DashboardTransactionDetail :transactionDetails="transactionData"  />
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 md:col-span-2 lg:col-span-3  gap-6 w-full">
         <TransactionsTransactionDetailItem
           label="Merchant Transaction Id"
           :value="transactionData.merchantTransactionId"

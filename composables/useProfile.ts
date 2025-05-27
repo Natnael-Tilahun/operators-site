@@ -1,89 +1,62 @@
 import { Toast, ToastAction, toast, useToast } from "~/components/ui/toast";
+import type { Merchant, Profile } from "~/types";
+import { handleApiError, type ApiResult } from "~/types/api";
 
 export const useProfile = () => {
     const runtimeConfig = useRuntimeConfig();
     const isLoading = ref<boolean>(false);
     const isSubmitting = ref<boolean>(false);
     const store = useAuthStore();
+    const { fetch } = useApi();
 
-    const getProfile: () => Promise<Profile> = async () => {
+    const getProfile: () => ApiResult<Profile> = async () => {
         try {
-            const { data, pending, error, status } = await useFetch<Profile>(
-                `${runtimeConfig.public.API_BASE_URL}/api/v1/operators/me`,
-                {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Bearer ${store.accessToken}`,
-                    },
-                }
+            const { data, pending, error, status } = await fetch<Profile>(
+              `/api/v1/operators/me`,
+              {
+                method: "GET",
+              }
             );
-
+      
             isLoading.value = pending.value;
-
+      
             if (status.value === "error") {
-                toast({
-                    title: error.value?.data?.type || "Something went wrong!",
-                    description: error.value?.data?.type == "/constraint-violation" ? error.value?.data?.fieldErrors[0]?.message : error.value?.data?.message,
-                    variant: "destructive"
-                })
-                throw new Error(error.value?.data?.detail);
+              handleApiError(error);
             }
-
-            if (!data.value) {
-                throw new Error("No profile data received");
-            }
-
-            return data.value;
-        } catch (err) {
-            // Throw the error to be caught and handled by the caller
-            throw err;
-        }
+      
+            return data.value ? (data.value as unknown as Profile) : null;
+          } catch (err) {
+            // handleApiError(err);
+            return null;
+          } finally {
+            isLoading.value = false;
+          }
     };
 
 
 
-    const updateProfile: (merchantData: any) => Promise<Merchant> = async (merchantData) => {
+    const updateProfile: (merchantData: any) => ApiResult<Merchant> = async (merchantData) => {
+        
         try {
-            const { data, pending, error, status } = await useFetch<Merchant>(
-                `${runtimeConfig.public.API_BASE_URL}/api/v1/merchants/update`,
-                {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${store.accessToken}`,
-                    },
-                    body: JSON.stringify(merchantData),
-                },
+            const { data, pending, error, status } = await fetch<Merchant>(
+              `/api/v1/merchants/update`,
+              {
+                method: "POST",
+                body: merchantData,
+              }
             );
-
-            isSubmitting.value = pending.value;
-
+      
+            isLoading.value = pending.value;
+      
             if (status.value === "error") {
-
-                console.log("Error: ", error)
-                toast({
-                    title: error.value?.data?.type || "Something went wrong!",
-                    description: error.value?.data?.type == "/constraint-violation" ? error.value?.data?.fieldErrors[0]?.message : error.value?.data?.message,
-                    variant: "destructive"
-                })
-
-                if (error.value?.data?.type == "/constraint-violation") {
-                    console.log("Updating merchant error: ", error.value?.data?.fieldErrors[0].message)
-                }
-                else {
-                    console.log("Updating merchant errorrr: ", error.value?.data?.message)
-                }
-                throw new Error((error as any).value);
+              handleApiError(error);
             }
-
-            if (!data.value) {
-                throw new Error("No merchant with this merchant id received");
-            }
-
-            return data.value;
-        } catch (err) {
-            // Throw the error to be caught and handled by the caller
-            throw err;
-        }
+      
+            return data.value ? (data.value as unknown as Merchant) : null;
+          } catch (err) {
+            // handleApiError(err);
+            return null;
+          }
     };
 
     return {

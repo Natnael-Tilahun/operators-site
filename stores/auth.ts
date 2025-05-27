@@ -1,12 +1,17 @@
 import { defineStore } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
+import type { Profile } from "~/types";
 
 interface AuthState {
   isAuthenticated: boolean;
   accessToken: string;
   refreshToken: string;
   refreshTokenExpiresIn: string;
-  // permissions: string[];
+  verificationId: string
+  phone: string
+  expiryTime: string
+  twoFactorToken:string
+  permissions: string[];
   profile: Partial<Profile> | null;
 }
 
@@ -29,6 +34,11 @@ interface AuthPayload {
   accessToken: string;
   refreshToken: string;
   refreshTokenExpiresIn: string;
+  permissions: string[];
+  verificationId: string
+  phone: string
+  expiryTime: string
+  twoFactorToken:string
 }
 
 export const useAuthStore = defineStore("auth", {
@@ -37,7 +47,12 @@ export const useAuthStore = defineStore("auth", {
     accessToken: "",
     refreshToken: "",
     refreshTokenExpiresIn: "",
+    permissions: [],
     profile: null,
+    verificationId: "",
+    expiryTime: "",
+    phone:"",
+    twoFactorToken:""
   }),
 
   actions: {
@@ -51,28 +66,44 @@ export const useAuthStore = defineStore("auth", {
       this.profile = profile;
     },
 
-    // setPermissions(auth: { permissions: string[] }) {
-    //   this.permissions = auth?.permissions ?? [];
-    // },
+    setPermissions(auth: { permissions: string[] }) {
+      this.permissions = auth?.permissions ?? [];
+    },
+
+    setOTPValues(auth: { verificationId: string, expiryTime:string, phone:string }) {
+      this.verificationId = auth?.verificationId ?? "";
+      this.expiryTime = auth?.expiryTime ?? "";
+      this.phone = auth?.phone ?? "";
+    },
+
+    setTwoFactorToken(auth: { twoFactorToken: string}) {
+      this.twoFactorToken = auth?.twoFactorToken ?? "";
+    },
+
 
     $reset() {
       this.isAuthenticated = false;
       this.accessToken = "";
       this.refreshToken = "";
       this.refreshTokenExpiresIn = "";
+      this.permissions = [];
       this.profile = null;
+      this.verificationId = "";
+      this.expiryTime = "";
+      this.phone = "";
     },
   },
   getters: {
-    // hasPermissions: (state) => {
-    //   return (permission: string) => state.permissions.includes(permission);
-    // },
+    hasPermissions: (state) => {
+      return (permission: string) => state.permissions.includes(permission);
+    },
 
     hasRole: (state) => {
       return (role: string) => state.profile?.operatorRole === role;
     }
   },
   persist: {
-    storage: persistedState.cookies,
+    // storage: persistedState.cookies,
+    storage: sessionStorage,
   },
 });
