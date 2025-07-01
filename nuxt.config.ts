@@ -7,6 +7,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       API_BASE_URL: process.env.API_BASE_URL,
+      X_APP_ID: process.env.X_APP_ID,
+      X_APP_VERSION: process.env.X_APP_VERSION,
     },
   },
   devtools: {
