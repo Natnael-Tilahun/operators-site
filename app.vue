@@ -11,7 +11,7 @@ import { useInactivityTimer } from "~/composables/useInactivityTimer";
 import { useAuthStore } from "~/stores/auth";
 
 const authStore = useAuthStore();
-const { setupInactivityTimer } = useInactivityTimer(0.2); // 3 minutes timeout
+const { setupInactivityTimer } = useInactivityTimer(10); // 3 minutes timeout
 const { logout } = useAuth();
 
 // Setup inactivity timer when user is authenticated
