@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { operatorLoginFormSchema } from "~/validations/operatorLoginFormSchema";
+import type { UserInput } from "~/types";
 const isLoading = ref<boolean>(false);
 const { login } = useAuth();
 let showPassword = ref(false);
@@ -32,6 +33,8 @@ const onSubmit = form.handleSubmit(async (values: UserInput) => {
 
   try {
     await login(userCredentials);
+    localStorage.setItem('auth-event', `login-${Date.now()}`);
+    navigateTo("/", { replace: true });
   } catch (error) {
     console.error("Login error: ", error);
   } finally {

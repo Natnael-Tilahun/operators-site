@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Skeleton } from "~/components/ui/skeleton";
 import { Icons } from "~/components/icons";
+import type { Transaction } from "~/types";
 
 const { getTransactions } = useTransactions();
 const isLoading = ref(true);
@@ -47,7 +48,7 @@ function toggleAvailableBalanceVisibility(showFullBalance: string) {
 
 const totalTransactionAmount = computed(() => {
   const today = new Date();
-  const startOfPeriod = new Date();
+  let startOfPeriod = new Date();
   let endOfPeriod = new Date();
 
   switch (currentPaymentSummaryOption.value) {
@@ -58,18 +59,30 @@ const totalTransactionAmount = computed(() => {
         0
       );
     case "Weekly":
-      startOfPeriod.setDate(today.getDate() - today.getDay()); // Start of the week
+      // Set to start of week (Sunday)
+      startOfPeriod.setDate(today.getDate() - today.getDay());
+      startOfPeriod.setHours(0, 0, 0, 0);
+      // Set to end of week (Saturday 23:59:59)
+      endOfPeriod = new Date(startOfPeriod);
+      endOfPeriod.setDate(startOfPeriod.getDate() + 6);
+      endOfPeriod.setHours(23, 59, 59, 999);
       break;
     case "Monthly":
-      startOfPeriod.setDate(1); // Start of the month
+      // Start of month
+      startOfPeriod = new Date(today.getFullYear(), today.getMonth(), 1, 0, 0, 0, 0);
+      // End of month
+      endOfPeriod = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999);
       break;
     case "Yearly":
-      startOfPeriod.setMonth(0, 1); // Start of the year
+      // Start of year
+      startOfPeriod = new Date(today.getFullYear(), 0, 1, 0, 0, 0, 0);
+      // End of year
+      endOfPeriod = new Date(today.getFullYear(), 11, 31, 23, 59, 59, 999);
       break;
     default:
       return 0; // Fallback
   }
-  // Filter transactions based on the selected
+  // Filter transactions based on the selected period
   const filteredTransactions = transactionData.value.filter((transaction) => {
     const transactionDate = new Date(transaction.expirationDate);
     return transactionDate >= startOfPeriod && transactionDate <= endOfPeriod;
@@ -87,7 +100,7 @@ try {
     "0",
     "10000000000000",
     "DESC"
-  );
+  ) || [];
   todaysTransactions.value = transactionData.value.filter((transaction) => {
     const transactionDate = new Date(transaction.expirationDate); // Assuming 'date' is the field for transaction date
     const today = new Date();

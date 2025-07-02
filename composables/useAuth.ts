@@ -35,7 +35,7 @@ export const useAuth = () => {
           isAuthenticated: data?.value?.accessToken ? true : false,
         });
         await getProfile();
-        navigateTo("/");
+        // navigateTo("/");
       }
 
       return data;
@@ -78,6 +78,7 @@ export const useAuth = () => {
 
   const logout = async () => {
     store.$reset();
+    localStorage.setItem('auth-event', `logout-${Date.now()}`);
     return navigateTo("/login", { replace: true });
   };
 
@@ -107,8 +108,7 @@ export const useAuth = () => {
 
       return response;
     } catch (err) {
-      // handleApiError(err);
-      return null;
+      throw err
     }
   };
 

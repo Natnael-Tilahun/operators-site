@@ -21,6 +21,7 @@ export const useProfile = () => {
             isLoading.value = pending.value;
       
             if (status.value === "error") {
+             navigateTo("/login");
               handleApiError(error);
             }
       

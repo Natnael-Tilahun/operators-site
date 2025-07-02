@@ -5,7 +5,13 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const runtimeConfig = useRuntimeConfig();
 
   // Skip authentication check for routes that do not require authentication
-  if (to.meta.requiresAuth === false) {
+  // if (to.meta.requiresAuth === false) {
+  //   return;
+  // }
+
+
+  const publicRoutes = ["/login", "/invalid-2fa", "/forgotPassword", "/activateNewUser"];
+  if (publicRoutes.includes(to.path)) {
     return;
   }
 
