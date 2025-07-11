@@ -33,8 +33,16 @@ const onSubmit = form.handleSubmit(async (values: UserInput) => {
 
   try {
     await login(userCredentials);
-    localStorage.setItem('auth-event', `login-${Date.now()}`);
-    navigateTo("/", { replace: true });
+        // Get the session management functions from the plugin
+        const { $claimSession, $notifyLogin } = useNuxtApp();
+
+// Claim the session for this tab
+const sessionId = $claimSession();
+
+// Notify other tabs about the login
+$notifyLogin(sessionId);
+console.log("sessionId", sessionId);
+navigateTo("/", { replace: true });
   } catch (error) {
     console.error("Login error: ", error);
   } finally {
