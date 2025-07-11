@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { operatorLoginFormSchema } from "~/validations/operatorLoginFormSchema";
+import type { UserInput } from "~/types";
 const isLoading = ref<boolean>(false);
 const { login } = useAuth();
 let showPassword = ref(false);
@@ -32,6 +33,16 @@ const onSubmit = form.handleSubmit(async (values: UserInput) => {
 
   try {
     await login(userCredentials);
+        // Get the session management functions from the plugin
+        const { $claimSession, $notifyLogin } = useNuxtApp();
+
+// Claim the session for this tab
+const sessionId = $claimSession();
+
+// Notify other tabs about the login
+$notifyLogin(sessionId);
+console.log("sessionId", sessionId);
+navigateTo("/", { replace: true });
   } catch (error) {
     console.error("Login error: ", error);
   } finally {

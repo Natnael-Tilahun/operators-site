@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { useToast } from "~/components/ui/toast";
 import type { OtpDTO } from "~/types";
 
-const { requestTwoFactorAuth, isLoading } = useAuth();
+const { requestTwoFactorAuth } = useAuth();
 const { toast } = useToast();
 
 const loading = ref(false);
@@ -17,7 +17,7 @@ definePageMeta({
 const generateNewOTP = async () => {
   try {
     loading.value = true;
-    const response = await requestTwoFactorAuth("email"); // Call your API function to fetch profile
+    const response = await requestTwoFactorAuth("sms"); // Call your API function to fetch profile
     if(response){
     data.value = response ? response : undefined;
     console.log("New 2fa token; ", response);

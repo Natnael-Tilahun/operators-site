@@ -6,7 +6,6 @@ const { toast } = useToast();
 
 export const handleApiError = async(error: any) => {
     const errorData = error?.value?.data as ApiError;
-    console.log("errorData: ", errorData)
     toast({
       title: errorData?.type || "Something went wrong!",
       description: errorData?.type === "/constraint-violation"

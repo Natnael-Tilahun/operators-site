@@ -21,12 +21,14 @@ export const useProfile = () => {
             isLoading.value = pending.value;
       
             if (status.value === "error") {
+             navigateTo("/login");
               handleApiError(error);
             }
       
-            return data.value ? (data.value as unknown as Profile) : null;
+            return data.value as unknown as Profile;
           } catch (err) {
-            // handleApiError(err);
+            handleApiError(err);
+            navigateTo("/login");
             return null;
           } finally {
             isLoading.value = false;

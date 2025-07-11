@@ -91,7 +91,7 @@ const maxValue = computed(() =>
     :y-formatter="
       (tick: number | Date, i: number, ticks: number[] | Date[]) => {
         return typeof tick === 'number'
-          ? `$ ${new Intl.NumberFormat('us').format(tick).toString()}`
+          ? `ETB ${new Intl.NumberFormat('us').format(tick).toString()}`
           : '';
       }
     "

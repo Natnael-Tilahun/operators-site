@@ -35,7 +35,7 @@ export const useAuth = () => {
           isAuthenticated: data?.value?.accessToken ? true : false,
         });
         await getProfile();
-        navigateTo("/");
+        // navigateTo("/");
       }
 
       return data;
@@ -77,8 +77,17 @@ export const useAuth = () => {
   };
 
   const logout = async () => {
-    store.$reset();
-    return navigateTo("/login", { replace: true });
+        // Get the session management functions from the plugin
+        const { $releaseSession, $notifyLogout } = useNuxtApp();
+
+        // Release the session
+        $releaseSession();
+    
+        // Notify other tabs about the logout
+        $notifyLogout();
+    
+        store.$reset();
+        return navigateTo("/login", { replace: true });
   };
 
   const requestTwoFactorAuth: (
@@ -107,8 +116,7 @@ export const useAuth = () => {
 
       return response;
     } catch (err) {
-      // handleApiError(err);
-      return null;
+      throw err
     }
   };
 
