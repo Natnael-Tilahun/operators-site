@@ -77,9 +77,17 @@ export const useAuth = () => {
   };
 
   const logout = async () => {
-    store.$reset();
-    localStorage.setItem('auth-event', `logout-${Date.now()}`);
-    return navigateTo("/login", { replace: true });
+        // Get the session management functions from the plugin
+        const { $releaseSession, $notifyLogout } = useNuxtApp();
+
+        // Release the session
+        $releaseSession();
+    
+        // Notify other tabs about the logout
+        $notifyLogout();
+    
+        store.$reset();
+        return navigateTo("/login", { replace: true });
   };
 
   const requestTwoFactorAuth: (

@@ -148,9 +148,19 @@ const { logout } = useAuth();
 const logoutHandler = async () => {
   logout().then((data) => {
     console.log("User logged out successfully!");
-    localStorage.setItem('auth-event', `logout-${Date.now()}`);
+
+    // Get the session management functions from the plugin
+    const { $releaseSession, $notifyLogout } = useNuxtApp();
+
+    // Release the session
+    $releaseSession();
+
+    // Notify other tabs about the logout
+    $notifyLogout();
   });
 };
+
+
 
 // Initialize isOpen array with the same length as mainLinks and set all to false
 const isOpen = ref(new Array(mainLinks.length).fill(false));
