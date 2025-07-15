@@ -23,6 +23,7 @@
   "dependencies": {
     "@davestewart/nuxt-scrollbar": "^1.0.0",
     "@pinia/nuxt": "^0.5.1",
+    "@stomp/stompjs": "^7.1.1",
     "@tanstack/vue-table": "^8.10.7",
     "@unovis/ts": "^1.4.3",
     "@unovis/vue": "^1.4.3",
