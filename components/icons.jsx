@@ -95,9 +95,9 @@ export const Icons = {
       stroke="currentColor"
       {...props}
     >
-      <rect width="54" height="54" rx="13" fill="#2DD683" fill-opacity="0.25" />
+      <rect width="54" height="54" rx="13" fill="props.fill" fill-opacity="0.25" />
       <g clip-path="url(#clip0_1_952)">
-        <circle cx="27" cy="27" r="16" fill="#2DD683" />
+        <circle cx="27" cy="27" r="16" fill="props.fill" />
         <path
           d="M27.866 32C27.4811 32.6667 26.5189 32.6667 26.134 32L23.5359 27.5C23.151 26.8333 23.6321 26 24.4019 26L29.5981 26C30.3679 26 30.849 26.8333 30.4641 27.5L27.866 32Z"
           fill="white"

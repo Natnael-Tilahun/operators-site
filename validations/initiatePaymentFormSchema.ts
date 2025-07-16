@@ -5,6 +5,6 @@ export const initiatePaymentFormSchema = toTypedSchema(
   z
     .object({
       amount: z.string(),
-      paymentReference: z.string(),
+      paymentReference: z.string().optional(),
     })
 );

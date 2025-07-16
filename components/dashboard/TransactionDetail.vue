@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { useRoute } from "vue-router";
 import { Icons } from "@/components/icons.jsx";
+import { ref, onMounted, onBeforeUnmount } from "vue";
+import type { Transaction } from "~/types";
+import { useSocket } from '~/composables/useSocket';
 
-const route = useRoute();
-// const paymentResponse = route.query;
+
 const showFullAccountId = ref(false);
 const paymentResponse = ref<Transaction | null>(null);
 
@@ -12,6 +13,9 @@ const props = defineProps(["transactionDetails"]);
 if (props) {
   paymentResponse.value = props.transactionDetails;
 }
+
+const { connect, disconnect, receivedMessages, state } = useSocket();
+
 
 function toggleAccountIdVisibility() {
   showFullAccountId.value = !showFullAccountId.value;
@@ -28,36 +32,27 @@ function formatAccountNumber(accountId: string) {
   }
 }
 
-import { ref, onMounted, onBeforeUnmount } from "vue";
-import { useStompClient } from "@/composables/useStompClient";
+if(paymentResponse.value?.merchantTransactionId && paymentResponse.value.paymentStatus == "PENDING") {
+  connect(paymentResponse.value?.merchantTransactionId);
+}
 
-const transaction = ref<any>(null);
-
-const transactionId = "abc123"; // dynamically set your transaction ID
-const topic = `/topic/transactions/${transactionId}`;
-const { connect, disconnect } = useStompClient();
-
-const token = "YOUR_ACCESS_TOKEN_HERE"; // securely load this, e.g., from cookies or useFetch
-
-onMounted(() => {
-  connect({
-    url: "wss://integrationuat.cbe.com.et/websocket/tracker/websocket",
-    topic,
-    token,
-    onMessage: (message) => {
-      try {
-        const body = JSON.parse(message.body);
-        transaction.value = body;
-      } catch (e) {
-        console.error("Failed to parse message", e);
-      }
-    },
-  });
-});
-
-onBeforeUnmount(() => {
+onUnmounted(() => {
   disconnect();
+})
+
+watch(receivedMessages, (newVal, oldVal) => {
+  if (newVal !== oldVal) {
+    console.log("newVal", newVal);
+    paymentResponse.value = {
+      ...paymentResponse.value,
+      ...newVal.transactionDTO,
+      paymentStatus: newVal.status,
+      completedDate: newVal.time,
+    };
+  }
 });
+
+
 </script>
 
 <template>
