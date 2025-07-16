@@ -96,7 +96,7 @@ const totalTransactionAmount = computed(() => {
 
 try {
   transactionData.value = await getTransactions(
-    "",
+    " ",
     "0",
     "10000000000000",
     "DESC"
