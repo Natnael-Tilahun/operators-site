@@ -54,7 +54,7 @@ export const useAuth = () => {
 
       try {
         const { data, pending, error, status } = await fetch<any>(
-          "/api/v1/auth/status",
+          "/api/v1/internal/auth/status",
           {
             method: "POST",
             header: useRequestHeaders(["cookie"]),
@@ -95,7 +95,7 @@ export const useAuth = () => {
   ) => ApiResult<OtpDTO> = async (deliveryMethod) => {
     try {
       const { data, pending, error, status } = await fetch<OtpDTO>(
-        `/api/v1/auth/two-factor/request-token?deliveryMethod=${deliveryMethod}`,
+        `/api/v1/internal/auth/two-factor/request-token?deliveryMethod=${deliveryMethod}`,
         {
           method: "POST",
         }
@@ -125,7 +125,7 @@ export const useAuth = () => {
   ) => ApiResult<TFAAccessTokenDTO> = async (otp) => {
     try {
       const { data, pending, error, status } = await fetch<TFAAccessTokenDTO>(
-        `/api/v1/auth/two-factor/validate`,
+        `/api/v1/internal/auth/two-factor/validate`,
         {
           method: "POST",
           body: {
@@ -157,7 +157,7 @@ export const useAuth = () => {
   const getAuthorities = async () => {
     try {
       const { data, pending, error, status } = await fetch<any[]>(
-        `/api/v1/auth/roles`,
+        `/api/v1/internal/auth/roles`,
         {
           method: "GET",
         }
