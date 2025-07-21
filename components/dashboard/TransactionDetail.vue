@@ -3,6 +3,7 @@ import { Icons } from "@/components/icons.jsx";
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import type { Transaction } from "~/types";
 import { useSocket } from '~/composables/useSocket';
+import { formatAccountNumber } from "~/lib/formatAccountNumber";
 
 
 const showFullAccountId = ref(false);
@@ -21,16 +22,7 @@ function toggleAccountIdVisibility() {
   showFullAccountId.value = !showFullAccountId.value;
 }
 
-function formatAccountNumber(accountId: string) {
-  if (showFullAccountId.value) {
-    return accountId;
-  } else {
-    const firstFourDigits = accountId.substring(0, 4);
-    const lastTwoDigits = accountId.substring(accountId.length - 2);
-    const asterisks = "*".repeat(accountId.length - 6);
-    return `${firstFourDigits}${asterisks}${lastTwoDigits}`;
-  }
-}
+
 
 if(paymentResponse.value?.merchantTransactionId && paymentResponse.value.paymentStatus == "PENDING") {
   connect(paymentResponse.value?.merchantTransactionId);
@@ -78,7 +70,9 @@ watch(receivedMessages, (newVal, oldVal) => {
               <div class="items-center flex gap-4">
                 <p class="text-lg font-medium">
                   {{
-                    formatAccountNumber(
+                    showFullAccountId ? typeof paymentResponse?.merchantAccountNumber === "string"
+                        ? paymentResponse.merchantAccountNumber
+                        : "-": formatAccountNumber(
                       typeof paymentResponse?.merchantAccountNumber === "string"
                         ? paymentResponse.merchantAccountNumber
                         : "-"

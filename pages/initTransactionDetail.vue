@@ -2,6 +2,7 @@
 import { useRoute } from "vue-router";
 import { Icons } from "@/components/icons.jsx";
 import { useSocket } from '~/composables/useSocket';
+import { formatAccountNumber } from "~/lib/formatAccountNumber";
 
 const route = useRoute();
 const paymentResponse = ref<any>(route.query);
@@ -14,7 +15,7 @@ const setOpenConfirmationModal = (value: boolean) => {
 
 const closeConfirmationModal = () => {
   openConfirmationModal.value = false;
-  navigateTo("/transactions/transactionDetails/" + paymentResponse.value.merchantTransactionId);
+  navigateTo("/transactions");
 };
 
 const formatDate = (date: string) => {
@@ -32,17 +33,6 @@ onMounted(() => {
 
 function toggleAccountIdVisibility() {
   showFullAccountId.value = !showFullAccountId.value;
-}
-
-function formatAccountNumber(accountId: string) {
-  if (showFullAccountId.value) {
-    return accountId;
-  } else {
-    const firstFourDigits = accountId.substring(0, 4);
-    const lastTwoDigits = accountId.substring(accountId.length - 2);
-    const asterisks = "*".repeat(accountId.length - 6);
-    return `${firstFourDigits}${asterisks}${lastTwoDigits}`;
-  }
 }
 
 onUnmounted(() => {
@@ -88,7 +78,9 @@ watch(receivedMessages, (newVal, oldVal) => {
               <div class="items-center flex gap-4">
                 <p class="text-lg font-medium">
                   {{
-                    formatAccountNumber(
+                    showFullAccountId?typeof paymentResponse?.merchantAccountNumber === "string"
+                        ? paymentResponse.merchantAccountNumber
+                        : "-": formatAccountNumber(
                       typeof paymentResponse?.merchantAccountNumber === "string"
                         ? paymentResponse.merchantAccountNumber
                         : "-"
@@ -189,10 +181,10 @@ watch(receivedMessages, (newVal, oldVal) => {
             <span class="font-medium">Payer Name:</span>
             <span>{{ paymentResponse?.payerName }}</span>
           </div>
-          <div class="flex justify-between mb-2">
+          <!-- <div class="flex justify-between mb-2">
             <span class="font-medium">Operator Name:</span>
             <span>{{ paymentResponse?.operatorName || 'N/A' }}</span>
-          </div>
+          </div> -->
           <div class="flex justify-between mb-2">
             <span class="font-medium">Payment Reference:</span>
             <span>{{ paymentResponse?.paymentReference }}</span>

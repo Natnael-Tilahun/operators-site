@@ -1,6 +1,7 @@
 <!-- pages/transactions/[id].vue -->
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
+import { formatAccountNumber } from "~/lib/formatAccountNumber";
 import type { Transaction } from "~/types";
 
 const route = useRoute();
@@ -13,6 +14,8 @@ const openConfirmationModal = ref(false);
 const setOpenConfirmationModal = (value: boolean) => {
   openConfirmationModal.value = value;
 };
+
+
 try {
   isLoading.value = true;
   const id = route.params.id as string;
@@ -46,6 +49,12 @@ onUnmounted(() => {
 const formatDate = (date: string) => {
   return new Date(date).toLocaleString();
 };
+
+const closeConfirmationModal = () => {
+  setOpenConfirmationModal(false)
+  navigateTo("/transactions");
+};
+
 </script>
 
 <template>
@@ -95,7 +104,7 @@ const formatDate = (date: string) => {
         <TransactionsTransactionDetailItem label="Core Transaction Id" :value="transactionData.coreTransactionId" />
         <TransactionsTransactionDetailItem label="Merchant Account Number"
           :value="transactionData.merchantAccountNumber" />
-        <TransactionsTransactionDetailItem label="Payer AccountNumber" :value="transactionData.payerAccountNumber" />
+        <TransactionsTransactionDetailItem label="Payer AccountNumber" :value="formatAccountNumber(transactionData.payerAccountNumber)" />
         <TransactionsTransactionDetailItem label="Payer Id" :value="transactionData.payerId" />
         <TransactionsTransactionDetailItem label="Payer Name" :value="transactionData.payerName" />
         <TransactionsTransactionDetailItem label="Payer Phone" :value="transactionData.payerPhone" />
@@ -168,7 +177,7 @@ const formatDate = (date: string) => {
             <UiButton
               variant="solid"
               class="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-2 rounded-lg shadow"
-              @click="setOpenConfirmationModal(false)"
+              @click="closeConfirmationModal()"
             >
               Close
             </UiButton>

@@ -95,11 +95,16 @@ const totalTransactionAmount = computed(() => {
 });
 
 try {
+  // Get yesterday's date in ISO string format
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  yesterday.setHours(0, 0, 0, 0);
   transactionData.value = await getTransactions(
     " ",
     "0",
-    "10000000000000",
-    "DESC"
+    "10000000",
+    "DESC",
+    // `${yesterday.toISOString()}`
   ) || [];
   todaysTransactions.value = transactionData.value.filter((transaction) => {
     const transactionDate = new Date(transaction.expirationDate); // Assuming 'date' is the field for transaction date

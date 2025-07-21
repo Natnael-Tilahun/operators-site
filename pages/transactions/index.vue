@@ -3,6 +3,7 @@ import { ref, computed } from "vue";
 import { columns } from "~/components/transactions/columns";
 import { useTransactions } from "~/composables/useTransactions";
 import { useRouter } from "vue-router"; // {{ edit_1 }}
+import type { Transaction } from "~/types";
 
 const { getTransactions } = useTransactions();
 const data = ref<Transaction[]>([]);
@@ -12,7 +13,11 @@ const router = useRouter(); // {{ edit_2 }}
 const transactionFilterStore = useTransactionFilterStore();
 
 try {
-  data.value = await getTransactions();
+  const response = await getTransactions(" ",
+    "0",
+    "10000000",
+    "DESC");
+    data.value = response?.slice()?.sort((a, b) => new Date(b.expirationDate).getTime() - new Date(a.expirationDate).getTime());
 } catch (error) {
   console.error("Error fetching transactions:", error);
   isError.value = true;
@@ -23,7 +28,11 @@ try {
 const refetch = async () => {
   try {
     isLoading.value = true;
-    data.value = await getTransactions();
+   const response = await getTransactions(" ",
+    "",
+    "",
+    "DESC");
+    data.value = response?.slice()?.sort((a, b) => new Date(a.expirationDate).getTime() - new Date(b.expirationDate).getTime());
   } catch (error) {
     console.error("Error fetching transactions:", error);
     isError.value = true;
