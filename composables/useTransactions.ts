@@ -16,6 +16,7 @@ export const useTransactions = () => {
         pageNumber?: string, 
         pageSize?: string, 
         sortBy?: string, 
+        expirationDate?: string, 
         transactionInitiator?: string, 
         amountGreaterThanOrEqual?: number, 
         amountLessThanOrEqual?: number, 
@@ -32,12 +33,12 @@ export const useTransactions = () => {
         merchantOperatorId?: string, 
         initiatedDate?: string, 
         completedDate?: string, 
-        expirationDate?: string, 
      ) => ApiResult<Transaction[]> = async (
         paymentStatus = undefined, 
         pageNumber = undefined, 
         pageSize = undefined, 
         sortBy = undefined,
+        expirationDate= undefined, 
         transactionInitiator= undefined, 
         amountGreaterThanOrEqual= undefined, 
         amountLessThanOrEqual= undefined, 
@@ -54,7 +55,6 @@ export const useTransactions = () => {
         merchantOperatorId= undefined, 
         initiatedDate= undefined, 
         completedDate= undefined, 
-        expirationDate= undefined, 
     ) => {
 
       try {
@@ -69,7 +69,7 @@ export const useTransactions = () => {
               // "paymentStatus.equals": paymentStatus ?? transactionFilterStore.paymentStatus == 'NONE' ? '' : transactionFilterStore.paymentStatus,
               "page": pageNumber ?? transactionFilterStore.pageNumber,
               "size": pageSize ?? transactionFilterStore.pageSize,
-              "sort": sortBy ?? transactionFilterStore.sortBy,
+              "sort":  `${sortBy ?? transactionFilterStore.sortBy}`,
               ...(transactionInitiator || (transactionFilterStore.transactionInitiator !== 'NONE' && transactionFilterStore.transactionInitiator !== '') ? {
                   "transactionInitiator.equals": transactionInitiator ?? transactionFilterStore.transactionInitiator
                 } : {}),
