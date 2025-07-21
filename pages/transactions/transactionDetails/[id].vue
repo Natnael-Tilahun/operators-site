@@ -15,7 +15,6 @@ const setOpenConfirmationModal = (value: boolean) => {
   openConfirmationModal.value = value;
 };
 
-
 try {
   isLoading.value = true;
   const id = route.params.id as string;

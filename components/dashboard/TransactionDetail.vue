@@ -1,13 +1,17 @@
 <script lang="ts" setup>
 import { Icons } from "@/components/icons.jsx";
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 import type { Transaction } from "~/types";
 import { useSocket } from '~/composables/useSocket';
 import { formatAccountNumber } from "~/lib/formatAccountNumber";
+import { toast } from "~/components/ui/toast";
+import { shareQrCode } from "~/lib/shareQrCode";
+import { downloadQrCode } from "~/lib/downloadQrCode";
 
 
 const showFullAccountId = ref(false);
 const paymentResponse = ref<Transaction | null>(null);
+const qrImgRef = ref<HTMLImageElement | null>(null); // 1. Create the ref
 
 // Define props
 const props = defineProps(["transactionDetails"]);
@@ -21,7 +25,6 @@ const { connect, disconnect, receivedMessages, state } = useSocket();
 function toggleAccountIdVisibility() {
   showFullAccountId.value = !showFullAccountId.value;
 }
-
 
 
 if(paymentResponse.value?.merchantTransactionId && paymentResponse.value.paymentStatus == "PENDING") {
@@ -43,7 +46,6 @@ watch(receivedMessages, (newVal, oldVal) => {
     };
   }
 });
-
 
 </script>
 
@@ -120,6 +122,7 @@ watch(receivedMessages, (newVal, oldVal) => {
               v-if="paymentResponse"
             >
               <img
+                ref="qrImgRef"
                 :src="`https://api.qrserver.com/v1/create-qr-code/?data=${paymentResponse.qrEncodedData}`"
                 alt="QR Code"
               />
@@ -155,6 +158,18 @@ watch(receivedMessages, (newVal, oldVal) => {
             </div>
           </UiCardDescription>
         </UiCardHeader>
+        <div class="flex justify-end gap-4">
+          <Icon
+                @click="() => downloadQrCode(qrImgRef)"
+                name="radix-icons:download"
+                class="h-6 w-6 z-50 text-white cursor-pointer"
+              ></Icon>
+              <Icon
+                @click="() => shareQrCode(qrImgRef)"
+                name="heroicons:share"
+                class="h-6 w-6 z-50 text-white cursor-pointer"
+              ></Icon>
+            </div>
       </UiCardContent>
     </UiCard>
     <DashboardInitiatePaymentPushUssd
