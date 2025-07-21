@@ -3,12 +3,16 @@ import { useRoute } from "vue-router";
 import { Icons } from "@/components/icons.jsx";
 import { useSocket } from '~/composables/useSocket';
 import { formatAccountNumber } from "~/lib/formatAccountNumber";
+import { downloadQrCode } from "~/lib/downloadQrCode";
+import { shareQrCode } from "~/lib/shareQrCode";
 
 const route = useRoute();
 const paymentResponse = ref<any>(route.query);
 const showFullAccountId = ref(false);
 const transactionId = ref<string | null>(null);
 const openConfirmationModal = ref(false);
+const qrImgRef = ref<HTMLImageElement | null>(null); // 1. Create the ref
+
 const setOpenConfirmationModal = (value: boolean) => {
   openConfirmationModal.value = value;
 };
@@ -128,6 +132,7 @@ watch(receivedMessages, (newVal, oldVal) => {
               v-if="paymentResponse"
             >
               <img
+              ref="qrImgRef"
                 :src="`https://api.qrserver.com/v1/create-qr-code/?data=${paymentResponse.qrEncodedData}`"
                 alt="QR Code"
               />
@@ -144,6 +149,18 @@ watch(receivedMessages, (newVal, oldVal) => {
             </div>
           </UiCardDescription>
         </UiCardHeader>
+        <div class="flex justify-end gap-4">
+          <Icon
+                @click="() => downloadQrCode(qrImgRef)"
+                name="radix-icons:download"
+                class="h-6 w-6 z-50 text-white cursor-pointer"
+              ></Icon>
+              <Icon
+                @click="() => shareQrCode(qrImgRef)"
+                name="heroicons:share"
+                class="h-6 w-6 z-50 text-white cursor-pointer"
+              ></Icon>
+            </div>
       </UiCardContent>
     </UiCard>
     <DashboardInitiatePaymentPushUssd
