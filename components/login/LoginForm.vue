@@ -89,7 +89,7 @@ navigateTo("/", { replace: true });
 
         <FormField v-slot="{ componentField }" name="password">
           <FormItem>
-            <FormLabel>Password</FormLabel>
+            <FormLabel>PIN</FormLabel>
             <FormControl>
               <div
                 className="relative flex items-center bg-input rounded-lg pl- focus-within:ring-1 focus-within:ring-primary"
@@ -120,13 +120,13 @@ navigateTo("/", { replace: true });
           </FormItem>
         </FormField>
 
-        <NuxtLink
+        <!-- <NuxtLink
           to="/forgotPassword"
           class="text-primary text-right text-sm pb-3"
         >
           Forgot Password?
-        </NuxtLink>
-        <UiButton :disabled="isLoading">
+        </NuxtLink> -->
+        <UiButton :disabled="isLoading" class="mt-3">
           <Icon
             v-if="isLoading"
             name="svg-spinners:8-dots-rotate"

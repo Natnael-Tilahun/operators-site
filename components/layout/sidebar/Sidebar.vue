@@ -10,8 +10,8 @@
         Project X
       </h1> -->
       <img
-        src="/cbe-logo2.jpeg"
-        class="lg:w-24 lg:h-24 w-14 h-14 shadow-sm shadow-purple-500 mx-auto rounded-full"
+        src="/logo.png"
+        class="lg:w-24 lg:h-24 w-14 h-14  mx-auto rounded-full"
         alt="CBE Logo"
       />
 

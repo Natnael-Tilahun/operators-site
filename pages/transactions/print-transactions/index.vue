@@ -18,8 +18,17 @@ const selectedAccount = ref<string>();
 // Fetch transaction data based on the account ID or other parameters
 async function fetchTransactionData() {
   try {
+    const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  yesterday.setHours(0, 0, 0, 0);
     isLoading.value = true;
-    transactionData.value = await getTransactions();
+    const response = await getTransactions(" ",
+    "0",
+    "10000000",
+    "DESC",
+    `${yesterday.toISOString()}`
+  );
+    transactionData.value = response?.slice()?.sort((a, b) => new Date(b.expirationDate).getTime() - new Date(a.expirationDate).getTime());
     selectedAccount.value = transactionData.value[0]?.merchantAccountNumber;
   } catch (error) {
     console.error("Error fetching transactions:", error);
@@ -146,11 +155,11 @@ function downloadStatement() {
             class="flex items-center text-primary text-xs md:text-sm lg:text-base gap-4 tracking-wider"
           >
             <p class="">
-              {{ startDate ? startDate?.toLocaleDateString() : "DD/MM/YYYY" }}
+              {{ startDate ? startDate?.toLocaleDateString() : ""  }}
             </p>
-            <span class="text-accent-foreground">-</span>
+            <span class="text-accent-foreground"> {{startDate ? "-" : ""}}</span>
             <p class="">
-              {{ startDate ? endDate?.toLocaleDateString() : "DD/MM/YYYY" }}
+              {{ endDate ? endDate?.toLocaleDateString() : "" }}
             </p>
           </div>
         </div>
