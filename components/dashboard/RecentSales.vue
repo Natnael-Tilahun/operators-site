@@ -17,7 +17,7 @@ const data = computed(() => {
         new Date(b.expirationDate).getTime() -
         new Date(a.expirationDate).getTime()
     )
-    .slice(0, 5);
+    .slice(0, 20);
 });
 
 const isLoading = ref(false);
@@ -36,10 +36,10 @@ const getInitials = (name: string) =>
 </script>
 
 <template>
-  <div class="space-y-4">
+  <div class="space-y-2 overflow-y-scroll max-h-[350px]">
     <div class="grid gap-8" v-if="isLoading">
       <div
-        class="h-16 flex justify-between items-center shadow-md rounded-xl p-4"
+        class="h-16 flex justify-between items-center shadow-md rounded-xl p-4 "
       >
         <div class="flex gap-4 items-center">
           <UiSkeleton class="h-10 w-10 rounded-full bg-slate-300" />
@@ -105,7 +105,7 @@ const getInitials = (name: string) =>
       v-else
       v-for="item in data"
       :key="item.merchantTransactionId"
-      class="flex items-center cursor-pointer p-3 rounded-xl bg-accent dark:bg-gray-700 hover:bg-accent/20 hover:dark:bg-gray-600 hover:shadow-md hover:scale-[1.02] border border-transparent hover:border-accent/20 transition-all duration-300 ease-in-out"
+      class="flex items-center cursor-pointer p-2 rounded-xl hover:rounded-2xl bg-accent dark:bg-gray-700 hover:bg-accent/20 hover:dark:bg-gray-600 hover:shadow-md hover:scale-[1.01] border border-transparent hover:border-accent/20 transition-all duration-300 ease-in-out"
       @click="navigateToTransactionDetail(item.merchantTransactionId)"
     >
       <Icons.deposit class="stroke-none" :fill="item.paymentStatus === 'COMPLETED' ? '#2DD683' : item.paymentStatus === 'PENDING' ? '#FFA500' : '#FF0000'" />
@@ -115,7 +115,7 @@ const getInitials = (name: string) =>
           {{ item.payerName || "Payer Name" }}
         </p>
         <p class="text-sm text-muted-foreground">
-          {{ item.payerAccountNumber || "Payer Account Number" }}
+          {{ item.paymentStatus || "Payment Status" }}
         </p>
       </div>
       <div class="space-y-1 ml-auto">
@@ -123,7 +123,7 @@ const getInitials = (name: string) =>
           + {{ item.amount.toFixed(2) + " " + item.currencyCode }}
         </div>
         <p class="text-xs text-muted-foreground text-right">
-          {{ new Date(item.expirationDate).toLocaleTimeString() }}
+          {{ new Date(item.expirationDate).toLocaleString() }}
         </p>
       </div>
     </div>
