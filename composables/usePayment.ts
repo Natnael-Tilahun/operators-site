@@ -30,10 +30,10 @@ export const usePayment = () => {
         handleApiError(error);
       }
 
-      toast({
-        title: "QR Code generated successfully.",
-        variant: "default",
-      });
+      // toast({
+      //   title: "QR Code generated successfully.",
+      //   variant: "default",
+      // });
       return data.value ? (data.value as unknown as Transaction) : null;
     } catch (err) {
       // handleApiError(err);

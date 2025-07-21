@@ -9,11 +9,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { initiatePaymentFormSchema } from "~/validations/initiatePaymentFormSchema.js";
+import { Toast, ToastAction, useToast } from "~/components/ui/toast";
+import type { Transaction } from "~/types";
 
 const router = useRouter(); // Initialize the router
 const isLoading = ref(false);
 const paymentResponse = ref<Transaction | null>(null);
 const { generateQRCode } = usePayment();
+const { toast } = useToast();
 
 const form = useForm({
   validationSchema: initiatePaymentFormSchema,
@@ -36,6 +39,10 @@ const onSubmit = form.handleSubmit(async (values: any) => {
         paymentStatus: data.paymentStatus
       },
     });
+    toast({
+        title: "QR Code generated successfully.",
+        variant: "default",
+      });
   } catch (error) {
     console.error("Login error: ", error);
   } finally {
@@ -52,9 +59,12 @@ const onSubmit = form.handleSubmit(async (values: any) => {
           <FormLabel> Amount</FormLabel>
           <FormControl>
             <UiInput
-              type="text"
-              class="h-10"
-              placeholder="100012345678"
+              type="number"
+              step="0.001"
+              min="0.001"
+              max="300000"
+              class="h-10 placeholder:text-muted-foreground"
+              placeholder="Enter Amount"
               v-bind="componentField"
               :disabled="isLoading"
             />
@@ -68,8 +78,8 @@ const onSubmit = form.handleSubmit(async (values: any) => {
           <FormControl>
             <UiInput
               type="text"
-              class="h-10"
-              placeholder="100012345678"
+              class="h-10 placeholder:text-muted-foreground"
+              placeholder="Enter Payment Reference"
               v-bind="componentField"
               :disabled="isLoading"
             />

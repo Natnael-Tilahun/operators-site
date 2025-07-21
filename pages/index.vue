@@ -127,7 +127,7 @@ watch(
 </script>
 
 <template>
-  <div class="lg:space-y-12 md:space-y-8 space-y-6 dark:bg-gray-900">
+  <div class="md:space-y-8 space-y-6 dark:bg-gray-900">
     <!-- Loading Indicator Skeleton -->
     <div
       class="grid gap-4 lg:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
@@ -156,7 +156,7 @@ watch(
     >
       <!-- Account list and total balance -->
       <UiCard
-        class="col-span-1 lg:col-span-4 xl:col-span-5 shadow-md rounded-3xl dark:bg-gray-800 flex flex-col justify-between max-h-72 relative"
+        class="col-span-1 lg:col-span-4 xl:col-span-5 max-h-min shadow-md rounded-3xl dark:bg-gray-800 flex flex-col justify-between relative"
       >
         <img
           src="/backgroundMap.png"
@@ -250,7 +250,7 @@ watch(
 
       <!-- Initiate payment -->
       <UiCard
-        class="col-span-1 lg:col-span-3 xl:col-span-4 p-6 space-y-4 w-full"
+        class="col-span-1 lg:col-span-3  max-h-min xl:col-span-4 p-6 space-y-4 w-full"
       >
         <h1 class="font-semibold text-xl col-span-full flex-1 w-full block">
           Initiate Payment
@@ -260,11 +260,11 @@ watch(
     </div>
 
     <div
-      class="grid gap-4 md:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-7 xl:grid-cols-9"
+      class="grid gap-4 md:gap-8 max-h-[400px] grid-cols-1 md:grid-cols-2 lg:grid-cols-7 xl:grid-cols-9"
     >
       <!-- Account Overview -->
       <UiCard
-        class="col-span-1 lg:col-span-4 xl:col-span-5 shadow-md rounded-xl dark:bg-gray-800"
+        class="col-span-1 lg:col-span-4 max-h-[450px] xl:col-span-5 shadow-md rounded-xl dark:bg-gray-800"
       >
         <UiCardHeader>
           <UiCardTitle>Overview</UiCardTitle>
@@ -276,14 +276,14 @@ watch(
 
       <!-- Recent Transactions -->
       <UiCard
-        class="col-span-1 lg:col-span-3 xl:col-span-4 shadow-md rounded-xl dark:bg-gray-800"
+        class="col-span-1 lg:col-span-3 max-h-[450px] xl:col-span-4 shadow-md rounded-xl dark:bg-gray-800"
       >
         <UiCardHeader>
           <div class="flex justify-between w-full items-center">
             <div class="space-y-1">
               <UiCardTitle>Recent Sales</UiCardTitle>
               <UiCardDescription class="text-xs">
-                Your recent 5 transactions.
+                Your recent 20 transactions.
               </UiCardDescription>
             </div>
             <NuxtLink class="text-primary text-sm" to="/transactions">
