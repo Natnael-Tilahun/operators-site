@@ -45,12 +45,13 @@ export default defineNuxtConfig({
         __X_APP_ID__: JSON.stringify(process.env.X_APP_ID),
         __X_APP_VERSION__: JSON.stringify(process.env.X_APP_VERSION),
         __STOMP_URL__: JSON.stringify(process.env.STOMP_URL),
+        __HOME_URL__:JSON.stringify(process.env.HOME_URL)
       },
     },
 
   app: {
     head: {
-      title: "Operators Site",
+      title: "CBE Merchant Site",
       link: [],
     },
   },
