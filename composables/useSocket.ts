@@ -12,7 +12,8 @@ export function useSocket() {
   const connect = (transactionId: string) => {
     // All connection logic is now self-contained.
     const baseUrl = __STOMP_URL__;
-    const bearerToken = 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImxhbmdLZXkiOiJlbiIsImF1dGgiOiJST0xFX0FETUlOIiwidXNlcl9pZCI6IjcxOTkwNzc0MDY3OTI4MjkwMyIsImV4cCI6MTc1NTI0MzAyMiwiaWF0IjoxNzUyNjUxMDIyfQ.1NS270yKBkI4amfibsjS216dpr4A26NMbCG0Wf3sxPaL3bZvvzMWYpby7nLaEej8VlBVXUDFK_JnUA3jxcEtHw';
+    const bearerToken = `Bearer ${store.accessToken}`
+    // const bearerToken = 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImxhbmdLZXkiOiJlbiIsImF1dGgiOiJST0xFX0FETUlOIiwidXNlcl9pZCI6IjcxOTkwNzc0MDY3OTI4MjkwMyIsImV4cCI6MTc1NTI0MzAyMiwiaWF0IjoxNzUyNjUxMDIyfQ.1NS270yKBkI4amfibsjS216dpr4A26NMbCG0Wf3sxPaL3bZvvzMWYpby7nLaEej8VlBVXUDFK_JnUA3jxcEtHw';
     const jwtToken = bearerToken.split(' ')[1];
     const destination = `/topic/transactions/${transactionId}`;
     const id = transactionId;
