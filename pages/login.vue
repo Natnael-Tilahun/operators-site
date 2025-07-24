@@ -61,13 +61,14 @@ const clearStaleSessions = () => {
       <div
         class="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]"
       >
-        <div class="flex flex-col space-y-4 text-center">
+        <div class="flex flex-col justify-center items-center space-y-2 text-center">
+          <img src="/logo.png" alt="CBE Logo" class="w-20 h-20">
+
            <div class="flex items-center" >
-           <img src="/logo.png" alt="CBE Logo" class="w-12 h-12">
            <h1 class="w-full text-3xl text-primary font-bold">CBE Merchant App</h1>
           </div>
 
-          <h1 class="text-xl font-semibold tracking-tight">Login</h1>
+          <h1 class="text-xl font-semibold tracking-tight text-left">Login</h1>
           <!-- <p class="text-sm text-muted-foreground">
             Enter your email(username) and password below to login
           </p> -->
