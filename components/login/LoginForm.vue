@@ -101,19 +101,19 @@ navigateTo("/", { replace: true });
                   :disabled="isLoading"
                   aria-autocomplete="password"
                 />
-
                 <Icon
-                  v-if="showPassword"
-                  name="material-symbols:visibility-off-rounded"
-                  class="absolute flex right-0 pr-3 items-center w-8 h-8"
-                  @Click="togglePasswordVisibility"
-                ></Icon>
-                <Icon
-                  v-else
+                v-if="showPassword"
                   name="material-symbols:visibility-rounded"
                   class="absolute flex right-0 pr-3 items-center w-8 h-8"
                   @Click="togglePasswordVisibility"
                 ></Icon>
+                <Icon
+                v-else
+                  name="material-symbols:visibility-off-rounded"
+                  class="absolute flex right-0 pr-3 items-center w-8 h-8"
+                  @Click="togglePasswordVisibility"
+                ></Icon>
+         
               </div>
             </FormControl>
             <FormMessage />
